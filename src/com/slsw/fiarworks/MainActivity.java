@@ -4,6 +4,7 @@ import com.slsw.fiarworks.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -64,7 +65,7 @@ public class MainActivity extends Activity {
                     int mControlsHeight;
                     int mShortAnimTime;
 
-                    @Override
+                    
                     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
                     public void onVisibilityChange(boolean visible) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
@@ -98,7 +99,7 @@ public class MainActivity extends Activity {
 
         // Set up the user interaction to manually show or hide the system UI.
         contentView.setOnClickListener(new View.OnClickListener() {
-            @Override
+           
             public void onClick(View view) {
                 if (TOGGLE_ON_CLICK) {
                     mSystemUiHider.toggle();
@@ -131,18 +132,19 @@ public class MainActivity extends Activity {
      * while interacting with activity UI.
      */
     View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
+       
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (AUTO_HIDE) {
                 delayedHide(AUTO_HIDE_DELAY_MILLIS);
             }
+            startActivity(new Intent(getBaseContext(), CameraActivity.class));
             return false;
         }
     };
 
     Handler mHideHandler = new Handler();
     Runnable mHideRunnable = new Runnable() {
-        @Override
+        
         public void run() {
             mSystemUiHider.hide();
         }
