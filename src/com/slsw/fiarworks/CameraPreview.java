@@ -92,7 +92,7 @@ public class CameraPreview extends SurfaceView implements
 	 * Pass this along to the Overlay, but first compress it down to a reasonable size and convert it into a bitmap.
 	 */
 	public void onPreviewFrame(byte[] data, Camera c) { //TODO: This is silly. The overlay already has the preview on the canvas, apparently. ut we need to do some passing of bitmaps later on.
-        Camera.Parameters p = c.getParameters();
+        /*Camera.Parameters p = c.getParameters();
         int width = p.getPreviewSize().width;
         int height = p.getPreviewSize().height;
         System.out.println("Width=" + width + "\nHeight=" + height);
@@ -107,6 +107,6 @@ public class CameraPreview extends SurfaceView implements
                 imageBytes.length, null);
         bmp = bmp.copy(Bitmap.Config.ARGB_8888, true);
 
-        Overlay.preview.set(bmp);
+        Overlay.preview.set(bmp); */
 	}
 }

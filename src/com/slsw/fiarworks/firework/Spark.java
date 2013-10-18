@@ -20,12 +20,12 @@ public class Spark
 		position = position.add(velocity);
 		if(type == 0)
 		{
-			if(position.z > 5.0)
+			if(position.z > 5.0f)
 			{
 				//Explode
 				for(int i = 0; i < 100; i++)
 				{
-					Spark new_spark = new Spark(new Vec3(position), Vec3.random_velocity(), 1);
+					Spark new_spark = new Spark(new Vec3(position), Vec3.random_velocity(0.04f), 1);
 					return_list.add(new_spark);
 				}
 			}

@@ -1,11 +1,13 @@
 package com.slsw.fiarworks.firework;
 
+import java.util.Random;
+
 public class Vec3
 {
-	public double x;
-	public double y;
-	public double z;
-	public Vec3(double x_, double y_, double z_)
+	public float x;
+	public float y;
+	public float z;
+	public Vec3(float x_, float y_, float z_)
 	{
 		x = x_;
 		y = y_;
@@ -24,8 +26,14 @@ public class Vec3
 		return new Vec3(this.x+B.x, this.y+B.y, this.z+B.z);
 	}
 	
-	static Vec3 random_velocity()
+	static Vec3 random_velocity(float speed)
 	{
-		return new Vec3(0.0, 0.0, 0.0);
+		Random r = new Random();
+		r.setSeed(2);
+		float x = (r.nextFloat() - 0.5f) * speed;
+		float y = (r.nextFloat() - 0.5f) * speed;
+		float z = (r.nextFloat() - 0.5f) * speed;
+
+		return new Vec3(x, y, z);
 	}
 }
