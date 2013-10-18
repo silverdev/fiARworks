@@ -24,7 +24,7 @@ import android.view.SurfaceView;
 public class CameraPreview extends SurfaceView implements
 		SurfaceHolder.Callback, PreviewCallback {
 	private SurfaceHolder mHolder;
-	private Camera mCamera;
+	public volatile Camera mCamera;
 
 	public CameraPreview(Context context, Camera camera) {
 		super(context);
@@ -38,7 +38,7 @@ public class CameraPreview extends SurfaceView implements
 			if (mCamera != null) {
 				mCamera.setPreviewDisplay(holder);
 				mCamera.startPreview();
-			}
+			}else { System.out.println("CAMERA NULL IN SURFACECREATED"); }
 		} catch (IOException e) {
 			Log.d(VIEW_LOG_TAG,
 					"Error setting camera preview: " + e.getMessage());
@@ -47,7 +47,8 @@ public class CameraPreview extends SurfaceView implements
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		if (mCamera != null) {
-			mCamera.stopPreview();
+			//mCamera.stopPreview();
+			//mCamera.release();
 		}
 	}
 
@@ -90,7 +91,7 @@ public class CameraPreview extends SurfaceView implements
 	 * This function is called for every new preview frame. This is the data that we are receiving from camera!
 	 * Pass this along to the Overlay, but first compress it down to a reasonable size and convert it into a bitmap.
 	 */
-	public void onPreviewFrame(byte[] data, Camera c) {
+	public void onPreviewFrame(byte[] data, Camera c) { //TODO: This is silly. The overlay already has the preview on the canvas, apparently. ut we need to do some passing of bitmaps later on.
         Camera.Parameters p = c.getParameters();
         int width = p.getPreviewSize().width;
         int height = p.getPreviewSize().height;

@@ -27,7 +27,7 @@ public class Overlay extends View{
 	private Paint p;
 	private CameraActivity cont;
 	private int frame;
-	private final int FRAMERATE = 5;
+	private final int FRAMERATE = 60;
 
 	public Overlay(CameraActivity context) {
 		super(context);
@@ -41,21 +41,22 @@ public class Overlay extends View{
 	 * For every callback, draw bitmap onto canvas. To speed this up, only draw on certain frames. Put on fireworks afterwards.
 	 */
 	@Override
-	protected void onDraw(Canvas canvas) {
-		if(frame==0){
+	protected void onDraw(Canvas canvas) { //TODO: This commented out code is useless, but will probably be repurposed later.
+		//if(frame==0){
+		/*	System.out.println("DRAW");
 			if (Overlay.preview.get() != null) {
 				canvas.drawBitmap(Bitmap.createScaledBitmap(Overlay.preview.get(), canvas.getWidth(), canvas.getHeight(), true), 0, 0, null);
 			} else{
 				p.setColor(Color.argb(255, 0, 0, 0));
 				canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), p);
-			}
+			} */
 			super.onDraw(canvas);
 			invalidate();
-		}
-		frame++;
-		if(frame>FRAMERATE){
-			frame=0;
-		}
+		//}
+		//frame++;
+		//if(frame>FRAMERATE){
+		//	frame=0;
+		//}
 	}
 
 	/*

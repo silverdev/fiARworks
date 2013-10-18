@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 
 public class CameraActivity extends Activity implements OnTouchListener {
-	private Camera mCamera;
+	private Camera mCamera = null;
 	private Overlay mView;
 	private CameraPreview mPrev;
 
@@ -23,9 +23,11 @@ public class CameraActivity extends Activity implements OnTouchListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		System.out.println("ONCREATE");
-		mCamera = getCameraInstance();
+		if(mCamera == null)
+			mCamera = getCameraInstance();
 		mView = new Overlay(this);
 		mPrev = new CameraPreview(this.getBaseContext(), mCamera);
+		if(mPrev == null) System.out.println("Oh noes");
 		mCamera.setPreviewCallback(mPrev);
 		mCamera.startPreview();
 		setContentView(mPrev);
@@ -42,14 +44,25 @@ public class CameraActivity extends Activity implements OnTouchListener {
 
 	@Override
 	protected void onPause() {
+		releaseCamera();
 		super.onPause();
+		//releaseCamera();
 		System.out.println("ONPAUSE");
 	}
 
 	@Override
 	protected void onResume() {
+		if(mCamera == null)
+			mCamera = getCameraInstance();
+		mPrev = new CameraPreview(getBaseContext(), mCamera);
+		if(mPrev == null) System.out.println("Oh noes");
+		mCamera.setPreviewCallback(mPrev);
+		mCamera.startPreview();
+		setContentView(mPrev);
+		addContentView(mView, new LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT));
+		mView.setOnTouchListener(this);
 		super.onResume();
-		System.out.println("ONRESUME");
 	}
 
 	/*
@@ -58,9 +71,10 @@ public class CameraActivity extends Activity implements OnTouchListener {
 	 */
 	private void releaseCamera() {
 		if (mCamera != null) {
-
+			mCamera.stopPreview();
 			mCamera.release(); // release the camera for other applications
 			mCamera = null;
+			mPrev.mCamera=null;
 		}
 	}
 
