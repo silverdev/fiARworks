@@ -4,10 +4,13 @@
  */
 package com.slsw.fiarworks;
 
+
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -16,7 +19,7 @@ import android.view.View.OnTouchListener;
 
 public class CameraActivity extends Activity implements OnTouchListener {
 	private Camera mCamera = null;
-	private Overlay mView;
+	private MyGLSurfaceView mView;
 	private CameraPreview mPrev;
 
 	@Override
@@ -25,7 +28,7 @@ public class CameraActivity extends Activity implements OnTouchListener {
 		System.out.println("ONCREATE");
 		if(mCamera == null)
 			mCamera = getCameraInstance();
-		mView = new Overlay(this);
+		mView = new MyGLSurfaceView(this);
 		mPrev = new CameraPreview(this.getBaseContext(), mCamera);
 		if(mPrev == null) System.out.println("Oh noes");
 		mCamera.setPreviewCallback(mPrev);
@@ -101,4 +104,20 @@ public class CameraActivity extends Activity implements OnTouchListener {
 		System.out.println("ONTOUCH");
 		return true;
 	}
+}
+
+class MyGLSurfaceView extends GLSurfaceView {
+
+    public MyGLSurfaceView(CameraActivity context) {
+        super(context);
+
+        // Create an OpenGL ES 2.0 context.
+        setEGLContextClientVersion(2);
+
+        // Set the Renderer for drawing on the GLSurfaceView
+        setRenderer(new Overlay(context));
+
+        // Render the view only when there is a change in the drawing data
+        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+    }
 }
