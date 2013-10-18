@@ -43,6 +43,8 @@ public class Overlay implements GLSurfaceView.Renderer{
     private MatrixStack mStackMV;
     private float[] mProjectionMatrix = new float[16];
 
+    private Thread mThread = null; 
+    
 	public Overlay(CameraActivity context) {
 		preview=new SynchBitmap(null);
 		frame=0;
@@ -63,6 +65,8 @@ public class Overlay implements GLSurfaceView.Renderer{
 //        System.out.println("Init GLCamera");
         mFirework = new Firework();
 
+
+        	
         System.out.println("Init End");
         
     }

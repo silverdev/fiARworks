@@ -38,6 +38,7 @@ public class CameraActivity extends Activity implements OnTouchListener {
 		addContentView(mView, new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT));
 		mView.setOnTouchListener(this);
+		
 	}
 
 	@Override
@@ -65,6 +66,7 @@ public class CameraActivity extends Activity implements OnTouchListener {
 		setContentView(mPrev);
 		addContentView(mView, new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT));
+		mView.start();
 		mView.setOnTouchListener(this);
 		super.onResume();
 	}
@@ -115,6 +117,7 @@ public class CameraActivity extends Activity implements OnTouchListener {
 
 class MyGLSurfaceView extends GLSurfaceView {
 	Overlay mOverlay = null;
+	private Thread mThread;
     public MyGLSurfaceView(CameraActivity context) {
         super(context);
 
@@ -133,7 +136,23 @@ class MyGLSurfaceView extends GLSurfaceView {
         // Render the view only when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
-
+    public void start(){
+        this.mThread = new Thread(){
+        	public void run(){
+        		while (true){
+        			try {
+						this.sleep(1000);
+						requestRender();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+        		}
+        	}
+        };
+        mThread.start();
+    }
+    
 	public void launchFirework(double x, double y, double d) {
 		mOverlay.launchFirework(x, y, d);
 		
