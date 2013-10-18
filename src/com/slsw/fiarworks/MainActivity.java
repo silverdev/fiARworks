@@ -137,6 +137,7 @@ public class MainActivity extends Activity {
             if (AUTO_HIDE) {
                 delayedHide(AUTO_HIDE_DELAY_MILLIS);
             }
+            
             startActivity(new Intent(getBaseContext(), CameraActivity.class));
             return false;
         }

@@ -141,7 +141,7 @@ class MyGLSurfaceView extends GLSurfaceView {
         	public void run(){
         		while (true){
         			try {
-						this.sleep(1000);
+						this.sleep(2000);
 						requestRender();
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
