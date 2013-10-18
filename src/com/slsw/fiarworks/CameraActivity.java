@@ -103,12 +103,18 @@ public class CameraActivity extends Activity implements OnTouchListener {
 	 */
 	public boolean onTouch(View v, MotionEvent event) {
 		System.out.println("ONTOUCH");
+		double x = event.getX(); 
+		double y = event.getY();
+		y = (y/v.getHeight()-.5);
+		x= (x/v.getWidth()-.5);
+		mView.launchFirework(x,y, 0.0);
+		
 		return true;
 	}
 }
 
 class MyGLSurfaceView extends GLSurfaceView {
-
+	Overlay mOverlay = null;
     public MyGLSurfaceView(CameraActivity context) {
         super(context);
 
@@ -121,10 +127,15 @@ class MyGLSurfaceView extends GLSurfaceView {
         setZOrderMediaOverlay(true);
 
         // Set the Renderer for drawing on the GLSurfaceView
-        setRenderer(new Overlay(context));
+        setRenderer(mOverlay = new Overlay(context));
         
 
         // Render the view only when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
+
+	public void launchFirework(double x, double y, double d) {
+		mOverlay.launchFirework(x, y, d);
+		
+	}
 }
