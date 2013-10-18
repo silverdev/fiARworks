@@ -105,8 +105,8 @@ public class CameraActivity extends Activity implements OnTouchListener {
 		System.out.println("ONTOUCH");
 		double x = event.getX(); 
 		double y = event.getY();
-		y = (y/v.getHeight()-.5);
-		x= (x/v.getWidth()-.5);
+		y = (y/v.getHeight()-.5)*2;
+		x= (x/v.getWidth()-.5)*2;
 		mView.launchFirework(x,y, 0.0);
 		
 		return true;

@@ -43,7 +43,7 @@ public class Overlay implements GLSurfaceView.Renderer{
 		cont = context;
 	}
 	public void launchFirework(double x, double y, double raidus){
-		
+		System.out.println("X: "+x+" Y: "+y);
 	}
 	@Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
@@ -82,7 +82,7 @@ public class Overlay implements GLSurfaceView.Renderer{
         // add the source code to the shader and compile it
         GLES20.glShaderSource(shader, shaderCode);
         GLES20.glCompileShader(shader);
-
+        
         return shader;
     }
 
