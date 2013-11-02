@@ -40,6 +40,7 @@ public class Firework
 			q.set_quad(draw_buffer, i*3*3*2*8);
 		}
 
+
 		Model m = new Model(draw_buffer);
 		GLModel glm = new GLModel(m);
 

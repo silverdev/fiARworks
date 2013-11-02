@@ -55,7 +55,6 @@ public class Overlay implements GLSurfaceView.Renderer{
 	}
 	@Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-        System.out.println("Init Begin");
         // Set the background frame color
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 //        System.out.println("Init glClearColor");
@@ -67,13 +66,11 @@ public class Overlay implements GLSurfaceView.Renderer{
 
 
         	
-        System.out.println("Init End");
         
     }
 
     @Override
     public void onDrawFrame(GL10 unused) {
-        System.out.println("DrawFrame Begin");
         // Draw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
@@ -87,7 +84,6 @@ public class Overlay implements GLSurfaceView.Renderer{
         mGLCamera.view(mStackMV);
         mFirework.draw(mStackMV, mProjectionMatrix);
 
-        System.out.println("DrawFrame End");
     }
 
     @Override
