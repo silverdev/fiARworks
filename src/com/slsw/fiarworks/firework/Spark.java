@@ -34,7 +34,7 @@ public class Spark
 				return_list.add(this);
 			}
 		}
-		if(type == 0)
+		else if(type == 1)
 		{
 			return_list.add(this);
 		}

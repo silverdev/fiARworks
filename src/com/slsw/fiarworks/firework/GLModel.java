@@ -79,6 +79,15 @@ public class GLModel
 		float[] mvMatrix = new float[16];
 		stackMV.getMatrix(mvMatrix, 0);
 		Matrix.multiplyMM(mvpMatrix, 0, mvMatrix, 0, projection, 0);
+		
+		System.out.println("projection: ");
+		for (float item : projection) { System.out.print(item + " "); }
+		System.out.println("\nmvMatrix: ");
+		for (float item : mvMatrix) { System.out.print(item + " "); }
+		System.out.println("\nmvpMatrix: ");
+		for (float item : mvpMatrix) { System.out.print(item + " "); }
+
+
 
 		GLES20.glUseProgram(mProgram);
 
