@@ -1,5 +1,7 @@
 package com.slsw.fiarworks.firework;
 
+import java.nio.IntBuffer;
+
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
@@ -77,6 +79,15 @@ public class GLModel
 		float[] mvMatrix = new float[16];
 		stackMV.getMatrix(mvMatrix, 0);
 		Matrix.multiplyMM(mvpMatrix, 0, mvMatrix, 0, projection, 0);
+		
+		System.out.println("projection: ");
+		for (float item : projection) { System.out.print(item + " "); }
+		System.out.println("\nmvMatrix: ");
+		for (float item : mvMatrix) { System.out.print(item + " "); }
+		System.out.println("\nmvpMatrix: ");
+		for (float item : mvpMatrix) { System.out.print(item + " "); }
+
+
 
 		GLES20.glUseProgram(mProgram);
 
@@ -106,9 +117,18 @@ public class GLModel
         // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
         int shader = GLES20.glCreateShader(type);
 
+        int[] isCompiled = new int[1];
+
+
         // add the source code to the shader and compile it
         GLES20.glShaderSource(shader, shaderCode);
         GLES20.glCompileShader(shader);
+
+        GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, isCompiled, 0);
+        if(isCompiled[0] == 0)
+        {
+        	System.out.println("Shader did not compile");
+        }
         
         return shader;
     }

@@ -15,6 +15,7 @@ public class Firework
 	}
 	public void update()
 	{
+		System.out.println("Number of sparks in update: " + sparks.size());
 		ArrayList<Spark> new_sparks = new ArrayList<Spark>();
 		for(int i = 0; i < sparks.size(); i++)
 		{
@@ -27,7 +28,7 @@ public class Firework
 	//returns false if animation is over
 	public boolean draw(MatrixStack stackMV, float[] projection)
 	{
-		float[] draw_buffer = new float[3*3*2*8*sparks.size()];
+		float[] draw_buffer = new float[48*sparks.size()];
 
 		if(sparks.size() == 0)
 		{
@@ -37,8 +38,9 @@ public class Firework
 		for(int i = 0; i < sparks.size(); i++)
 		{
 			Quad q = new Quad(sparks.get(i));
-			q.set_quad(draw_buffer, i*3*3*2*8);
+			q.set_quad(draw_buffer, i*48);
 		}
+
 
 		Model m = new Model(draw_buffer);
 		GLModel glm = new GLModel(m);

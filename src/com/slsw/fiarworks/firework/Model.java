@@ -12,6 +12,7 @@ public class Model
 	Model(float[] geometry)
 	{
 		num_geometry = geometry.length;
+		System.out.println("Size of allocation: " + geometry.length * 4);
 		ByteBuffer bb = ByteBuffer.allocateDirect(geometry.length * 4);	//4 bytes per float
 		bb.order(ByteOrder.nativeOrder());
 		geometryBuffer = bb.asFloatBuffer();

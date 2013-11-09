@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -134,11 +135,19 @@ public class MainActivity extends Activity {
     View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
        
         public boolean onTouch(View view, MotionEvent motionEvent) {
+        	if (motionEvent.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+        	      Log.d("TouchTest", "Touch down");
+        	    } else if (motionEvent.getAction() == android.view.MotionEvent.ACTION_UP) {
+        	      Log.d("TouchTest", "Touch up");
+        	      startActivity(new Intent(getBaseContext(), CameraActivity.class));
+        	    }
             if (AUTO_HIDE) {
                 delayedHide(AUTO_HIDE_DELAY_MILLIS);
             }
+
             
-            startActivity(new Intent(getBaseContext(), CameraActivity.class));
+
+
             return false;
         }
     };
