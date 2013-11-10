@@ -129,6 +129,12 @@ public class CameraPreview extends SurfaceView implements
 		//System.err.println("HERE ------------------------------------------");
 		System.err.println(Arrays.toString(event.values));
 		if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			mRotVec = event.values;
 			//Update rotation and position vector
 			System.err.println("HERE ------------------------------------------");
