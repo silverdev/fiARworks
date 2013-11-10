@@ -32,7 +32,7 @@ public class GLFirework
 		"void main() {" +
 		"  vColor = vColorIn;" +
 		"  vTexture = vTextureIn;" +
-		"  gl_Position = uMVPMatrix * vPosition;" +
+		"  gl_Position = uMVPMatrix * vPositionIn;" +
 		"}";
 
     static private final String fragmentShaderCode =
