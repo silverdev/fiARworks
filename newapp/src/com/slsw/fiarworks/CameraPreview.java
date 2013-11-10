@@ -5,7 +5,9 @@ package com.slsw.fiarworks;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
+import android.hardware.SensorManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,6 +17,9 @@ import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.media.FaceDetector;
 import android.media.FaceDetector.Face;
 import android.util.Log;
@@ -22,9 +27,12 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class CameraPreview extends SurfaceView implements
-		SurfaceHolder.Callback, PreviewCallback {
+		SurfaceHolder.Callback, PreviewCallback, SensorEventListener {
 	private SurfaceHolder mHolder;
 	public volatile Camera mCamera;
+	private float[] mRotVec;
+	private long mRotTimeStamp;
+	private float[] mRotold;
 
 	public CameraPreview(Context context, Camera camera) {
 		super(context);
@@ -109,4 +117,30 @@ public class CameraPreview extends SurfaceView implements
 
         Overlay.preview.set(bmp); */
 	}
+
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		//System.err.println("HERE ------------------------------------------");
+		System.err.println(Arrays.toString(event.values));
+		if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
+			mRotVec = event.values;
+			mRotTimeStamp = event.timestamp;
+			//Update rotation and position vector
+			System.err.println("HERE ------------------------------------------");
+		}
+	}
+		public float[] changeInRot(){
+			if (mRotold == null) {
+				mRotold = mRotVec.clone();
+			}
+			SensorManager.getAngleChange (null, mRotVec, mRotold);
+			return null;
+			
+		}
 }

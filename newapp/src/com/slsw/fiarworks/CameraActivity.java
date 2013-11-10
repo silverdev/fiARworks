@@ -20,7 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-public class CameraActivity extends Activity implements OnTouchListener, SensorEventListener {
+public class CameraActivity extends Activity implements OnTouchListener {
 	private Camera mCamera = null;
 	private MyGLSurfaceView mView;
 	private CameraPreview mPrev;
@@ -57,7 +57,7 @@ public class CameraActivity extends Activity implements OnTouchListener, SensorE
 	@Override
 	protected void onPause() {
 		releaseCamera();
-		mSensorManager.unregisterListener(this);
+		mSensorManager.unregisterListener(this.mPrev);
 		super.onPause();
 		//releaseCamera();
 		System.out.println("ONPAUSE");
@@ -76,7 +76,7 @@ public class CameraActivity extends Activity implements OnTouchListener, SensorE
 				LayoutParams.WRAP_CONTENT));
 		mView.start();
 		mView.setOnTouchListener(this);
-		mSensorManager.registerListener(this, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
+		mSensorManager.registerListener(this.mPrev, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
 		super.onResume();
 	}
 
@@ -123,22 +123,6 @@ public class CameraActivity extends Activity implements OnTouchListener, SensorE
 		return true;
 	}
 
-	@Override
-	public void onAccuracyChanged(Sensor arg0, int arg1) {
-		// Eh, don't care if the accuracy changed.
-		
-	}
-
-	@Override
-	public void onSensorChanged(SensorEvent event) {
-		//System.err.println("HERE ------------------------------------------");
-		System.err.println(event.values[0]);
-		if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
-			//Update rotation and position vector
-			System.err.println("HERE ------------------------------------------");
-		}
-		
-	}
 }
 
 class MyGLSurfaceView extends GLSurfaceView {
