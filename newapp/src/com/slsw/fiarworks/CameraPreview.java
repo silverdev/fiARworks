@@ -97,13 +97,14 @@ public class CameraPreview extends SurfaceView implements
 	 * This function is called for every new preview frame. This is the data that we are receiving from camera!
 	 * Pass this along to the Overlay, but first compress it down to a reasonable size and convert it into a bitmap.
 	 */
+	@Override
 	public void onPreviewFrame(byte[] data, Camera c) { 
 		if(sendBitmap){
 	        Camera.Parameters p = c.getParameters();
 	        int width = p.getPreviewSize().width;
 	        int height = p.getPreviewSize().height;
 	        
-	        sendBitmap=false;
+	        sendBitmap=true;
 	        
 	        mask = AlphaMake.makeSimpleMask(data, height, width, mRotVec);
 	        mRotOld=mRotVec.clone();
@@ -120,7 +121,7 @@ public class CameraPreview extends SurfaceView implements
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		System.err.println(Arrays.toString(event.values));
+		//System.err.println(Arrays.toString(event.values));
 		if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
 			//Update rotation and position vector
 			mRotVec = event.values;
