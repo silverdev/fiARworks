@@ -7,10 +7,12 @@ package com.slsw.fiarworks;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,15 +20,20 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-public class CameraActivity extends Activity implements OnTouchListener {
+public class CameraActivity extends Activity implements OnTouchListener, SensorEventListener {
 	private Camera mCamera = null;
 	private MyGLSurfaceView mView;
 	private CameraPreview mPrev;
+	private SensorManager mSensorManager;
+    private Sensor mRotation;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		System.out.println("ONCREATE");
+		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+		mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 		if(mCamera == null)
 			mCamera = getCameraInstance();
 		mView = new MyGLSurfaceView(this);
@@ -50,6 +57,7 @@ public class CameraActivity extends Activity implements OnTouchListener {
 	@Override
 	protected void onPause() {
 		releaseCamera();
+		mSensorManager.unregisterListener(this);
 		super.onPause();
 		//releaseCamera();
 		System.out.println("ONPAUSE");
@@ -68,6 +76,7 @@ public class CameraActivity extends Activity implements OnTouchListener {
 				LayoutParams.WRAP_CONTENT));
 		mView.start();
 		mView.setOnTouchListener(this);
+		mSensorManager.registerListener(this, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
 		super.onResume();
 	}
 
@@ -113,6 +122,23 @@ public class CameraActivity extends Activity implements OnTouchListener {
 		
 		return true;
 	}
+
+	@Override
+	public void onAccuracyChanged(Sensor arg0, int arg1) {
+		// Eh, don't care if the accuracy changed.
+		
+	}
+
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		//System.err.println("HERE ------------------------------------------");
+		System.err.println(event.values[0]);
+		if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
+			//Update rotation and position vector
+			System.err.println("HERE ------------------------------------------");
+		}
+		
+	}
 }
 
 class MyGLSurfaceView extends GLSurfaceView {
@@ -136,7 +162,7 @@ class MyGLSurfaceView extends GLSurfaceView {
         // Render the view only when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
-    public void start(){
+    public void start(){/*
         this.mThread = new Thread(){
         	public void run(){
         		while (true){
@@ -150,7 +176,7 @@ class MyGLSurfaceView extends GLSurfaceView {
         		}
         	}
         };
-        mThread.start();
+        mThread.start();*/
     }
     
 	public void launchFirework(double x, double y, double d) {
