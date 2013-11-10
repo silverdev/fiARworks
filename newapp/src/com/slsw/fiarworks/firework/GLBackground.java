@@ -11,12 +11,13 @@ public class GLBackground
 {
 	private final String vertexShaderCode =
         "attribute vec2 a_Position;" +
-        "attribute vec2 a_TexCoordinate;" +
+//        "attribute vec2 a_TexCoordinate;" +
         "varying vec2 v_TexCoordinate;" +
         "void main() {" +
         // the matrix must be included as a modifier of gl_Position
         "  vec4 position = vec4(a_Position, 0.0, 1.0);" +
-        "  v_TexCoordinate = a_TexCoordinate;" +
+//        "  v_TexCoordinate = a_TexCoordinate;" +
+        "  v_TexCoordinate = a_Position;" +
         "  gl_Position = position;" +
         "}";
 
@@ -48,6 +49,8 @@ public class GLBackground
     final int[] textureHandle = new int[1];
 	static int mPosShaderLoc;
     static int mTexShaderLoc;
+    static int mTextureUniformLoc;
+
 
     static int mNumGeometryFloats; 
 	static int mProgram;
@@ -73,11 +76,17 @@ public class GLBackground
 			{
 				System.out.println("mPosShaderLoc is -1. This is bad.");
 			}
-			mTexShaderLoc = GLES20.glGetUniformLocation(mProgram, "a_TexCoordinate");
-			if(mTexShaderLoc == -1)
+			// mTexShaderLoc = GLES20.glGetUniformLocation(mProgram, "a_TexCoordinate");
+			// if(mTexShaderLoc == -1)
+			// {
+			// 	System.out.println("mTexShaderLoc is -1. This is bad.");
+			// }
+			mTextureUniformLoc = GLES20.glGetUniformLocation(mProgramHandle, "u_Texture");
+			if(mTextureUniformLoc == -1)
 			{
-				System.out.println("mTexShaderLoc is -1. This is bad.");
+				System.out.println("mTextureUniformLoc is -1. This is bad.");
 			}
+
 		}
 
 		GLES20.glGenTextures(1, textureHandle, 0);
@@ -89,6 +98,7 @@ public class GLBackground
 		mByteBufferPos.order(ByteOrder.nativeOrder());
 		mByteBufferTex = ByteBuffer.allocateDirect(12 * 4);
 		mByteBufferTex.order(ByteOrder.nativeOrder());
+
 
 	}
 
@@ -115,6 +125,11 @@ public class GLBackground
 		floatBufferTex.position(0);
 
 		GLES20.glUseProgram(mProgram);
+
+		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+		GLES20.glUniform1i(mTextureUniformLoc, 0);
+
 		GLES20.glEnableVertexAttribArray(mPosShaderLoc);
 		GLES20.glVertexAttribPointer(	mPosShaderLoc, 2,
 										GLES20.GL_FLOAT, false,
