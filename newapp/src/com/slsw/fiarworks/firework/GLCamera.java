@@ -1,4 +1,5 @@
-package com.slsw.fiarworks.firework;
+
+package com.example.android.opengl;
 
 import android.opengl.Matrix;
 
@@ -14,14 +15,15 @@ public class GLCamera
 		mHeight = height;
 		Matrix.setIdentityM(mViewMatrix, 0);
 	}
-	public void view(MatrixStack stackMV)
+	//returns view matrix
+	public float[] view()
 	{
 
 		Matrix.setIdentityM(mViewMatrix, 0);
-		Matrix.setLookAtM(mViewMatrix, 0, mDistance, 0.0f, mHeight, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-		System.out.println("camera: ");
-		for (float item : mViewMatrix) { System.out.print(item + " "); }
-		System.out.println("");
-		stackMV.glMultMatrixf(mViewMatrix, 0);
+		Matrix.setLookAtM(mViewMatrix, 0, 0.0f, mHeight, -mDistance, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+		// System.out.println("camera: ");
+		// for (float item : mViewMatrix) { System.out.print(item + " "); }
+		// System.out.println("");
+		return mViewMatrix;
 	}
 }

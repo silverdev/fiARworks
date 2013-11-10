@@ -1,4 +1,5 @@
-package com.slsw.fiarworks.firework;
+
+package com.example.android.opengl;
 import java.util.ArrayList;
 
 
@@ -15,14 +16,13 @@ public class Firework
 	{
 		System.out.println("Launching");
 		Vec3 start_pos = new Vec3(0.0f, 0.0f, 0.0f);
-		Vec3 start_vel = new Vec3(0.0f, 0.0f, 0.01f);
+		Vec3 start_vel = new Vec3(0.0f, 0.01f, 0.0f);
 		Spark start_spark = new Spark(start_pos, start_vel, 0);
 		sparks.add(start_spark);
 	}
 
 	public void update()
 	{
-		System.out.println("Number of sparks in update: " + sparks.size());
 		ArrayList<Spark> new_sparks = new ArrayList<Spark>();
 		for(int i = 0; i < sparks.size(); i++)
 		{
@@ -32,15 +32,15 @@ public class Firework
 
 		return;
 	}
-	public void draw(MatrixStack stackMV, float[] projection)
+	public void draw(float[] MVPMatrix)
 	{
-		float[] draw_buffer = new float[48*sparks.size()];
+		float[] draw_buffer = new float[3*6*sparks.size()];
 		for(int i = 0; i < sparks.size(); i++)
 		{
 			Quad q = new Quad(sparks.get(i));
-			q.set_quad(draw_buffer, i*48);
+			q.set_quad(draw_buffer, i*3*6);
 		}
-		glfw.updateFireworkAndDraw(draw_buffer, stackMV, projection);
+		glfw.updateFireworkAndDraw(draw_buffer, MVPMatrix);
 	}
 }
 

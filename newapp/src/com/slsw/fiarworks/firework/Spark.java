@@ -1,5 +1,18 @@
-package com.slsw.fiarworks.firework;
+
+package com.example.android.opengl;
 import java.util.ArrayList;
+
+/*
+ * Types:
+ * 0 - Rocket
+ * 1 - Shrapnel
+ *
+ *
+ *
+ *
+ *
+ *
+*/
 
 public class Spark
 {
@@ -20,8 +33,9 @@ public class Spark
 		position = position.add(velocity);
 		if(type == 0)
 		{
-			if(position.z > 5.0f)
+			if(position.y > 5.0f)
 			{
+				System.out.println("Exploded!");
 				//Explode
 				for(int i = 0; i < 100; i++)
 				{
