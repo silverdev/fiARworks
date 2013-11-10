@@ -31,8 +31,7 @@ public class CameraPreview extends SurfaceView implements
 	private SurfaceHolder mHolder;
 	public volatile Camera mCamera;
 	private float[] mRotVec;
-	private long mRotTimeStamp;
-	private float[] mRotold;
+	private float[] mRotOld;
 
 	public CameraPreview(Context context, Camera camera) {
 		super(context);
@@ -99,7 +98,8 @@ public class CameraPreview extends SurfaceView implements
 	 * This function is called for every new preview frame. This is the data that we are receiving from camera!
 	 * Pass this along to the Overlay, but first compress it down to a reasonable size and convert it into a bitmap.
 	 */
-	public void onPreviewFrame(byte[] data, Camera c) { //TODO: This is silly. The overlay already has the preview on the canvas, apparently. ut we need to do some passing of bitmaps later on.
+	public void onPreviewFrame(byte[] data, Camera c) { 
+		//TODO: Should be in RGBA565 format
         /*Camera.Parameters p = c.getParameters();
         int width = p.getPreviewSize().width;
         int height = p.getPreviewSize().height;
@@ -130,17 +130,19 @@ public class CameraPreview extends SurfaceView implements
 		System.err.println(Arrays.toString(event.values));
 		if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
 			mRotVec = event.values;
-			mRotTimeStamp = event.timestamp;
 			//Update rotation and position vector
 			System.err.println("HERE ------------------------------------------");
 		}
 	}
-		public float[] changeInRot(){
-			if (mRotold == null) {
-				mRotold = mRotVec.clone();
-			}
-			SensorManager.getAngleChange (null, mRotVec, mRotold);
-			return null;
-			
+	
+	public float[] changeInRot(){
+		if (mRotOld == null) {
+			mRotOld = mRotVec.clone();
 		}
+		SensorManager.getAngleChange (null, mRotVec, mRotOld);
+		return null;
+		
+	}
+	
+	
 }
