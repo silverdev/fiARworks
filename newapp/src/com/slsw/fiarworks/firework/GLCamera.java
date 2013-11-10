@@ -1,5 +1,5 @@
 
-package com.example.android.opengl;
+package com.slsw.fiarworks.firework;
 
 import android.opengl.Matrix;
 
@@ -21,9 +21,6 @@ public class GLCamera
 
 		Matrix.setIdentityM(mViewMatrix, 0);
 		Matrix.setLookAtM(mViewMatrix, 0, 0.0f, mHeight, -mDistance, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-		// System.out.println("camera: ");
-		// for (float item : mViewMatrix) { System.out.print(item + " "); }
-		// System.out.println("");
 		return mViewMatrix;
 	}
 }

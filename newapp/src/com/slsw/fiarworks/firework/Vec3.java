@@ -1,5 +1,5 @@
 
-package com.example.android.opengl;
+package com.slsw.fiarworks.firework;
 
 import java.util.Random;
 

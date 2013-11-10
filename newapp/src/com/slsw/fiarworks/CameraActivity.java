@@ -5,8 +5,11 @@
 package com.slsw.fiarworks;
 
 
+import com.slsw.fiarworks.firework.GLRenderer;
+
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Sensor;
@@ -41,11 +44,9 @@ public class CameraActivity extends Activity implements OnTouchListener, SensorE
 		if(mPrev == null) System.out.println("Oh noes");
 		mCamera.setPreviewCallback(mPrev);
 		mCamera.startPreview();
-		setContentView(mPrev);
-		addContentView(mView, new LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT));
+		setContentView(mView);
 		mView.setOnTouchListener(this);
-		
+		System.err.println("hello");
 	}
 
 	@Override
@@ -61,6 +62,7 @@ public class CameraActivity extends Activity implements OnTouchListener, SensorE
 		super.onPause();
 		//releaseCamera();
 		System.out.println("ONPAUSE");
+		mView.onPause();
 	}
 
 	@Override
@@ -71,10 +73,8 @@ public class CameraActivity extends Activity implements OnTouchListener, SensorE
 		if(mPrev == null) System.out.println("Oh noes");
 		mCamera.setPreviewCallback(mPrev);
 		mCamera.startPreview();
-		setContentView(mPrev);
-		addContentView(mView, new LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT));
-		mView.start();
+		setContentView(mView);
+		mView.onResume();
 		mView.setOnTouchListener(this);
 		mSensorManager.registerListener(this, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
 		super.onResume();
@@ -131,7 +131,6 @@ public class CameraActivity extends Activity implements OnTouchListener, SensorE
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		//System.err.println("HERE ------------------------------------------");
 		System.err.println(event.values[0]);
 		if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
 			//Update rotation and position vector
@@ -142,45 +141,23 @@ public class CameraActivity extends Activity implements OnTouchListener, SensorE
 }
 
 class MyGLSurfaceView extends GLSurfaceView {
-	Overlay mOverlay = null;
-	private Thread mThread;
-    public MyGLSurfaceView(CameraActivity context) {
+	private final GLRenderer mRenderer;
+
+    public MyGLSurfaceView(Context context) {
         super(context);
 
         // Create an OpenGL ES 2.0 context.
         setEGLContextClientVersion(2);
-        
-        //Should make background visible
-        setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        getHolder().setFormat(PixelFormat.TRANSLUCENT);
-        setZOrderMediaOverlay(true);
 
         // Set the Renderer for drawing on the GLSurfaceView
-        setRenderer(mOverlay = new Overlay(context));
-        
+        mRenderer = new GLRenderer();
+        setRenderer(mRenderer);
 
         // Render the view only when there is a change in the drawing data
-        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-    }
-    public void start(){/*
-        this.mThread = new Thread(){
-        	public void run(){
-        		while (true){
-        			try {
-						this.sleep(2000);
-						requestRender();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-        		}
-        	}
-        };
-        mThread.start();*/
+        setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
     
 	public void launchFirework(double x, double y, double d) {
-		mOverlay.launchFirework(x, y, d);
 		
 	}
 }

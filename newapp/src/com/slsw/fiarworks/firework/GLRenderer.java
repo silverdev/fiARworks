@@ -1,5 +1,5 @@
 
-package com.example.android.opengl;
+package com.slsw.fiarworks.firework;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -14,7 +14,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
-public class GLRenderer implements GLSurfaceView.Renderer, PreviewCallback {
+public class GLRenderer implements GLSurfaceView.Renderer{
     private static final String TAG = "GLRenderer";
 	private Firework mFirework;
     private GLCamera mCamera;

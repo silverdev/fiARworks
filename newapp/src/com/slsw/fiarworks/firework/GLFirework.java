@@ -1,5 +1,5 @@
 
-package com.example.android.opengl;
+package com.slsw.fiarworks.firework;
 
 import java.nio.IntBuffer;
 
@@ -47,11 +47,6 @@ public class GLFirework
     static int mNumGeometryFloats; 
 	static int mProgram;
 
-	// static float triangleCoords[] = { // in counterclockwise order:
- //         0.0f,  0.622008459f, 0.0f,   // top
- //        -0.5f, -0.311004243f, 0.0f,   // bottom left
- //         0.5f, -0.311004243f, 0.0f    // bottom right
- //    };
 
 	ByteBuffer mByteBuffer;
 
@@ -71,16 +66,6 @@ public class GLFirework
 			{
 				System.out.println("mPosShaderLoc is -1. This is bad.");
 			}
-			// mTexShaderLoc = GLES20.glGetAttribLocation(mProgram, "vTextureIn");
-			// if(mTexShaderLoc == -1)
-			// {
-			// 	System.out.println("mTexShaderLoc is -1. This is bad.");
-			// }
-			// mColShaderLoc = GLES20.glGetAttribLocation(mProgram, "vColorIn");
-			// if(mColShaderLoc == -1)
-			// {
-			// 	System.out.println("mColShaderLoc is -1. This is bad.");
-			// }
 			mMVPMatrixLoc = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
 			if(mMVPMatrixLoc == -1)
 			{
@@ -103,31 +88,10 @@ public class GLFirework
 
 		mNumGeometryFloats = geometry.length;
 		int numGeometryBytes = mNumGeometryFloats * 4;
-		// if(printed == 0)
-		// {
-		// 	System.out.println("numGeometryBytes: " + numGeometryBytes);
-		// 	for(int i = 0; i < geometry.length / 8; i++)
-		// 	{
-		// 		System.out.print(geometry[i * 8 + 0] + " ");
-		// 		System.out.print(geometry[i * 8 + 1] + " ");
-		// 		System.out.print(geometry[i * 8 + 2] + " ");
-		// 		System.out.print(geometry[i * 8 + 3] + " ");
-		// 		System.out.print(geometry[i * 8 + 4] + " ");
-		// 		System.out.print(geometry[i * 8 + 5] + " ");
-		// 		System.out.print(geometry[i * 8 + 6] + " ");
-		// 		System.out.print(geometry[i * 8 + 7] + " ");
-		// 		System.out.println();
-		// 	}
-		// 	printed = 1;
-		// }
 
 		FloatBuffer geometryBuffer = mByteBuffer.asFloatBuffer();
 		geometryBuffer.put(geometry);
 		geometryBuffer.position(0);
-
-
-		// GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mGeometryBufferHandle[0]);
-		// GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, numGeometryBytes, geometryBuffer, GLES20.GL_DYNAMIC_DRAW);
 
 
 		GLES20.glUseProgram(mProgram);
@@ -139,21 +103,12 @@ public class GLFirework
 										GLES20.GL_FLOAT, false,
 										GEOMETERY_PER_VERTEX*4, geometryBuffer);
 
-		// geometryBuffer.position(3);
-		// GLES20.glEnableVertexAttribArray(mTexShaderLoc);
-		// GLES20.glVertexAttribPointer(mTexShaderLoc, TEXTURE_COORDS_PER_VERTEX,
-		// 								GLES20.GL_FLOAT, false,
-		// 								GEOMETERY_PER_VERTEX*4, geometryBuffer);
-
 		GLES20.glUniformMatrix4fv(mMVPMatrixLoc, 1, false, MVPMatrix, 0);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumGeometryFloats / GEOMETERY_PER_VERTEX);
 
-        MyGLRenderer.checkGlError("Firework Error Checking");
 
         GLES20.glDisableVertexAttribArray(mPosShaderLoc);
-
-        // GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 	}
 
 	public static int loadShader(int type, String shaderCode){

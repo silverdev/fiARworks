@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.opengl;
+package com.slsw.fiarworks.firework;
 
 import android.app.Activity;
 import android.content.Context;
