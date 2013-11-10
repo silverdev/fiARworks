@@ -1,3 +1,4 @@
+
 package com.slsw.fiarworks.firework;
 
 import java.util.Random;
@@ -7,6 +8,7 @@ public class Vec3
 	public float x;
 	public float y;
 	public float z;
+	private static Random r = new Random();
 	public Vec3(float x_, float y_, float z_)
 	{
 		x = x_;
@@ -28,8 +30,6 @@ public class Vec3
 	
 	static Vec3 random_velocity(float speed)
 	{
-		Random r = new Random();
-		r.setSeed(2);
 		float x = (r.nextFloat() - 0.5f) * speed;
 		float y = (r.nextFloat() - 0.5f) * speed;
 		float z = (r.nextFloat() - 0.5f) * speed;
