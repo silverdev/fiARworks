@@ -3,28 +3,22 @@
  */
 package com.slsw.fiarworks;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
-import android.hardware.SensorManager;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
-import android.graphics.PointF;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.media.FaceDetector;
-import android.media.FaceDetector.Face;
+import android.hardware.SensorManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.slsw.fiarworks.firework.GLRenderer;
+import com.slsw.fiarworks.masker.AlphaMake;
 
 public class CameraPreview extends SurfaceView implements
 		SurfaceHolder.Callback, PreviewCallback, SensorEventListener {
@@ -32,12 +26,17 @@ public class CameraPreview extends SurfaceView implements
 	public volatile Camera mCamera;
 	private float[] mRotVec;
 	private float[] mRotOld;
+	public volatile boolean sendBitmap;
+	private byte[][] mask = null;
+	public GLRenderer mRenderer;
 
-	public CameraPreview(Context context, Camera camera) {
+	public CameraPreview(Context context, Camera camera, GLRenderer renderer) {
 		super(context);
 		mCamera = camera;
 		mHolder = getHolder();
 		mHolder.addCallback(this);
+		sendBitmap=true;
+		mRenderer=renderer;
 	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
@@ -99,23 +98,16 @@ public class CameraPreview extends SurfaceView implements
 	 * Pass this along to the Overlay, but first compress it down to a reasonable size and convert it into a bitmap.
 	 */
 	public void onPreviewFrame(byte[] data, Camera c) { 
-		//TODO: Should be in RGBA565 format
-        /*Camera.Parameters p = c.getParameters();
-        int width = p.getPreviewSize().width;
-        int height = p.getPreviewSize().height;
-        System.out.println("Width=" + width + "\nHeight=" + height);
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 4;
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        YuvImage yuvImage = new YuvImage(data, ImageFormat.NV21, width, height,
-                null);
-        yuvImage.compressToJpeg(new Rect(0, 0, width, height), 50, out);
-        byte[] imageBytes = out.toByteArray();
-        Bitmap bmp = BitmapFactory.decodeByteArray(imageBytes, 0,
-                imageBytes.length, null);
-        bmp = bmp.copy(Bitmap.Config.ARGB_8888, true);
-
-        Overlay.preview.set(bmp); */
+		if(sendBitmap){
+	        Camera.Parameters p = c.getParameters();
+	        int width = p.getPreviewSize().width;
+	        int height = p.getPreviewSize().height;
+	        
+	        sendBitmap=false;
+	        
+	        mask = AlphaMake.makeSimpleMask(data, height, width, mRotVec);
+	        mRotOld=mRotVec.clone();
+		}
 	}
 
 	@Override

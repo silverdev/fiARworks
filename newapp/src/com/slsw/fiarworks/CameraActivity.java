@@ -5,16 +5,11 @@
 package com.slsw.fiarworks;
 
 
-import com.slsw.fiarworks.firework.GLRenderer;
-
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.PixelFormat;
+import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -23,12 +18,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+import com.slsw.fiarworks.firework.GLRenderer;
+
 public class CameraActivity extends Activity implements OnTouchListener {
 	private Camera mCamera = null;
 	private MyGLSurfaceView mView;
 	private CameraPreview mPrev;
 	private SensorManager mSensorManager;
     private Sensor mRotation;
+    private GLRenderer mRenderer;
 
 
 	@Override
@@ -39,9 +37,11 @@ public class CameraActivity extends Activity implements OnTouchListener {
 		mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 		if(mCamera == null)
 			mCamera = getCameraInstance();
-		mView = new MyGLSurfaceView(this);
-		mPrev = new CameraPreview(this.getBaseContext(), mCamera);
+		mRenderer=new GLRenderer();
+		mView = new MyGLSurfaceView(this, mRenderer);
+		mPrev = new CameraPreview(this.getBaseContext(), mCamera, mRenderer);
 		if(mPrev == null) System.out.println("Oh noes");
+		mCamera.getParameters().setPreviewFormat(ImageFormat.RGB_565);
 		mCamera.setPreviewCallback(mPrev);
 		mCamera.startPreview();
 		setContentView(mView);
@@ -69,8 +69,9 @@ public class CameraActivity extends Activity implements OnTouchListener {
 	protected void onResume() {
 		if(mCamera == null)
 			mCamera = getCameraInstance();
-		mPrev = new CameraPreview(getBaseContext(), mCamera);
+		mPrev = new CameraPreview(getBaseContext(), mCamera, mRenderer);
 		if(mPrev == null) System.out.println("Oh noes");
+		mCamera.getParameters().setPreviewFormat(ImageFormat.RGB_565);
 		mCamera.setPreviewCallback(mPrev);
 		mCamera.startPreview();
 		setContentView(mView);
@@ -128,14 +129,14 @@ public class CameraActivity extends Activity implements OnTouchListener {
 class MyGLSurfaceView extends GLSurfaceView {
 	private final GLRenderer mRenderer;
 
-    public MyGLSurfaceView(Context context) {
+    public MyGLSurfaceView(Context context, GLRenderer rend) {
         super(context);
 
         // Create an OpenGL ES 2.0 context.
         setEGLContextClientVersion(2);
 
         // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = new GLRenderer();
+        mRenderer = rend;
         setRenderer(mRenderer);
 
         // Render the view only when there is a change in the drawing data
