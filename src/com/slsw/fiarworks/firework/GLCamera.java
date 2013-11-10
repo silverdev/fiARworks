@@ -18,9 +18,6 @@ public class GLCamera
 	{
 
 		Matrix.setIdentityM(mViewMatrix, 0);
-		System.out.println("Camera Identity: ");
-		for (float item : mViewMatrix) { System.out.print(item + " "); }
-		System.out.println("");
 		Matrix.setLookAtM(mViewMatrix, 0, mDistance, 0.0f, mHeight, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 		System.out.println("camera: ");
 		for (float item : mViewMatrix) { System.out.print(item + " "); }

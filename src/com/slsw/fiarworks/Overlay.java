@@ -51,9 +51,9 @@ public class Overlay implements GLSurfaceView.Renderer{
 		cont = context;
 	}
 	public void launchFirework(double x, double y, double raidus){
-		mFirework = new Firework();
-	}
-	@Override
+
+    }
+    @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         // Set the background frame color
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -63,6 +63,7 @@ public class Overlay implements GLSurfaceView.Renderer{
         mGLCamera = new GLCamera(8.0f, 2.0f);
 //        System.out.println("Init GLCamera");
         mFirework = new Firework();
+		mFirework.Launch();
 
 
         	
