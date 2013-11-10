@@ -1,5 +1,11 @@
+package com.slsw.fiarworks.firework;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 
+import android.graphics.Bitmap;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 
 public class GLBackground
 {
@@ -22,20 +28,20 @@ public class GLBackground
         "  gl_FragColor = texture2D(u_Texture, v_TexCoordinate);" +
         "}";
 
-    static final float[] screenPos = {	-1.0, -1.0,
-	   									-1.0,  1.0,
-	   									 1.0, -1.0,
-	   									 1.0,  1.0,
-	   									-1.0,  1.0,
-	   									 1.0, -1.0,
+    static final float[] screenPos = {	-1.0f, -1.0f,
+	   									-1.0f,  1.0f,
+	   									 1.0f, -1.0f,
+	   									 1.0f,  1.0f,
+	   									-1.0f,  1.0f,
+	   									 1.0f, -1.0f,
 	   									};
 
-	static final float[] screenTex = {	-1.0, -1.0,
-	   									-1.0,  1.0,
-	   									 1.0, -1.0,
-	   									 1.0,  1.0,
-	   									-1.0,  1.0,
-	   									 1.0, -1.0,
+	static final float[] screenTex = {	-1.0f, -1.0f,
+	   									-1.0f,  1.0f,
+	   									 1.0f, -1.0f,
+	   									 1.0f,  1.0f,
+	   									-1.0f,  1.0f,
+	   									 1.0f, -1.0f,
 	   									};
 
     static int[] mfloatBufferPosHandle = new int[1];
@@ -86,13 +92,13 @@ public class GLBackground
 
 	}
 
-	public draw(Bitmap camera_image)
+	public void draw(Bitmap camera_image)
 	{
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
- 		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
- 		bitmap.recycle();
+ 		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, camera_image, 0);
+ 		camera_image.recycle();
 
  		mNumGeometryFloats = screenPos.length;
 		int numGeometryBytes = mNumGeometryFloats * 4;

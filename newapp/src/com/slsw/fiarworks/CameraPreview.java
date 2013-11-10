@@ -107,6 +107,8 @@ public class CameraPreview extends SurfaceView implements
 	        
 	        mask = AlphaMake.makeSimpleMask(data, height, width, mRotVec);
 	        mRotOld=mRotVec.clone();
+	        mRenderer.setTextures(data, mask);
+	        mRenderer.setChange(changeInRot());
 		}
 	}
 
@@ -118,12 +120,11 @@ public class CameraPreview extends SurfaceView implements
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		//System.err.println("HERE ------------------------------------------");
 		System.err.println(Arrays.toString(event.values));
 		if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
-			mRotVec = event.values;
 			//Update rotation and position vector
-			System.err.println("HERE ------------------------------------------");
+			mRotVec = event.values;
+			mRenderer.setChange(changeInRot());
 		}
 	}
 	
@@ -131,8 +132,9 @@ public class CameraPreview extends SurfaceView implements
 		if (mRotOld == null) {
 			mRotOld = mRotVec.clone();
 		}
-		SensorManager.getAngleChange (null, mRotVec, mRotOld);
-		return null;
+		float[] angleChange = new float[]{0f,0f,0f};
+		//SensorManager.getAngleChange (angleChange, mRotVec, mRotOld);
+		return angleChange;
 		
 	}
 	

@@ -61,5 +61,13 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 
 
     }
+    
+    public void setTextures(byte[] image, byte[][] mask){
+    	
+    }
+    
+    public void setChange(float[] rot){
+    	
+    }
 
 }
