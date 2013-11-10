@@ -41,7 +41,6 @@ public class GLModel
     final int mTexShaderLoc;
     final int mColShaderLoc;
     final int mMVPMatrixLoc;
-    final int mColFShaderLoc;
 
     final int mNumGeometry; 
 	final int mProgram;
@@ -64,14 +63,46 @@ public class GLModel
         GLES20.glAttachShader(mProgram, fragmentShader); // add the fragment shader to program
         GLES20.glLinkProgram(mProgram);                  // create OpenGL program executables
 		mPosShaderLoc = GLES20.glGetAttribLocation(mProgram, "vPosition");
+		if(mPosShaderLoc == -1)
+		{
+			System.out.println("mPosShaderLoc is -1. This is bad.");
+		}
 		mTexShaderLoc = GLES20.glGetAttribLocation(mProgram, "vTexture");
+		if(mTexShaderLoc == -1)
+		{
+			System.out.println("mTexShaderLoc is -1. This is bad.");
+		}
 		mColShaderLoc = GLES20.glGetAttribLocation(mProgram, "vColor");
+		if(mColShaderLoc == -1)
+		{
+			System.out.println("mColShaderLoc is -1. This is bad.");
+		}
 		mMVPMatrixLoc = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
-		mColFShaderLoc = GLES20.glGetUniformLocation(mProgram, "vColor");
+		if(mMVPMatrixLoc == -1)
+		{
+			System.out.println("mMVPMatrixLoc is -1. This is bad.");
+		}
 	}
 
 	public void draw(MatrixStack stackMV, float[] projection)
 	{
+		//error checking
+		if(mPosShaderLoc == -1)
+		{
+			System.out.println("mPosShaderLoc is -1. This is bad.");
+		}
+		if(mTexShaderLoc == -1)
+		{
+			System.out.println("mTexShaderLoc is -1. This is bad.");
+		}
+		if(mColShaderLoc == -1)
+		{
+			System.out.println("mColShaderLoc is -1. This is bad.");
+		}
+		if(mMVPMatrixLoc == -1)
+		{
+			System.out.println("mMVPMatrixLoc is -1. This is bad.");
+		}
 		//multiply tansforms onto the stack
 		//we'll skip this for now
 
@@ -92,7 +123,7 @@ public class GLModel
 		GLES20.glUseProgram(mProgram);
 
 		GLES20.glUniformMatrix4fv(mMVPMatrixLoc, 1, false, mvpMatrix, 0);
-		GLES20.glUniform4fv(mColFShaderLoc, 1, color, 0);
+		GLES20.glUniform4fv(mColShaderLoc, 1, color, 0);
 
 		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mGeometryBufferHandle[0]);
 
