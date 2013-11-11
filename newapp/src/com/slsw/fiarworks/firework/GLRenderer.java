@@ -25,12 +25,15 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     private float[] mVMatrix;
 	private float[] mMVPMatrix = new float[16];
 	private GLBackground mBackground;
-	private Bitmap mBackgroundImage;
+	private Bitmap mBackgroundImage =Bitmap.createBitmap(1,1,Bitmap.Config.RGB_565);
+	private static final byte[][] initalMask = {{(byte)0xf}}; 
+	
 
 	@Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
     	GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     	mBackground = new GLBackground();
+    	mBackgroundImage.setPixel(0, 0, 0xffffff);
     	mFirework = new Firework();
         mCamera = new GLCamera(10.0f, 5.0f);
         mFirework.Launch();
