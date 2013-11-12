@@ -23,19 +23,19 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     private GLCamera mCamera;
     private float[] mProjMatrix = new float[16];
     private float[] mVMatrix;
-	private float[] mMVPMatrix = new float[16];
-	private GLBackground mBackground;
-	private Bitmap mBackgroundImage =Bitmap.createBitmap(1,1,Bitmap.Config.RGB_565);
-	private static final byte[][] initalMask = {{(byte)0xf}}; 
-	
+    private float[] mMVPMatrix = new float[16];
+    private GLBackground mBackground;
+    private Bitmap mBackgroundImage =Bitmap.createBitmap(1,1,Bitmap.Config.RGB_565);
+    private static final byte[][] initalMask = {{(byte)0xf}}; 
+    
 
-	@Override
+    @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-    	GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    	mBackground = new GLBackground();
-    	mBackgroundImage.setPixel(0, 0, 0xffffff);
-    	mFirework = new Firework();
+        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        mBackground = new GLBackground();
+        mFirework = new Firework();
         mCamera = new GLCamera(10.0f, 5.0f);
+    	mBackgroundImage.setPixel(0, 0, 0xffffff);
         mFirework.Launch();
     }
 
@@ -56,8 +56,8 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 
     @Override
     public void onDrawFrame(GL10 unused) {
-    	GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-    	// Draw background color
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        // Draw background color
         //GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
         // Set the camera position (View matrix)
@@ -73,6 +73,8 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     }
     
     public void setTextures(byte[] image, byte[][] mask){
+        this.mBackgroundImage.recycle();
+        this.mBackgroundImage = null;
     	System.out.println(Arrays.toString(image));
     	mBackgroundImage = BitmapFactory.decodeByteArray(
     				image, 0, image.length);
