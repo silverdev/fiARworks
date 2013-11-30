@@ -109,7 +109,6 @@ public class GLBackground
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
  		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, camera_image, 0);
- 		camera_image.recycle();
 
  		mNumGeometryFloats = screenPos.length;
 		int numGeometryBytes = mNumGeometryFloats * 4;
