@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -18,15 +17,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
 
 public class SkyDetector extends JFrame{
+
+	private static final long serialVersionUID=-681141109762206171L;
 
 	enum BlockSize {
 		_4x4(2),
@@ -50,7 +48,7 @@ public class SkyDetector extends JFrame{
 
 	protected BufferedImage disp;
 
-	protected int[] norms;
+	protected double[] norms;
 
 	protected BlockSize bsize=BlockSize._4x4;
 
@@ -89,11 +87,11 @@ public class SkyDetector extends JFrame{
 
 	protected void updateNorms() {
 		norms=computeNorms(luma,disp.getWidth(),disp.getHeight(),bsize,norm);
-		int max=0;
+		double max=0;
 		for (int i=0;i<norms.length;i++) {
 			max=Math.max(max,norms[i]);
 		}
-		thresholdSlider.setMaximum(max);
+		thresholdSlider.setMaximum((int)Math.ceil(max));
 		refresh();
 	}
 
@@ -182,7 +180,7 @@ public class SkyDetector extends JFrame{
 		normPanel.setLayout(new GridLayout(2,0));
 		gbc.anchor=gbc.anchor=GridBagConstraints.WEST;
 		gbc.gridwidth=GridBagConstraints.REMAINDER;
-		panel.add(normPanel,gbc);		
+		panel.add(normPanel,gbc);
 
 		normButtonGroup=new ButtonGroup();
 
@@ -659,11 +657,11 @@ public class SkyDetector extends JFrame{
 		for(int i=0;i<16;i++)od_bin_fdct16(_y,_yoff+_ystride*i,z,i,16);
 	}
 
-	public static int[] computeNorms(int[] _luma,int _width,int _height,BlockSize _b_sz,Norm _norm) {
+	public static double[] computeNorms(int[] _luma,int _width,int _height,BlockSize _b_sz,Norm _norm) {
 		int n=1<<_b_sz.log;
 		int nx=_width/n;
 		int ny=_height/n;
-		int[] norms=new int[nx*ny];
+		double[] norms=new double[nx*ny];
 		for (int by=0;by<ny;by++) {
 			for (int bx=0;bx<nx;bx++) {
 				int[] z=new int[n*n];
@@ -697,6 +695,9 @@ public class SkyDetector extends JFrame{
 							}
 						}
 					}
+				}
+				if (_norm==Norm.L2) {
+					norms[by*nx+bx]=Math.sqrt(norms[by*nx+bx]);
 				}
 			}
 		}
@@ -738,6 +739,7 @@ public class SkyDetector extends JFrame{
 	 *  - status bar at the bottom (mouse over shows the block coordinates)
 	 *  x call listener on image load
 	 *  - logarithm scale on slider
+	 *  - display file name in TextField
 	 */
 	public static void main(String[] _args) throws IOException {
 		JFrame sky  = new SkyDetector(_args[0]);
