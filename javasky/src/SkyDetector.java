@@ -19,8 +19,14 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.NavigationFilter.FilterBypass;
+
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
+import javax.swing.JTextField;
+import javax.print.attribute.AttributeSet;
 
 public class SkyDetector extends JFrame{
 
@@ -56,6 +62,8 @@ public class SkyDetector extends JFrame{
 
 	protected JLabel imageLabel;
 
+	protected JTextField thresholdBox;
+	
 	protected JSlider thresholdSlider;
 
 	protected ButtonGroup blockSizeButtonGroup;
@@ -91,7 +99,7 @@ public class SkyDetector extends JFrame{
 		for (int i=0;i<norms.length;i++) {
 			max=Math.max(max,norms[i]);
 		}
-		thresholdSlider.setMaximum((int)Math.ceil(max));
+		thresholdSlider.setMaximum((int)Math.ceil(Math.sqrt(max)));
 		refresh();
 	}
 
@@ -105,7 +113,7 @@ public class SkyDetector extends JFrame{
 				int rgb=(Y<<16)|(Y<<8)|Y;
 				int bx=x/n;
 				int by=y/n;
-				if (bx<nx&&by<ny&&norms[by*nx+bx]<thresholdSlider.getValue()) {
+				if (bx<nx&&by<ny&&norms[by*nx+bx]<Math.pow(thresholdSlider.getValue(), 2)) {
 					rgb&=0xffff00;
 				}
 				disp.setRGB(x,y,rgb);
@@ -216,11 +224,32 @@ public class SkyDetector extends JFrame{
 		thresholdSlider=new JSlider(JSlider.HORIZONTAL,0,500,0);
 		thresholdSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
+				thresholdBox.setText("" +(int) Math.pow(thresholdSlider.getValue(),2));
 				refresh();
 			}
 		});
+	
 		thresholdPanel.add(thresholdSlider);
+		
+		thresholdBox = new JTextField();
+		thresholdBox.addActionListener(new ActionListener(){
 
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int threshold = 0;
+				try{
+				threshold = Integer.parseInt(thresholdBox.getText());
+				} catch (java.lang.NumberFormatException e){
+					thresholdBox.setText("" + (int)Math.pow(thresholdSlider.getValue(),2));
+					return;
+				}
+				thresholdSlider.setValue((int) Math.sqrt(threshold));
+				thresholdBox.setText("" + (int)Math.pow(thresholdSlider.getValue(),2));
+				refresh();
+			}});
+		
+		thresholdPanel.add(thresholdBox);
+		
 		JButton loadImage = new JButton("Load Image");
 		loadImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _ae) {
