@@ -9,6 +9,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Sensor;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -45,8 +47,9 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 
     // Create our Preview view and set it as the content of our activity
     mPreview = new CameraPreview(this, mCamera, mRenderer);
-    setContentView(mPreview);
-    addContentView(mView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    setContentView(mView);
+    addContentView(mPreview, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    mSensorManager.registerListener((SensorEventListener)mPreview, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     public void onPause() {
@@ -75,6 +78,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 
     public void onPreviewFrame(byte[] data, Camera camera) {
     System.out.println("PreviewFrame");
+    
     }
     
     /*
