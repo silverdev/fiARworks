@@ -4,113 +4,88 @@
  */
 package com.slsw.fiarworks;
 
-
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Sensor;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
 import com.slsw.fiarworks.firework.GLRenderer;
 
-public class CameraActivity extends Activity implements OnTouchListener {
-	private Camera mCamera = null;
-	private MyGLSurfaceView mView;
-	private CameraPreview mPrev;
+public class CameraActivity extends Activity implements Camera.PreviewCallback, OnTouchListener {
+
+    private Camera mCamera;
+    private CameraPreview mPreview;
 	private SensorManager mSensorManager;
     private Sensor mRotation;
+	private MyGLSurfaceView mView;
     private GLRenderer mRenderer;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.main_layout);
+    
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		System.out.println("ONCREATE");
-		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-		mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-		if(mCamera == null)
-			mCamera = getCameraInstance();
-		mRenderer=new GLRenderer();
-		mView = new MyGLSurfaceView(this, mRenderer);
-		mPrev = new CameraPreview(this.getBaseContext(), mCamera, mRenderer);
-		if(mPrev == null) System.out.println("Oh noes");
-		mCamera.getParameters().setPreviewFormat(ImageFormat.RGB_565);
-		mCamera.setPreviewCallback(mPrev);
-		mCamera.startPreview();
-		setContentView(mView);
-		mView.setOnTouchListener(this);
-		System.err.println("hello");
-	}
+	mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+	mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+	
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		System.out.println("ONCREATEOPTIONSMENU");
-		return true;
-	}
+	mRenderer=new GLRenderer();
+	mView = new MyGLSurfaceView(this, mRenderer);
 
-	@Override
-	protected void onPause() {
-		releaseCamera();
-		mSensorManager.unregisterListener(this.mPrev);
-		super.onPause();
-		//releaseCamera();
-		System.out.println("ONPAUSE");
-		mView.onPause();
-	}
+    // Create an instance of Camera
+    mCamera = getCameraInstance();
 
-	@Override
-	protected void onResume() {
-		if(mCamera == null)
-			mCamera = getCameraInstance();
-		mPrev = new CameraPreview(getBaseContext(), mCamera, mRenderer);
-		if(mPrev == null) System.out.println("Oh noes");
-		mCamera.getParameters().setPreviewFormat(ImageFormat.RGB_565);
-		mCamera.setPreviewCallback(mPrev);
-		mCamera.startPreview();
-		setContentView(mView);
-		mView.onResume();
-		mView.setOnTouchListener(this);
-		mSensorManager.registerListener(this.mPrev, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
-		super.onResume();
-	}
+    // Create our Preview view and set it as the content of our activity
+    mPreview = new CameraPreview(this, mCamera, mRenderer);
+    setContentView(mView);
+    addContentView(mPreview, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    mSensorManager.registerListener((SensorEventListener)mPreview, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
+    }
 
-	/*
-	 * Release the camera so that other applications can use it. Called when the
-	 * program is not in the forefront
-	 */
-	private void releaseCamera() {
-		if (mCamera != null) {
-			mCamera.stopPreview();
-			mCamera.release(); // release the camera for other applications
-			mCamera = null;
-			mPrev.mCamera=null;
-		}
-	}
+    public void onPause() {
+        super.onPause();
+        
+        mSensorManager.unregisterListener(this.mPreview);
 
-	/*
-	 * This function tries to grab the first available camera
-	 * 
-	 * returns null if unavailable
-	 */
-	public static Camera getCameraInstance() {
-		Camera c = null;
-		try {
-			c = Camera.open();
-		} catch (Exception e) {
-			// Camera is not available
-			System.out.println("CAMERA NOT AVAILABLE");
-		}
-		return c;
-	}
+        if (mCamera != null) {
+            mCamera.setPreviewCallback(null);
+            mPreview.getHolder().removeCallback(mPreview);
+            mCamera.release();
+        }
+    }
 
-	/*
+    /** A safe way to get an instance of the Camera object. */
+    public static Camera getCameraInstance(){
+    Camera c = null;
+    try {
+        c = Camera.open(); // attempt to get a Camera instance
+    }
+    catch (Exception e){
+        // Camera is not available (in use or does not exist)
+    }
+    return c; // returns null if camera is unavailable
+    }
+
+    public void onPreviewFrame(byte[] data, Camera camera) {
+    System.out.println("PreviewFrame");
+    Camera.Parameters p = mCamera.getParameters();
+    int width = p.getPreviewSize().width;
+    int height = p.getPreviewSize().height;
+    mRenderer.setTextures(data, width, height, null);
+    
+    }
+    
+    /*
 	 * Called whenever a touch is detected.
 	 */
 	public boolean onTouch(View v, MotionEvent event) {
@@ -124,7 +99,7 @@ public class CameraActivity extends Activity implements OnTouchListener {
 		return true;
 	}
 
-}
+ }
 
 class MyGLSurfaceView extends GLSurfaceView {
 	private final GLRenderer mRenderer;
