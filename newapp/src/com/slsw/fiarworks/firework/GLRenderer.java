@@ -1,21 +1,19 @@
 
 package com.slsw.fiarworks.firework;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-import java.util.Arrays;
+import java.io.ByteArrayOutputStream;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
-import android.util.Log;
 
 public class GLRenderer implements GLSurfaceView.Renderer{
     private static final String TAG = "GLRenderer";
@@ -72,15 +70,18 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 
     }
     
-    public void setTextures(byte[] image, byte[][] mask){
-        this.mBackgroundImage.recycle();
-        this.mBackgroundImage = null;
-    	System.out.println(Arrays.toString(image));
-    	mBackgroundImage = BitmapFactory.decodeByteArray(
-    				image, 0, image.length);
-    	if (this.mBackgroundImage == null){
-    		throw new RuntimeException("failed to decode");
-    		
+    public void setTextures(byte[] image, int width, int height, byte[][] mask){
+        //mBackgroundImage.recycle();
+        //mBackgroundImage = null;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        YuvImage yuvImage = new YuvImage(image, ImageFormat.NV21, width, height,
+                null);
+        yuvImage.compressToJpeg(new Rect(0, 0, width, height), 50, out);
+        byte[] imageBytes = out.toByteArray();
+        mBackgroundImage = BitmapFactory.decodeByteArray(imageBytes, 0,
+                imageBytes.length, null);
+    	if (mBackgroundImage == null){
+    		System.err.println("FAILED");
     	}
     	
     }

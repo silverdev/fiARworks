@@ -78,6 +78,10 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 
     public void onPreviewFrame(byte[] data, Camera camera) {
     System.out.println("PreviewFrame");
+    Camera.Parameters p = mCamera.getParameters();
+    int width = p.getPreviewSize().width;
+    int height = p.getPreviewSize().height;
+    mRenderer.setTextures(data, width, height, null);
     
     }
     
