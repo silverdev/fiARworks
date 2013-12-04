@@ -2,6 +2,9 @@
 package com.slsw.fiarworks.firework;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.util.Arrays;
+import java.util.Calendar;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -15,6 +18,9 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
+import com.slsw.fiarworks.CameraPreview;
+import com.slsw.fiarworks.masker.AlphaMake;
+
 public class GLRenderer implements GLSurfaceView.Renderer{
     private static final String TAG = "GLRenderer";
 	private Firework mFirework;
@@ -24,7 +30,10 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     private float[] mMVPMatrix = new float[16];
     private GLBackground mBackground;
     private Bitmap mBackgroundImage =Bitmap.createBitmap(1,1,Bitmap.Config.RGB_565);
-    private static final byte[][] initalMask = {{(byte)0xf}}; 
+    private static byte[][] myMask = {{(byte)0xf}};
+    private Bitmap[] imgs = new Bitmap[8];
+    private int captured = 0;
+    private int wait = 0;
     
 
     @Override
@@ -70,7 +79,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 
     }
     
-    public void setTextures(byte[] image, int width, int height, byte[][] mask){
+    public void setTextures(byte[] image, int width, int height, CameraPreview prev){
         //mBackgroundImage.recycle();
         //mBackgroundImage = null;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -82,12 +91,42 @@ public class GLRenderer implements GLSurfaceView.Renderer{
                 imageBytes.length, null);
     	if (mBackgroundImage == null){
     		System.err.println("FAILED");
+    	} else{
+			//saveImages();
     	}
     	
+    	myMask = AlphaMake.makeSimpleMask(mBackgroundImage, height, width, prev.changeInRot());
     }
+
+	private void saveImages() {
+		if(wait<60){
+    		wait++;
+    	} else if(captured<imgs.length){
+    		imgs[captured]=mBackgroundImage;
+    		captured++;
+    	} else if(captured==imgs.length){
+    		//Save images to file
+    		Calendar c = Calendar.getInstance(); 
+			int seconds = c.get(Calendar.SECOND);
+			int min = c.get(Calendar.MINUTE);
+			String seq = min+"_"+seconds;
+    		for (int i=0; i<captured; i++){
+    			Bitmap bmp = imgs[i];
+    			try {
+     		       FileOutputStream o = new FileOutputStream("storage/sdcard0/testimg"+seq+"_"+i+".png");
+     		       bmp.compress(Bitmap.CompressFormat.PNG, 100, o);
+     		       o.close();
+	     		} catch (Exception e) {
+	     		       e.printStackTrace();
+	     		}
+    		}
+
+    		captured++;
+    	}
+	}
     
     public void setChange(float[] rot){
-    	
+    	System.err.println(Arrays.toString(rot));
     }
 
 }

@@ -4,13 +4,14 @@
  */
 package com.slsw.fiarworks;
 
+import java.util.List;
+
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 
 import com.slsw.fiarworks.firework.GLRenderer;
+import com.slsw.fiarworks.masker.AlphaMake;
 
 public class CameraActivity extends Activity implements Camera.PreviewCallback, OnTouchListener {
 
@@ -31,25 +33,32 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.main_layout);
-    
-
-	mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-	mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+	    super.onCreate(savedInstanceState);
+	    setContentView(R.layout.main_layout);
+	    
 	
-
-	mRenderer=new GLRenderer();
-	mView = new MyGLSurfaceView(this, mRenderer);
-
-    // Create an instance of Camera
-    mCamera = getCameraInstance();
-
-    // Create our Preview view and set it as the content of our activity
-    mPreview = new CameraPreview(this, mCamera, mRenderer);
-    setContentView(mView);
-    addContentView(mPreview, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-    mSensorManager.registerListener((SensorEventListener)mPreview, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
+		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+		mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+		
+	
+		mRenderer=new GLRenderer();
+		mView = new MyGLSurfaceView(this, mRenderer);
+	
+	    // Create an instance of Camera
+	    mCamera = getCameraInstance();
+	    Camera.Parameters parameters = mCamera.getParameters();
+	    List<String> focusModes = parameters.getSupportedFocusModes();
+	    if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO))
+	    {
+	        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+	    }
+	    mCamera.setParameters(parameters);
+	
+	    // Create our Preview view and set it as the content of our activity
+	    mPreview = new CameraPreview(this, mCamera, mRenderer);
+	    setContentView(mView);
+	    addContentView(mPreview, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+	    mSensorManager.registerListener((SensorEventListener)mPreview, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     public void onPause() {
@@ -66,23 +75,22 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 
     /** A safe way to get an instance of the Camera object. */
     public static Camera getCameraInstance(){
-    Camera c = null;
-    try {
-        c = Camera.open(); // attempt to get a Camera instance
-    }
-    catch (Exception e){
-        // Camera is not available (in use or does not exist)
-    }
-    return c; // returns null if camera is unavailable
+	    Camera c = null;
+	    try {
+	        c = Camera.open(); // attempt to get a Camera instance
+	    }
+	    catch (Exception e){
+	        // Camera is not available (in use or does not exist)
+	    }
+	    return c; // returns null if camera is unavailable
     }
 
     public void onPreviewFrame(byte[] data, Camera camera) {
-    System.out.println("PreviewFrame");
-    Camera.Parameters p = mCamera.getParameters();
-    int width = p.getPreviewSize().width;
-    int height = p.getPreviewSize().height;
-    mRenderer.setTextures(data, width, height, null);
-    
+	    System.out.println("PreviewFrame");
+	    Camera.Parameters p = mCamera.getParameters();
+	    int width = p.getPreviewSize().width;
+	    int height = p.getPreviewSize().height;
+	    mRenderer.setTextures(data, width, height, mPreview);
     }
     
     /*

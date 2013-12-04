@@ -15,6 +15,7 @@ import android.hardware.Camera.Size;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -151,7 +152,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
 			//Update rotation and position vector
 			mRotVec = event.values;
-			if(mRenderer != null) mRenderer.setChange(changeInRot());
 		}
 	}
 	
@@ -160,7 +160,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 			mRotOld = mRotVec.clone();
 		}
 		float[] angleChange = new float[]{0f,0f,0f};
-		//SensorManager.getAngleChange (angleChange, mRotVec, mRotOld);
+		float[] rotVec = new float[9];
+		float[] rotOld = new float[9];
+		SensorManager.getRotationMatrixFromVector(rotVec, mRotVec);
+		SensorManager.getRotationMatrixFromVector(rotOld, mRotOld);
+		SensorManager.getAngleChange (angleChange, rotVec, rotOld);
+		mRotOld=mRotVec;
 		return angleChange;
 		
 	}
