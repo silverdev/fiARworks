@@ -2,7 +2,7 @@
 package com.slsw.fiarworks.firework;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
+import java.util.Arrays;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -16,6 +16,9 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
+import com.slsw.fiarworks.CameraPreview;
+import com.slsw.fiarworks.masker.AlphaMake;
+
 public class GLRenderer implements GLSurfaceView.Renderer{
     private static final String TAG = "GLRenderer";
 	private Firework mFirework;
@@ -25,7 +28,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     private float[] mMVPMatrix = new float[16];
     private GLBackground mBackground;
     private Bitmap mBackgroundImage =Bitmap.createBitmap(1,1,Bitmap.Config.RGB_565);
-    private static final byte[][] initalMask = {{(byte)0xf}};
+    private static byte[][] myMask = {{(byte)0xf}};
     private Bitmap[] imgs = new Bitmap[8];
     private int captured = 0;
     private int wait = 0;
@@ -74,7 +77,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 
     }
     
-    public void setTextures(byte[] image, int width, int height, byte[][] mask){
+    public void setTextures(byte[] image, int width, int height, CameraPreview prev){
         //mBackgroundImage.recycle();
         //mBackgroundImage = null;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -108,10 +111,11 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     		captured++;
     	}*/
     	
+    	myMask = AlphaMake.makeSimpleMask(mBackgroundImage, height, width, prev.changeInRot());
     }
     
     public void setChange(float[] rot){
-    	
+    	System.err.println(Arrays.toString(rot));
     }
 
 }
