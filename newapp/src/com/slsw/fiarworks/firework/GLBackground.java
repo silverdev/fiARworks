@@ -27,20 +27,20 @@ public class GLBackground
         "  gl_FragColor = texture2D(u_Texture, v_TexCoordinate);" +
         "}";
 
-    static final float[] screenPos = {	0.0f, 0.0f,
+    static final float[] screenPos = {	-1.0f, -1.0f,
+	   									-1.0f,  1.0f,
+	   									 1.0f, -1.0f,
+	   									 1.0f,  1.0f,
+	   									 1.0f, -1.0f,
+	   									-1.0f,  1.0f,
+	   									};
+
+	static final float[] screenTex = {	0.0f, 0.0f,
 	   									0.0f,  1.0f,
 	   									 1.0f, 0.0f,
 	   									 1.0f,  1.0f,
 	   									 1.0f, 0.0f,
-	   									-0.0f,  1.0f,
-	   									};
-
-	static final float[] screenTex = {	-1.0f, -1.0f,
-	   									 1.0f, -1.0f,
-	   									-1.0f,  1.0f,
-	   									 1.0f,  1.0f,
-	   									 1.0f, -1.0f,
-	   									-1.0f,  1.0f,
+	   									0.0f,  1.0f,
 	   									};
 
     static int[] mfloatBufferPosHandle = new int[1];
