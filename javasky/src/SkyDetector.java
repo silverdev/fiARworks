@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Stack;
+import java.util.zip.Inflater;
 
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
@@ -19,14 +21,13 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.NavigationFilter.FilterBypass;
+
+
 
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
 import javax.swing.JTextField;
-import javax.print.attribute.AttributeSet;
+
 
 public class SkyDetector extends JFrame{
 
@@ -124,6 +125,112 @@ public class SkyDetector extends JFrame{
 		repaint();
 	}
 	
+	
+	protected boolean[][] makeTextureMap() {
+		int n=1<<bsize.log;
+		int nx=disp.getWidth()/n;
+		int ny=disp.getHeight()/n;
+		boolean [][] mask = new boolean [nx][ny];
+		
+		for (int y=0;y<ny;y++) {
+			for (int x=0;x<nx;x++) {
+				if (x<nx&&y<ny&&norms[y*nx+x]<Math.pow(thresholdSlider.getValue(), 2)) {
+					mask[x][y] = true;
+				}
+				else {mask[x][y] = false;}
+			}
+		}
+		return mask;
+	}
+	
+	/*protected void floodFillFromTop(boolean[][] skymask){
+		
+		int n=1<<bsize.log;
+		int nx=disp.getWidth()/n;
+		int ny=disp.getHeight()/n;
+		for (int y=0;y<ny;y++) {
+			for (int x=0;x<nx;x++) {
+				if (skymask[x][y]&&(y==0 ||(x > 0 && skymask[x-1][y])||skymask[x][y-1])) {
+					skymask[x][y] = true;
+				}
+				else {skymask[x][y] = false;}
+			}
+		}
+	}*/private void floodFill(boolean[][] skymask, boolean[][] confirmed, int x, int y){
+		System.out.println("x "+x+" y "+y);
+		
+		if (0 <= y && y < skymask[0].length && 0 <= x && x < skymask.length && ((!confirmed[x][y]) && (skymask [x][y]))){
+		confirmed[x][y] = true;
+		floodFill(skymask, confirmed,x+1 ,y );
+		floodFill(skymask, confirmed,x-1 ,y );
+		floodFill(skymask, confirmed,x ,y+1 );
+		floodFill(skymask, confirmed,x ,y-1 );
+		}
+	}
+	
+	private void floodFill(boolean[][] skymask, boolean[][] confirmed, Stack<Integer> pStack){
+		int y = pStack.pop();
+		int x = pStack.pop();
+		if (0 <= y && y < skymask[0].length && 0 <= x && x < skymask.length && ((!confirmed[x][y]) && (skymask [x][y]))){
+		confirmed[x][y] = true;
+		pStack.push(x+1);		pStack.push(y);
+		//floodFill(skymask, confermed,x+1 ,y );
+		pStack.push(x-1);		pStack.push(y);
+		//floodFill(skymask, confermed,x-1 ,y );
+		pStack.push(x);		pStack.push(y+1);
+		//floodFill(skymask, confermed,x ,y+1 );
+		pStack.push(x);		pStack.push(y-1);
+		//floodFill(skymask, confermed,x ,y-1 );
+		}
+		
+
+	}
+	protected boolean[][] floodFillFromTop(boolean[][] skymask){
+	Stack<Integer> pStack = new Stack<Integer>();
+	boolean [][] fillMask = new boolean[skymask.length][skymask[0].length];
+	for (int x=0;x< skymask.length ;x++) {
+		//System.out.println(fillMask[0][y]);
+		pStack.push(x);
+		pStack.push(0);
+		
+		
+	}
+	while(!pStack.empty()){
+		floodFill(skymask, fillMask, pStack);
+		
+		
+	}
+	
+	return fillMask;
+}
+	
+
+	protected void drawMap(boolean[][] skymask)
+		{
+		int n=1<<bsize.log;
+		int nx=disp.getWidth()/n;
+		int ny=disp.getHeight()/n;
+		
+		for (int y=0;y<disp.getHeight();y++) {
+			for (int x=0;x<disp.getWidth();x++) {
+				int Y=luma[y*disp.getWidth()+x];
+				int rgb=(Y<<16)|(Y<<8)|Y;
+				int bx=x/n;
+				int by=y/n;
+				if (bx<nx&&by<ny&& skymask[bx][by]) {
+					rgb|=0x00ff00;
+				}
+				disp.setRGB(x,y,rgb);
+			}
+		}
+		repaint();
+		}
+	protected void testFindSky(){
+		boolean[][] mask = makeTextureMap();
+		mask = floodFillFromTop(mask);
+		drawMap(mask);
+		
+	}
 	public SkyDetector(String fileURL) throws IOException {
 		getContentPane().setLayout(new FlowLayout());
 
@@ -267,6 +374,14 @@ public class SkyDetector extends JFrame{
 			}
 		});
 		panel.add(loadImage);
+		
+		JButton testFlood = new JButton("flood for sky");
+		testFlood.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _ae) {
+				testFindSky();
+			}
+		});
+		panel.add(testFlood);
 		
 		loadImage(new File(fileURL));
 
