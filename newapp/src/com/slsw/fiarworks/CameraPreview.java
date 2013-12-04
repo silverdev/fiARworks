@@ -97,6 +97,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         if (context.getPackageManager().hasSystemFeature("android.hardware.camera.autofocus"))
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
 
+        parameters.setPreviewSize(720, 480);
         mCamera.setParameters(parameters);
 
         mCamera.setPreviewCallback((PreviewCallback) context);
