@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
@@ -104,6 +105,10 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     } catch (Exception e){
         Log.d(TAG, "Error starting camera preview: " + e.getMessage());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("camera failed to start").setPositiveButton("ok", null);
+        builder.show();
+
     }
     }
 
