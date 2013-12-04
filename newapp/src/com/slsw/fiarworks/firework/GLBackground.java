@@ -29,20 +29,20 @@ public class GLBackground
         "  gl_FragColor = texture2D(u_Texture, v_TexCoordinate);" +
         "}";
 
-    static final float[] screenPos = {	-1.0f, -1.0f,
-	   									-1.0f,  1.0f,
-	   									 1.0f, -1.0f,
-	   									 1.0f,  1.0f,
-	   									-1.0f,  1.0f,
-	   									 1.0f, -1.0f,
+    static final float[] screenPos = {	-14.0f, -02345.0f,
+	   									-0235.0f,  12345.0f,
+	   									 1234.0f, -0532.0f,
+	   									 12345.0f,  12345.0f,
+	   									 12345.0f, -02345.0f,
+	   									-0345.0f,  1235.0f,
 	   									};
 
 	static final float[] screenTex = {	-1.0f, -1.0f,
-	   									-1.0f,  1.0f,
 	   									 1.0f, -1.0f,
+	   									-1.0f,  1.0f,
 	   									 1.0f,  1.0f,
-	   									-1.0f,  1.0f,
 	   									 1.0f, -1.0f,
+	   									-1.0f,  1.0f,
 	   									};
 
     static int[] mfloatBufferPosHandle = new int[1];
@@ -76,11 +76,11 @@ public class GLBackground
 			{
 				System.out.println("mPosShaderLoc is -1. This is bad.");
 			}
-			// mTexShaderLoc = GLES20.glGetUniformLocation(mProgram, "a_TexCoordinate");
-			// if(mTexShaderLoc == -1)
-			// {
-			// 	System.out.println("mTexShaderLoc is -1. This is bad.");
-			// }
+			mTexShaderLoc = GLES20.glGetUniformLocation(mProgram, "a_TexCoordinate");
+			if(mTexShaderLoc == -1)
+			{
+				System.out.println("mTexShaderLoc is -1. This is bad.");
+			}
 			mTextureUniformLoc = GLES20.glGetUniformLocation(mProgram, "u_Texture");
 			if(mTextureUniformLoc == -1)
 			{
