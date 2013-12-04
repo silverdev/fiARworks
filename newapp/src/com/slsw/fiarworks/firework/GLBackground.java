@@ -11,13 +11,11 @@ public class GLBackground
 {
 	private final String vertexShaderCode =
         "attribute vec2 a_Position;" +
-//        "attribute vec2 a_TexCoordinate;" +
+        "attribute vec2 a_TexCoordinate;" +
         "varying vec2 v_TexCoordinate;" +
         "void main() {" +
-        // the matrix must be included as a modifier of gl_Position
         "  vec4 position = vec4(a_Position, 0.0, 1.0);" +
-//        "  v_TexCoordinate = a_TexCoordinate;" +
-        "  v_TexCoordinate = a_Position;" +
+        "  v_TexCoordinate = a_TexCoordinate;" +
         "  gl_Position = position;" +
         "}";
 
@@ -29,12 +27,12 @@ public class GLBackground
         "  gl_FragColor = texture2D(u_Texture, v_TexCoordinate);" +
         "}";
 
-    static final float[] screenPos = {	-14.0f, -02345.0f,
-	   									-0235.0f,  12345.0f,
-	   									 1234.0f, -0532.0f,
-	   									 12345.0f,  12345.0f,
-	   									 12345.0f, -02345.0f,
-	   									-0345.0f,  1235.0f,
+    static final float[] screenPos = {	0.0f, 0.0f,
+	   									0.0f,  1.0f,
+	   									 1.0f, 0.0f,
+	   									 1.0f,  1.0f,
+	   									 1.0f, 0.0f,
+	   									-0.0f,  1.0f,
 	   									};
 
 	static final float[] screenTex = {	-1.0f, -1.0f,
@@ -76,7 +74,7 @@ public class GLBackground
 			{
 				System.out.println("mPosShaderLoc is -1. This is bad.");
 			}
-			mTexShaderLoc = GLES20.glGetUniformLocation(mProgram, "a_TexCoordinate");
+			mTexShaderLoc = GLES20.glGetAttribLocation(mProgram, "a_TexCoordinate");
 			if(mTexShaderLoc == -1)
 			{
 				System.out.println("mTexShaderLoc is -1. This is bad.");
