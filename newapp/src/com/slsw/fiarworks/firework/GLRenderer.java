@@ -2,7 +2,9 @@
 package com.slsw.fiarworks.firework;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.util.Arrays;
+import java.util.Calendar;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -89,17 +91,21 @@ public class GLRenderer implements GLSurfaceView.Renderer{
                 imageBytes.length, null);
     	if (mBackgroundImage == null){
     		System.err.println("FAILED");
-    	} /*else if(wait<60){
+    	} else if(wait<60){
     		wait++;
     	} else if(captured<imgs.length){
     		imgs[captured]=mBackgroundImage;
     		captured++;
     	} else if(captured==imgs.length){
     		//Save images to file
+    		Calendar c = Calendar.getInstance(); 
+			int seconds = c.get(Calendar.SECOND);
+			int min = c.get(Calendar.MINUTE);
+			String seq = min+"_"+seconds;
     		for (int i=0; i<captured; i++){
     			Bitmap bmp = imgs[i];
     			try {
-     		       FileOutputStream o = new FileOutputStream("storage/sdcard0/testimg"+i+".png");
+     		       FileOutputStream o = new FileOutputStream("storage/sdcard0/testimg"+i+"_"+seq+".png");
      		       bmp.compress(Bitmap.CompressFormat.PNG, 100, o);
      		       o.close();
 	     		} catch (Exception e) {
@@ -107,9 +113,8 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 	     		}
     		}
 
-
     		captured++;
-    	}*/
+    	}
     	
     	myMask = AlphaMake.makeSimpleMask(mBackgroundImage, height, width, prev.changeInRot());
     }
