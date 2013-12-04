@@ -10,6 +10,7 @@ import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
+import android.hardware.Camera.Size;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
@@ -35,7 +36,6 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	    setContentView(R.layout.main_layout);
 	    
 	
@@ -53,6 +53,11 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 	    if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO))
 	    {
 	        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+	    }
+	    List<Size> sizes = parameters.getSupportedPreviewSizes();
+	    System.out.println("CALLED");
+	    for(Size s : sizes){
+	    	System.out.println("Size = "+s.width +", "+ s.height);
 	    }
 	    mCamera.setParameters(parameters);
 	
