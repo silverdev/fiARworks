@@ -83,19 +83,46 @@ public class GLRenderer implements GLSurfaceView.Renderer{
         //mBackgroundImage.recycle();
         //mBackgroundImage = null;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
+        /*
         YuvImage yuvImage = new YuvImage(image, ImageFormat.NV21, width, height,
                 null);
-        yuvImage.compressToJpeg(new Rect(0, 0, width, height), 50, out);
+        yuvImage.compressToJpeg(new Rect(0, 0, width, height), 100, out);
         byte[] imageBytes = out.toByteArray();
-        mBackgroundImage = BitmapFactory.decodeByteArray(imageBytes, 0,
+        Bitmap BackgroundImage = BitmapFactory.decodeByteArray(imageBytes, 0,
                 imageBytes.length, null);
-    	if (mBackgroundImage == null){
+                */
+        Bitmap BackgroundImage = makeBlackAndWhiteBitmap(image, width, height);
+    	if (BackgroundImage == null){
     		System.err.println("FAILED");
     	} else{
-			//saveImages();
+			
+    		mBackgroundImage = BackgroundImage;
+    		saveImages();
     	}
     	
     	myMask = AlphaMake.makeSimpleMask(mBackgroundImage, height, width, prev.changeInRot());
+    }
+    public Bitmap makeBlackAndWhiteBitmap(byte[] image, int width, int height){
+    	int[] RGBAImage = new int[width * height];
+    	applyGrayScale(RGBAImage, image, width, height);
+		return Bitmap.createBitmap(RGBAImage, width, height, Bitmap.Config.ARGB_8888);
+    	
+    }
+    /**
+     * Converts YUV420 NV21 to Y888 (RGB8888). The grayscale image still holds 3 bytes on the pixel.
+     * 
+     * @param pixels output array with the converted array o grayscale pixels
+     * @param data byte array on YUV420 NV21 format.
+     * @param width pixels width
+     * @param height pixels height
+     */
+    public static void applyGrayScale(int [] pixels, byte [] data, int width, int height) {
+        int p;
+        int size = width*height;
+        for(int i = 0; i < size; i++) {
+            p = data[i] & 0xFF;
+            pixels[i] = 0xff000000 | p<<16 | p<<8 | p;
+        }
     }
 
 	private void saveImages() {
