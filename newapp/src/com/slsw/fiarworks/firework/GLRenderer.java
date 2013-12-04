@@ -101,6 +101,8 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     	}
     	
     	myMask = AlphaMake.makeSimpleMask(mBackgroundImage, height, width, prev.changeInRot());
+
+        mCamera.updateView(prev.mRotVec);
     }
     public Bitmap makeBlackAndWhiteBitmap(byte[] image, int width, int height){
     	int[] RGBAImage = new int[width * height];
@@ -154,6 +156,11 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     
     public void setChange(float[] rot){
     	System.err.println(Arrays.toString(rot));
+    }
+
+    public launchFirework()
+    {
+
     }
 
 }

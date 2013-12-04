@@ -94,8 +94,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         Size optimalSize = getOptimalPreviewSize(sizes, w, h);
         parameters.setPreviewSize(optimalSize.width, optimalSize.height);
 
-        if (context.getPackageManager().hasSystemFeature("android.hardware.camera.autofocus"))
-            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        //if (context.getPackageManager().hasSystemFeature("android.hardware.camera.autofocus"))
+         //   parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
 
         parameters.setPreviewSize(720, 480);
         mCamera.setParameters(parameters);
