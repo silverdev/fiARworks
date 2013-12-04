@@ -91,7 +91,15 @@ public class GLRenderer implements GLSurfaceView.Renderer{
                 imageBytes.length, null);
     	if (mBackgroundImage == null){
     		System.err.println("FAILED");
-    	} else if(wait<60){
+    	} else{
+			//saveImages();
+    	}
+    	
+    	myMask = AlphaMake.makeSimpleMask(mBackgroundImage, height, width, prev.changeInRot());
+    }
+
+	private void saveImages() {
+		if(wait<60){
     		wait++;
     	} else if(captured<imgs.length){
     		imgs[captured]=mBackgroundImage;
@@ -105,7 +113,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     		for (int i=0; i<captured; i++){
     			Bitmap bmp = imgs[i];
     			try {
-     		       FileOutputStream o = new FileOutputStream("storage/sdcard0/testimg"+i+"_"+seq+".png");
+     		       FileOutputStream o = new FileOutputStream("storage/sdcard0/testimg"+seq+"_"+i+".png");
      		       bmp.compress(Bitmap.CompressFormat.PNG, 100, o);
      		       o.close();
 	     		} catch (Exception e) {
@@ -115,9 +123,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 
     		captured++;
     	}
-    	
-    	myMask = AlphaMake.makeSimpleMask(mBackgroundImage, height, width, prev.changeInRot());
-    }
+	}
     
     public void setChange(float[] rot){
     	System.err.println(Arrays.toString(rot));
