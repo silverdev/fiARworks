@@ -158,7 +158,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     	System.err.println(Arrays.toString(rot));
     }
 
-    public launchFirework()
+    public void launchFirework()
     {
 
     }

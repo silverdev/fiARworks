@@ -28,7 +28,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private Camera mCamera;
     private String TAG = "CameraPreview";
     private Context context;
-	private float[] mRotVec = new float[9];
+	public float[] mRotVec = new float[9];
 	private float[] mRotOld = new float[9];
 	private byte[][] mask = null;
 	public GLRenderer mRenderer;

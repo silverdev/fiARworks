@@ -24,7 +24,7 @@ public class GLCamera
 		return mViewMatrix;
 	}
 
-	public updateView(float[] dir)
+	public void updateView(float[] dir)
 	{
 		mViewMatrix[0] = dir[0];
 		mViewMatrix[1] = dir[1];
