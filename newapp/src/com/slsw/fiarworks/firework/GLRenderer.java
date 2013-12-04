@@ -2,6 +2,7 @@
 package com.slsw.fiarworks.firework;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -24,7 +25,9 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     private float[] mMVPMatrix = new float[16];
     private GLBackground mBackground;
     private Bitmap mBackgroundImage =Bitmap.createBitmap(1,1,Bitmap.Config.RGB_565);
-    private static final byte[][] initalMask = {{(byte)0xf}}; 
+    private static final byte[][] initalMask = {{(byte)0xf}};
+    private Bitmap[] imgs = new Bitmap[8];
+    private int captured = 0;
     
 
     @Override
@@ -82,7 +85,25 @@ public class GLRenderer implements GLSurfaceView.Renderer{
                 imageBytes.length, null);
     	if (mBackgroundImage == null){
     		System.err.println("FAILED");
-    	}
+    	} /*else if(captured<imgs.length){
+    		imgs[captured]=mBackgroundImage;
+    		captured++;
+    	} else if(captured==imgs.length){
+    		//Save images to file
+    		for (int i=0; i<captured; i++){
+    			Bitmap bmp = imgs[i];
+    			try {
+     		       FileOutputStream o = new FileOutputStream("storage/sdcard0/testimg"+i+".png");
+     		       bmp.compress(Bitmap.CompressFormat.PNG, 100, o);
+     		       o.close();
+	     		} catch (Exception e) {
+	     		       e.printStackTrace();
+	     		}
+    		}
+
+
+    		captured++;
+    	}*/
     	
     }
     
