@@ -4,13 +4,14 @@
  */
 package com.slsw.fiarworks;
 
+import java.util.List;
+
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -44,6 +45,13 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 
     // Create an instance of Camera
     mCamera = getCameraInstance();
+    Camera.Parameters parameters = mCamera.getParameters();
+    List<String> focusModes = parameters.getSupportedFocusModes();
+    if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO))
+    {
+        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+    }
+    mCamera.setParameters(parameters);
 
     // Create our Preview view and set it as the content of our activity
     mPreview = new CameraPreview(this, mCamera, mRenderer);

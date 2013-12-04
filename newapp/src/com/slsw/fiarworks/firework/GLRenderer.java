@@ -28,6 +28,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     private static final byte[][] initalMask = {{(byte)0xf}};
     private Bitmap[] imgs = new Bitmap[8];
     private int captured = 0;
+    private int wait = 0;
     
 
     @Override
@@ -85,7 +86,9 @@ public class GLRenderer implements GLSurfaceView.Renderer{
                 imageBytes.length, null);
     	if (mBackgroundImage == null){
     		System.err.println("FAILED");
-    	} /*else if(captured<imgs.length){
+    	} /*else if(wait<60){
+    		wait++;
+    	} else if(captured<imgs.length){
     		imgs[captured]=mBackgroundImage;
     		captured++;
     	} else if(captured==imgs.length){
