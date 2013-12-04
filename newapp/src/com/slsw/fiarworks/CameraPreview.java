@@ -28,8 +28,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private Camera mCamera;
     private String TAG = "CameraPreview";
     private Context context;
-	private float[] mRotVec;
-	private float[] mRotOld;
+	private float[] mRotVec = new float[9];
+	private float[] mRotOld = new float[9];
 	private byte[][] mask = null;
 	public GLRenderer mRenderer;
 	public volatile boolean sendBitmap;
@@ -156,7 +156,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		System.err.println(Arrays.toString(event.values));
 		if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
 			//Update rotation and position vector
-			mRotVec = event.values;
+			SensorManager.getRotationMatrixFromVector(mRotVec, event.values);
 		}
 	}
 	
@@ -165,11 +165,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 			mRotOld = mRotVec.clone();
 		}
 		float[] angleChange = new float[]{0f,0f,0f};
-		float[] rotVec = new float[9];
-		float[] rotOld = new float[9];
-		SensorManager.getRotationMatrixFromVector(rotVec, mRotVec);
-		SensorManager.getRotationMatrixFromVector(rotOld, mRotOld);
-		SensorManager.getAngleChange (angleChange, rotVec, rotOld);
+		SensorManager.getAngleChange (angleChange, mRotVec, mRotOld);
 		mRotOld=mRotVec;
 		return angleChange;
 		
