@@ -35,12 +35,12 @@ public class GLBackground
 	   									-1.0f,  1.0f,
 	   									};
 
-	static final float[] screenTex = {	0.0f, 0.0f,
-	   									0.0f,  1.0f,
-	   									 1.0f, 0.0f,
-	   									 1.0f,  1.0f,
-	   									 1.0f, 0.0f,
-	   									0.0f,  1.0f,
+	static final float[] screenTex = {	0.0f, 1.0f,
+	   									0.0f,  0.0f,
+	   									 1.0f, 1.0f,
+	   									 1.0f,  0.0f,
+	   									 1.0f, 1.0f,
+	   									0.0f,  0.0f,
 	   									};
 
     static int[] mfloatBufferPosHandle = new int[1];
