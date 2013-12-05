@@ -55,16 +55,16 @@ public class AlphaMake {
 		
 		double[] norms = BlockDCT.computeNorms(luma, width, height, bsize, BlockDCT.Norm.L1);
 		
-		for (int x = 0; x<mx; x++){
-			for (int y = 0; y<mx; y++){
+		for (int y = 0; y<height; y++){
+			for (int x = 0; x<width; x++){
 			int bx=x/n;
 			int by=y/n;
 			if (norms[by * mx + bx] < CUTOFF)
 			{
-				mask[y * height + x] = BACKGROUND;
+				mask[y * width + x] = BACKGROUND;
 			}
 			else {
-				mask[y * height + x] = OPAQUE;
+				mask[y * width + x] = OPAQUE;
 			}
 			}
 		}
