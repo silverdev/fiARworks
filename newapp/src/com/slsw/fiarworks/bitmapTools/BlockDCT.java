@@ -11,6 +11,9 @@ public class BlockDCT {
 		_16x16(4);
 
 		protected int log;
+		
+		public int getLog(){
+			return log;}
 
 		BlockSize(int _log) {
 			log=_log;
