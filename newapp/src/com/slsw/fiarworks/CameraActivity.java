@@ -45,6 +45,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 	
 		mRenderer=new GLRenderer();
 		mView = new MyGLSurfaceView(this, mRenderer);
+		mView.setOnTouchListener(this);
     }
 
     public void onPause() {
@@ -106,7 +107,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
     }
 
     public void onPreviewFrame(byte[] data, Camera camera) {
-	    //System.out.println("PreviewFrame");
+	    System.out.println("PreviewFrame");
 	    Camera.Parameters p = mCamera.getParameters();
 	    int width = p.getPreviewSize().width;
 	    int height = p.getPreviewSize().height;
