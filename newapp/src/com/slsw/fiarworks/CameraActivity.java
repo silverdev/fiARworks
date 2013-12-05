@@ -147,6 +147,6 @@ class MyGLSurfaceView extends GLSurfaceView {
     }
     
 	public void launchFirework(double x, double y, double d) {
-		
+
 	}
 }
