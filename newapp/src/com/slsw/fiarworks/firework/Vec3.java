@@ -9,6 +9,14 @@ public class Vec3
 	public float y;
 	public float z;
 	private static Random r = new Random();
+
+	public Vec3()
+	{
+		x = 0.0f;
+		y = 0.0f;
+		z = 0.0f;
+	}
+
 	public Vec3(float x_, float y_, float z_)
 	{
 		x = x_;
@@ -23,9 +31,20 @@ public class Vec3
 		this.z = other.z;
 	}
 
-	Vec3 add(Vec3 B)
+	void add(Vec3 B)
 	{
-		return new Vec3(this.x+B.x, this.y+B.y, this.z+B.z);
+//		Changed to modify existing object instead of returning a new one.
+//		return new Vec3(this.x+B.x, this.y+B.y, this.z+B.z);
+		this.x += B.x;
+		this.y += B.y;
+		this.z += B.z;
+	}
+
+	void add(float xdiff, float ydiff, float zdiff)
+	{
+		this.x += xdiff;
+		this.y += ydiff;
+		this.z += zdiff;		
 	}
 	
 	static Vec3 random_velocity(float speed)
