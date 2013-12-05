@@ -18,8 +18,10 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
+
 import com.slsw.fiarworks.CameraPreview;
 import com.slsw.fiarworks.masker.AlphaMake;
+import com.slsw.fiarworks.bitmapTools.PixelTools;
 
 public class GLRenderer implements GLSurfaceView.Renderer{
     private static final String TAG = "GLRenderer";
@@ -30,7 +32,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     private float[] mMVPMatrix = new float[16];
     private GLBackground mBackground;
     private Bitmap mBackgroundImage =Bitmap.createBitmap(1,1,Bitmap.Config.RGB_565);
-    private static byte[][] myMask = {{(byte)0xf}};
+    private static Bitmap myMask = Bitmap.createBitmap (1,1,Bitmap.Config.RGB_565);
     private Bitmap[] imgs = new Bitmap[8];
     private int captured = 0;
     private int wait = 0;
@@ -43,6 +45,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
         mFirework = new Firework();
         mCamera = new GLCamera(10.0f, 5.0f);
     	mBackgroundImage.setPixel(0, 0, 0xffffff);
+    	myMask.setPixel(0, 0, 0xffffff);
         mFirework.Launch();
     }
 
@@ -91,42 +94,20 @@ public class GLRenderer implements GLSurfaceView.Renderer{
         Bitmap BackgroundImage = BitmapFactory.decodeByteArray(imageBytes, 0,
                 imageBytes.length, null);
                 */
-        Bitmap BackgroundImage = makeBlackAndWhiteBitmap(image, width, height);
+        Bitmap BackgroundImage = PixelTools.makeBlackAndWhiteBitmap(image, width, height);
     	if (BackgroundImage == null){
     		System.err.println("FAILED");
     	} else{
 			
     		mBackgroundImage = BackgroundImage;
-    		saveImages();
+    		//saveImages();
     	}
+    	int[] luma = PixelTools.YUBtoLuma(image, width, height);
+    	myMask = AlphaMake.makeSimpleMask(image, width, height, prev.changeInRot());
     	
-    	myMask = AlphaMake.makeSimpleMask(mBackgroundImage, height, width, prev.changeInRot());
-
         mCamera.updateView(prev.mRotVec);
     }
-    public Bitmap makeBlackAndWhiteBitmap(byte[] image, int width, int height){
-    	int[] RGBAImage = new int[width * height];
-    	applyGrayScale(RGBAImage, image, width, height);
-		return Bitmap.createBitmap(RGBAImage, width, height, Bitmap.Config.ARGB_8888);
-    	
-    }
-    /**
-     * Converts YUV420 NV21 to Y888 (RGB8888). The grayscale image still holds 3 bytes on the pixel.
-     * 
-     * @param pixels output array with the converted array o grayscale pixels
-     * @param data byte array on YUV420 NV21 format.
-     * @param width pixels width
-     * @param height pixels height
-     */
-    public static void applyGrayScale(int [] pixels, byte [] data, int width, int height) {
-        int p;
-        int size = width*height;
-        for(int i = 0; i < size; i++) {
-            p = data[i] & 0xFF;
-            pixels[i] = 0xff000000 | p<<16 | p<<8 | p;
-        }
-    }
-
+   
 	private void saveImages() {
 		if(wait<60){
     		wait++;

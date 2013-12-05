@@ -33,6 +33,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	private byte[][] mask = null;
 	public GLRenderer mRenderer;
 	public volatile boolean sendBitmap;
+	public float mVerticalViewAngle;
 
     @SuppressWarnings("deprecation")
     public CameraPreview(Context context, Camera camera, GLRenderer renderer) {
@@ -98,6 +99,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
          //   parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
 
         parameters.setPreviewSize(720, 480);
+        mVerticalViewAngle = parameters.getVerticalViewAngle();
         mCamera.setParameters(parameters);
 
         mCamera.setPreviewCallback((PreviewCallback) context);
