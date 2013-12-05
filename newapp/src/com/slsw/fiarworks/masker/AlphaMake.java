@@ -29,7 +29,17 @@ public class AlphaMake {
 		
 		int[] luma = PixelTools.YUBtoLuma(image, width, height);
 		
+		double[] norms = BlockDCT.computeNorms(luma, width, height, BlockDCT.BlockSize._8x8, BlockDCT.Norm.L1);
 		
+		for (int i = 0; i<norms.length; i++){
+			if (norms[i] < 64)
+			{
+				mask[i] = BACKROUND;
+			}
+			else {
+				mask[i] =OPAQUE;
+			}
+		}
 		
 		return Bitmap.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
 	}
