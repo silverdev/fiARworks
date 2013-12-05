@@ -6,8 +6,22 @@ import com.slsw.fiarworks.bitmapTools.BlockDCT;
 import android.graphics.Bitmap;
 
 public class AlphaMake {
+	public enum SkyPos{
+		up(),
+		down(),
+		left(),
+		right();
+	}
+	
+	public enum PhonePos{
+		sky(),
+		center(),
+		down(),
+	}
+	
 	public static final int BACKROUND =  0xffffffff;
 	public static final int OPAQUE = 0;
+	public static final int CUTOFF = 64;
 
 	public static Bitmap makeSimpleMask(byte[] image, int width,int height,
 			float[] currRot) {
@@ -32,7 +46,7 @@ public class AlphaMake {
 		double[] norms = BlockDCT.computeNorms(luma, width, height, BlockDCT.BlockSize._8x8, BlockDCT.Norm.L1);
 		
 		for (int i = 0; i<norms.length; i++){
-			if (norms[i] < 64)
+			if (norms[i] < CUTOFF)
 			{
 				mask[i] = BACKROUND;
 			}
@@ -42,6 +56,13 @@ public class AlphaMake {
 		}
 		
 		return Bitmap.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
+	}
+	
+	private SkyPos getSkyDir(float[] currRot){
+		return null;
+	}
+	private PhonePos getPhoneDir(float[] currRot){
+		return null;
 	}
 
 }
