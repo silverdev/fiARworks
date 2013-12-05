@@ -139,6 +139,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     //x,y are screen coords
     //we need to get the y-axis angle in world coords
 	public void launchFirework(float x, float y) {
+        float angle = 0.0f;
         // float angle = zAxis(mCamera.mViewMatrix)
         mFirework.Launch(angle, 10.0f);
 	}

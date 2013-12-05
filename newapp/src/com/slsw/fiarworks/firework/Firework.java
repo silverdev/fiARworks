@@ -15,7 +15,7 @@ public class Firework
 	public void Launch(float angle, float depth)
 	{
 		System.out.println("Launching");
-		Vec3 start_pos = new Vec3(depth * Math.cos(angle), depth * Math.sin(angle), 0.0f);
+		Vec3 start_pos = new Vec3(depth * (float) Math.cos(angle), depth * (float) Math.sin(angle), 0.0f);
 		//possible issues:
 		//radians or degrees?
 		//cos and sin mixed up?
