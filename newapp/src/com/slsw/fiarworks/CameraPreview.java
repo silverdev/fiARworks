@@ -173,4 +173,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		return angleChange;
 		
 	}
+	
+	public void setCamera(Camera c){
+		mCamera=c;
+	}
 }

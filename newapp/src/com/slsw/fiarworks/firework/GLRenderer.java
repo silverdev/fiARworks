@@ -44,7 +44,9 @@ public class GLRenderer implements GLSurfaceView.Renderer{
         mBackground = new GLBackground();
         mFirework = new Firework();
         mCamera = new GLCamera(10.0f, 5.0f);
+        mBackgroundImage =Bitmap.createBitmap(1,1,Bitmap.Config.RGB_565);
     	mBackgroundImage.setPixel(0, 0, 0xffffff);
+    	myMask = Bitmap.createBitmap (1,1,Bitmap.Config.RGB_565);
     	myMask.setPixel(0, 0, 0xffffff);
         mFirework.Launch();
     }
