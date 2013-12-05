@@ -43,12 +43,12 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		mBackground = new GLBackground();
 		mFirework = new Firework();
-		mCamera = new GLCamera(10.0f, 5.0f);
+		mCamera = new GLCamera();
 		mBackgroundImage = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565);
 		mBackgroundImage.setPixel(0, 0, 0xffffff);
 		myMask = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565);
 		myMask.setPixel(0, 0, 0xffffff);
-		mFirework.Launch();
+		mFirework.Launch(0.2f, 10.0f);
 	}
 
 	@Override
@@ -135,9 +135,11 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	public void setChange(float[] rot) {
 		System.err.println(Arrays.toString(rot));
 	}
-
-	public void launchFirework() {
-
+    //x,y are screen coords
+    //we need to get the y-axis angle in world coords
+	public void launchFirework(float x, float y) {
+        // float angle = zAxis(mCamera.mViewMatrix)
+        mFirework.Launch(angle, 10.0f);
 	}
 
 }
