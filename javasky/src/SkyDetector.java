@@ -126,37 +126,25 @@ public class SkyDetector extends JFrame{
 	}
 	
 	
-	protected boolean[][] makeTextureMap() {
+
+	protected boolean[] makeTextureMap() {
 		int n=1<<bsize.log;
 		int nx=disp.getWidth()/n;
 		int ny=disp.getHeight()/n;
-		boolean [][] mask = new boolean [nx][ny];
+		boolean [] mask = new boolean [nx *ny];
 		
 		for (int y=0;y<ny;y++) {
 			for (int x=0;x<nx;x++) {
 				if (x<nx&&y<ny&&norms[y*nx+x]<Math.pow(thresholdSlider.getValue(), 2)) {
-					mask[x][y] = true;
+					mask[y * nx +x] = true;
 				}
-				else {mask[x][y] = false;}
+				
 			}
 		}
 		return mask;
 	}
 	
-	/*protected void floodFillFromTop(boolean[][] skymask){
-		
-		int n=1<<bsize.log;
-		int nx=disp.getWidth()/n;
-		int ny=disp.getHeight()/n;
-		for (int y=0;y<ny;y++) {
-			for (int x=0;x<nx;x++) {
-				if (skymask[x][y]&&(y==0 ||(x > 0 && skymask[x-1][y])||skymask[x][y-1])) {
-					skymask[x][y] = true;
-				}
-				else {skymask[x][y] = false;}
-			}
-		}
-	}*/private void floodFill(boolean[][] skymask, boolean[][] confirmed, int x, int y){
+	private void floodFill(boolean[][] skymask, boolean[][] confirmed, int x, int y){
 		System.out.println("x "+x+" y "+y);
 		
 		if (0 <= y && y < skymask[0].length && 0 <= x && x < skymask.length && ((!confirmed[x][y]) && (skymask [x][y]))){
@@ -167,12 +155,13 @@ public class SkyDetector extends JFrame{
 		floodFill(skymask, confirmed,x ,y-1 );
 		}
 	}
+
 	
-	private void floodFill(boolean[][] skymask, boolean[][] confirmed, Stack<Integer> pStack){
+	private void floodFill(boolean[] skymask, boolean[] confirmed, Stack<Integer> pStack, int mx, int my){
 		int y = pStack.pop();
 		int x = pStack.pop();
-		if (0 <= y && y < skymask[0].length && 0 <= x && x < skymask.length && ((!confirmed[x][y]) && (skymask [x][y]))){
-		confirmed[x][y] = true;
+		if (0 <= y && y < my && 0 <= x && x < mx && ((!confirmed[y * mx + x]) && (skymask [y * mx + x]))){
+		confirmed[y * mx + x] = true;
 		pStack.push(x+1);		pStack.push(y);
 		//floodFill(skymask, confermed,x+1 ,y );
 		pStack.push(x-1);		pStack.push(y);
@@ -185,10 +174,14 @@ public class SkyDetector extends JFrame{
 		
 
 	}
-	protected boolean[][] floodFillFromTop(boolean[][] skymask){
+	
+	protected boolean[] floodFillFromTop(boolean[] skymask){
+	int n=1<<bsize.log;
+	int mx=disp.getWidth()/n;
+	int my=disp.getHeight()/n;
 	Stack<Integer> pStack = new Stack<Integer>();
-	boolean [][] fillMask = new boolean[skymask.length][skymask[0].length];
-	for (int x=0;x< skymask.length ;x++) {
+	boolean [] fillMask = new boolean[skymask.length];
+	for (int x=0;x< mx ;x++) {
 		//System.out.println(fillMask[0][y]);
 		pStack.push(x);
 		pStack.push(0);
@@ -196,41 +189,43 @@ public class SkyDetector extends JFrame{
 		
 	}
 	while(!pStack.empty()){
-		floodFill(skymask, fillMask, pStack);
-		
-		
+		floodFill(skymask, fillMask, pStack, mx, my);
 	}
 	
 	return fillMask;
 }
-	
 
-	protected void drawMap(boolean[][] skymask)
-		{
-		int n=1<<bsize.log;
-		int nx=disp.getWidth()/n;
-		int ny=disp.getHeight()/n;
-		
-		for (int y=0;y<disp.getHeight();y++) {
-			for (int x=0;x<disp.getWidth();x++) {
-				int Y=luma[y*disp.getWidth()+x];
-				int rgb=(Y<<16)|(Y<<8)|Y;
-				int bx=x/n;
-				int by=y/n;
-				if (bx<nx&&by<ny&& skymask[bx][by]) {
-					rgb|=0x00ff00;
-				}
-				disp.setRGB(x,y,rgb);
+
+	
+	protected void drawMask(boolean[] skymask)
+	{
+	int n=1<<bsize.log;
+	int nx=disp.getWidth()/n;
+	int ny=disp.getHeight()/n;
+	
+	for (int y=0;y<disp.getHeight();y++) {
+		for (int x=0;x<disp.getWidth();x++) {
+			int Y=luma[y*disp.getWidth()+x];
+			int rgb=(Y<<16)|(Y<<8)|Y;
+			int bx=x/n;
+			int by=y/n;
+			if (bx<nx&&by<ny&& skymask[by * nx + bx]) {
+				rgb|=0x00ff00;
 			}
+			disp.setRGB(x,y,rgb);
 		}
-		repaint();
-		}
+	}
+	repaint();
+	}
 	protected void testFindSky(){
-		boolean[][] mask = makeTextureMap();
+		
+		boolean[] mask = makeTextureMap();
 		mask = floodFillFromTop(mask);
-		drawMap(mask);
+		drawMask(mask);
 		
 	}
+
+
 	public SkyDetector(String fileURL) throws IOException {
 		getContentPane().setLayout(new FlowLayout());
 
