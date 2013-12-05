@@ -40,6 +40,7 @@ public class Firework
 		float[] draw_buffer = new float[3*6*sparks.size()];
 		for(int i = 0; i < sparks.size(); i++)
 		{
+			// generate new quad from current spark
 			Quad q = new Quad(sparks.get(i));
 			q.set_quad(draw_buffer, i*3*6);
 		}
