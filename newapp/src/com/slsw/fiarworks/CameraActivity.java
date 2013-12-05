@@ -45,39 +45,52 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 	
 		mRenderer=new GLRenderer();
 		mView = new MyGLSurfaceView(this, mRenderer);
-	
-	    // Create an instance of Camera
-	    mCamera = getCameraInstance();
-	    Camera.Parameters parameters = mCamera.getParameters();
-	    List<String> focusModes = parameters.getSupportedFocusModes();
-	    if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO))
-	    {
-	        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-	    }
-	    List<Size> sizes = parameters.getSupportedPreviewSizes();
-	    System.out.println("CALLED");
-	    for(Size s : sizes){
-	    	System.out.println("Size = "+s.width +", "+ s.height);
-	    }
-	    mCamera.setParameters(parameters);
-	
-	    // Create our Preview view and set it as the content of our activity
-	    mPreview = new CameraPreview(this, mCamera, mRenderer);
-	    setContentView(mView);
-	    addContentView(mPreview, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-	    mSensorManager.registerListener((SensorEventListener)mPreview, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     public void onPause() {
         super.onPause();
+        System.out.println("PAUSE");
         
         mSensorManager.unregisterListener(this.mPreview);
 
         if (mCamera != null) {
+        	System.out.println("mCamera now null");
             mCamera.setPreviewCallback(null);
             mPreview.getHolder().removeCallback(mPreview);
             mCamera.release();
+            mCamera=null;
+            mPreview.setCamera(null);
+            mPreview=null;
         }
+    }
+    
+    public void onResume(){
+    	super.onResume();
+    	System.out.println("RESUME");
+    	startCamera();
+    	mSensorManager.registerListener((SensorEventListener)mPreview, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+    
+    public void startCamera(){
+    	System.out.println("mCamera no longer null");
+    	if(mCamera==null) {
+	    	mCamera = getCameraInstance();
+	    	mPreview = new CameraPreview(this, mCamera, mRenderer);
+	    	Camera.Parameters parameters = mCamera.getParameters();
+		    List<String> focusModes = parameters.getSupportedFocusModes();
+		    if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO))
+		    {
+		        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+		    }
+		    List<Size> sizes = parameters.getSupportedPreviewSizes();
+		    System.out.println("CALLED");
+		    for(Size s : sizes){
+		    	System.out.println("Size = "+s.width +", "+ s.height);
+		    }
+		    mCamera.setParameters(parameters);
+		    setContentView(mView);
+			addContentView(mPreview, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    	}
     }
 
     /** A safe way to get an instance of the Camera object. */
