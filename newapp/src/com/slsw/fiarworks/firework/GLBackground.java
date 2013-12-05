@@ -50,7 +50,8 @@ public class GLBackground
     final int[] textureHandle = new int[2];
 	static int mPosShaderLoc;
     static int mTexShaderLoc;
-    static int mTextureUniformLoc;
+    static int mTextureCamUniformLoc;
+    static int mTextureMaskUniformLoc;
 
 
     static int mNumGeometryFloats; 
@@ -139,7 +140,11 @@ public class GLBackground
 
 		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
-		GLES20.glUniform1i(mTextureUniformLoc, 0);
+		GLES20.glUniform1i(mTextureCamUniformLoc, 0);
+
+		GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[1]);
+		GLES20.glUniform1i(mTextureMaskUniformLoc, 1);
 
 		GLES20.glEnableVertexAttribArray(mPosShaderLoc);
 		GLES20.glVertexAttribPointer(	mPosShaderLoc, 2,

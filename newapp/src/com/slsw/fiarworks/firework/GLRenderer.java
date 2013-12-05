@@ -79,7 +79,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
 		mFirework.update();
 		mFirework.draw(mMVPMatrix);
-		mBackground.draw(mBackgroundImage);
+		mBackground.draw(mBackgroundImage, myMask);
 
 	}
 
@@ -99,8 +99,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 			//mBackgroundImage = BackgroundImage;
 			// saveImages();
 		}
-		myMask = AlphaMake.makeSimpleMask(image, width, height, prev.mRotVec);
-		mBackgroundImage = myMask;
+		myMask = AlphaMake.coolMask(image, width, height, prev.mRotVec);
+		mBackgroundImage = BackgroundImage;
 		mCamera.updateView(prev.mRotVec);
 	}
 
@@ -138,7 +138,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     //x,y are screen coords
     //we need to get the y-axis angle in world coords
 	public void launchFirework(float x, float y) {
-        float angle = Math.atan2(mCamera.mViewMatrix[4], mCamera.mViewMatrix[0]);
+        float angle = (float)Math.atan2(mCamera.mViewMatrix[4], mCamera.mViewMatrix[0]);
         mFirework.Launch(angle, 10.0f);
 	}
 
