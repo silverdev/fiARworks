@@ -1,6 +1,7 @@
 
 package com.slsw.fiarworks.firework;
 
+
 public class Quad
 {
 	Vec3 p1;
