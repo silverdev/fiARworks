@@ -18,6 +18,7 @@ public class Quad
 		// spark center pos in world coords
 		Vec3 p_ = s.position;
 
+		/*
 		{
 			// NON-ROTATED quad coordinates in XZ plane, Z being up.
 			// Assumes points are set to p_ first!
@@ -35,6 +36,7 @@ public class Quad
 			// top-right		
 			p4.add( size, 0.0f, size);
 		}
+		*/
 
 		{
 			// ROTATED billboard coordinates. These should face the origin.
