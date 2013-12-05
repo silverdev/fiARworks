@@ -32,7 +32,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     private float[] mMVPMatrix = new float[16];
     private GLBackground mBackground;
     private Bitmap mBackgroundImage =Bitmap.createBitmap(1,1,Bitmap.Config.RGB_565);
-    private static byte[][] myMask = {{(byte)0xf}};
+    private static Bitmap myMask = Bitmap.createBitmap (1,1,Bitmap.Config.RGB_565);
     private Bitmap[] imgs = new Bitmap[8];
     private int captured = 0;
     private int wait = 0;
@@ -45,6 +45,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
         mFirework = new Firework();
         mCamera = new GLCamera(10.0f, 5.0f);
     	mBackgroundImage.setPixel(0, 0, 0xffffff);
+    	myMask.setPixel(0, 0, 0xffffff);
         mFirework.Launch();
     }
 
@@ -99,11 +100,11 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     	} else{
 			
     		mBackgroundImage = BackgroundImage;
-    		saveImages();
+    		//saveImages();
     	}
+    	int[] luma = PixelTools.YUBtoLuma(image, width, height);
+    	myMask = AlphaMake.makeSimpleMask(image, width, height, prev.changeInRot());
     	
-    	myMask = AlphaMake.makeSimpleMask(mBackgroundImage, height, width, prev.changeInRot());
-
         mCamera.updateView(prev.mRotVec);
     }
    
