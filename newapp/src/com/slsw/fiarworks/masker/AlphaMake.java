@@ -115,7 +115,6 @@ public class AlphaMake {
 		float newX = currRot[6];
 		if(Math.abs(newY)<Math.abs(newX)){
 			if(newX>0){
-
 				return SkyPos.up;
 			} else{
 				return SkyPos.down;
@@ -131,8 +130,8 @@ public class AlphaMake {
 
 	private static PhonePos getPhoneDir(float[] currRot){
 		float newZ = currRot[8];
-		if(newZ>.5) return PhonePos.sky;
-		if(newZ<-.5) return PhonePos.down;
+		if(newZ>-.5) return PhonePos.sky;
+		if(newZ<.5) return PhonePos.down;
 		return PhonePos.center;
 	}
 }
