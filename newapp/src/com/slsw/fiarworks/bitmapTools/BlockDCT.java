@@ -5,7 +5,7 @@ package com.slsw.fiarworks.bitmapTools;
 public class BlockDCT {
 
 
-	enum BlockSize {
+	public enum BlockSize {
 		_4x4(2),
 		_8x8(3),
 		_16x16(4);
@@ -18,14 +18,12 @@ public class BlockDCT {
 
 	};
 
-	enum Norm {
+	public enum Norm {
 		L1,
 		L2
 	};
 
 	
-
-
 	public static void od_bin_fdct4(int[] _y,int _yoff,int[] _x,int _xoff,int _xstride){
 		int t0;
 		int t1;
