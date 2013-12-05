@@ -83,26 +83,19 @@ public class GLRenderer implements GLSurfaceView.Renderer{
     }
     
     public void setTextures(byte[] image, int width, int height, CameraPreview prev){
-        //mBackgroundImage.recycle();
-        //mBackgroundImage = null;
+        
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        /*
-        YuvImage yuvImage = new YuvImage(image, ImageFormat.NV21, width, height,
-                null);
-        yuvImage.compressToJpeg(new Rect(0, 0, width, height), 100, out);
-        byte[] imageBytes = out.toByteArray();
-        Bitmap BackgroundImage = BitmapFactory.decodeByteArray(imageBytes, 0,
-                imageBytes.length, null);
-                */
+        
         Bitmap BackgroundImage = PixelTools.makeBlackAndWhiteBitmap(image, width, height);
+        //Bitmap BackgroundImage = PixelTools.makeColorBitmap(image, width, height);
     	if (BackgroundImage == null){
-    		System.err.println("FAILED");
+    		System.err.println("FAILED to make Bitmap");
     	} else{
-			
+    		//mBackgroundImage.recycle();
     		mBackgroundImage = BackgroundImage;
     		//saveImages();
     	}
-    	int[] luma = PixelTools.YUBtoLuma(image, width, height);
+    	
     	myMask = AlphaMake.makeSimpleMask(image, width, height, prev.changeInRot());
     	
         mCamera.updateView(prev.mRotVec);

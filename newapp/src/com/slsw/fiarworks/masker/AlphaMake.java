@@ -37,7 +37,7 @@ public class AlphaMake {
 				mask[i] = BACKROUND;
 			}
 			else {
-				mask[i] =OPAQUE;
+				mask[i] = OPAQUE;
 			}
 		}
 		
