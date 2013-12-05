@@ -26,83 +26,86 @@ import com.slsw.fiarworks.bitmapTools.PixelTools;
 public class GLRenderer implements GLSurfaceView.Renderer{
     private static final String TAG = "GLRenderer";
 	private Firework mFirework;
-    private GLCamera mCamera;
-    private float[] mProjMatrix = new float[16];
-    private float[] mVMatrix;
-    private float[] mMVPMatrix = new float[16];
-    private GLBackground mBackground;
-    private Bitmap mBackgroundImage =Bitmap.createBitmap(1,1,Bitmap.Config.RGB_565);
-    private static Bitmap myMask = Bitmap.createBitmap (1,1,Bitmap.Config.RGB_565);
-    private Bitmap[] imgs = new Bitmap[8];
-    private int captured = 0;
-    private int wait = 0;
-    
 
-    @Override
-    public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        mBackground = new GLBackground();
-        mFirework = new Firework();
-        mCamera = new GLCamera(10.0f, 5.0f);
-        mBackgroundImage =Bitmap.createBitmap(1,1,Bitmap.Config.RGB_565);
-    	mBackgroundImage.setPixel(0, 0, 0xffffff);
-    	myMask = Bitmap.createBitmap (1,1,Bitmap.Config.RGB_565);
-    	myMask.setPixel(0, 0, 0xffffff);
-        mFirework.Launch();
-    }
+	private GLCamera mCamera;
+	private float[] mProjMatrix = new float[16];
+	private float[] mVMatrix;
+	private float[] mMVPMatrix = new float[16];
+	private GLBackground mBackground;
+	private Bitmap mBackgroundImage = Bitmap.createBitmap(1, 1,
+			Bitmap.Config.RGB_565);
+	private static Bitmap myMask = Bitmap.createBitmap(1, 1,
+			Bitmap.Config.RGB_565);
+	private Bitmap[] imgs = new Bitmap[8];
+	private int captured = 0;
+	private int wait = 0;
 
-    @Override
-    public void onSurfaceChanged(GL10 unused, int width, int height) {
-        // Adjust the viewport based on geometry changes,
-        // such as screen rotation
-        GLES20.glViewport(0, 0, width, height);
+	@Override
+	public void onSurfaceCreated(GL10 unused, EGLConfig config) {
+		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		mBackground = new GLBackground();
+		mFirework = new Firework();
+		mCamera = new GLCamera(10.0f, 5.0f);
+		mBackgroundImage = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565);
+		mBackgroundImage.setPixel(0, 0, 0xffffff);
+		myMask = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565);
+		myMask.setPixel(0, 0, 0xffffff);
+		mFirework.Launch();
+	}
 
-        float ratio = (float) width / height;
+	@Override
+	public void onSurfaceChanged(GL10 unused, int width, int height) {
+		// Adjust the viewport based on geometry changes,
+		// such as screen rotation
+		GLES20.glViewport(0, 0, width, height);
 
-        // this projection matrix is applied to object coordinates
-        // in the onDrawFrame() method
-        Matrix.frustumM(mProjMatrix, 0, -ratio, ratio, -1.0f, 1.0f, 1.0f, 100.0f);
+		float ratio = (float) width / height;
 
-    }
+		// this projection matrix is applied to object coordinates
+		// in the onDrawFrame() method
+		Matrix.frustumM(mProjMatrix, 0, -ratio, ratio, -1.0f, 1.0f, 1.0f,
+				100.0f);
+
+	}
+
+	@Override
+	public void onDrawFrame(GL10 unused) {
+		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+		// Draw background color
+		// GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+
+		// Set the camera position (View matrix)
+		mVMatrix = mCamera.view();
+
+		// Calculate the projection and view transformation
+		Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
+		mFirework.update();
+		mFirework.draw(mMVPMatrix);
+		mBackground.draw(mBackgroundImage);
+
+	}
+
+	public void setTextures(byte[] image, int width, int height,
+			CameraPreview prev) {
+
+		   ByteArrayOutputStream out = new ByteArrayOutputStream();
+	        
+	        Bitmap BackgroundImage = PixelTools.makeBlackAndWhiteBitmap(image, width, height);
+	        //Bitmap BackgroundImage = PixelTools.makeColorBitmap(image, width, height);
+	    	if (BackgroundImage == null){
+	    		System.err.println("FAILED to make Bitmap");
+	    	} else{
+	    		//mBackgroundImage.recycle();
+	    		mBackgroundImage = BackgroundImage;
+	    		//saveImages();
+	    	}
+		myMask = AlphaMake.makeSimpleMask(image, width, height,
+				prev.mRotVec);
+
+		mCamera.updateView(prev.mRotVec);
+	}
 
 
-    @Override
-    public void onDrawFrame(GL10 unused) {
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-        // Draw background color
-        //GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-
-        // Set the camera position (View matrix)
-        mVMatrix = mCamera.view();
-
-        // Calculate the projection and view transformation
-        Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
-        mFirework.update();
-        mFirework.draw(mMVPMatrix);
-        mBackground.draw(mBackgroundImage);
-
-
-    }
-    
-    public void setTextures(byte[] image, int width, int height, CameraPreview prev){
-        
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        
-        Bitmap BackgroundImage = PixelTools.makeBlackAndWhiteBitmap(image, width, height);
-        //Bitmap BackgroundImage = PixelTools.makeColorBitmap(image, width, height);
-    	if (BackgroundImage == null){
-    		System.err.println("FAILED to make Bitmap");
-    	} else{
-    		//mBackgroundImage.recycle();
-    		mBackgroundImage = BackgroundImage;
-    		//saveImages();
-    	}
-    	
-    	myMask = AlphaMake.makeSimpleMask(image, width, height, prev.changeInRot());
-    	
-        mCamera.updateView(prev.mRotVec);
-    }
-   
 	private void saveImages() {
 		if(wait<60){
     		wait++;
