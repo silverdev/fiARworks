@@ -1,5 +1,7 @@
 package com.slsw.fiarworks.bitmapTools;
 
+import java.util.Stack;
+
 import android.graphics.Bitmap;
 
 public class PixelTools {
@@ -24,6 +26,32 @@ public class PixelTools {
 			return Bitmap.createBitmap(RGBAImage, width, height, Bitmap.Config.ARGB_8888);
 	    	
 	    }
+	public static void floodFill(int endColor, int[] image, int x, int y, int mx, int my){
+		Stack<Integer> pStack = new Stack<Integer>();
+		pStack.push(x);
+		pStack.push(0);
+	while(!pStack.empty()){
+		_floodFill(image[y * mx + x], endColor, image, pStack, mx, my);
+	}
+	}
+	 
+	private static void _floodFill(int startColor, int endColor, int[] image, Stack<Integer> pStack, int mx, int my){
+			int y = pStack.pop();
+			int x = pStack.pop();
+			if (0 <= y && y < my && 0 <= x && x < mx && (((image[y * mx + x] != endColor)) && (image [y * mx + x] == startColor))){
+			image[y * mx + x] = endColor;
+			pStack.push(x+1);		pStack.push(y);
+			pStack.push(x-1);		pStack.push(y);
+			pStack.push(x);		pStack.push(y+1);
+			pStack.push(x);		pStack.push(y-1);
+			}
+		}
+	 
+	 //stuff from stack overflow starts blow 
+	 
+	 
+	 
+	 
 	    /**
 	     * Converts YUV420 NV21 to Y888 (RGB8888). The grayscale image still holds 3 bytes on the pixel.
 	     * 

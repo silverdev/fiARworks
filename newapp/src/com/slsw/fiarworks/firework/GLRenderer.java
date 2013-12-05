@@ -24,6 +24,7 @@ import com.slsw.fiarworks.bitmapTools.PixelTools;
 public class GLRenderer implements GLSurfaceView.Renderer {
 	private static final String TAG = "GLRenderer";
 	private Firework mFirework;
+
 	private GLCamera mCamera;
 	private float[] mProjMatrix = new float[16];
 	private float[] mVMatrix;
@@ -87,10 +88,10 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		Bitmap BackgroundImage = PixelTools.makeBlackAndWhiteBitmap(image,
-				width, height);
-		// Bitmap BackgroundImage = PixelTools.makeColorBitmap(image, width,
-		// height);
+		//Bitmap BackgroundImage = PixelTools.makeBlackAndWhiteBitmap(image,
+		//		width, height);
+		 Bitmap BackgroundImage = PixelTools.makeColorBitmap(image, width,
+		 height);
 		if (BackgroundImage == null) {
 			System.err.println("FAILED to make Bitmap");
 		} else {
@@ -98,9 +99,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 			mBackgroundImage = BackgroundImage;
 			// saveImages();
 		}
-
-		myMask = AlphaMake.makeSimpleMask(image, width, height,
-				prev.mRotVec);
+		myMask = AlphaMake.makeSimpleMask(image, width, height, prev.mRotVec);
 
 		mCamera.updateView(prev.mRotVec);
 	}

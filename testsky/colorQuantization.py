@@ -9,7 +9,7 @@ Z = np.float32(Z)
 print Z
 # define criteria, number of clusters(K) and apply kmeans()
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
-ret, label, center = cv2.kmeans(Z, 4, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+ret, label, center = cv2.kmeans(Z, 3, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
 
 # Now convert back into uint8, and make original image
 center = np.uint8(center)

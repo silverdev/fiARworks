@@ -163,16 +163,10 @@ public class SkyDetector extends JFrame{
 		if (0 <= y && y < my && 0 <= x && x < mx && ((!confirmed[y * mx + x]) && (skymask [y * mx + x]))){
 		confirmed[y * mx + x] = true;
 		pStack.push(x+1);		pStack.push(y);
-		//floodFill(skymask, confermed,x+1 ,y );
 		pStack.push(x-1);		pStack.push(y);
-		//floodFill(skymask, confermed,x-1 ,y );
 		pStack.push(x);		pStack.push(y+1);
-		//floodFill(skymask, confermed,x ,y+1 );
 		pStack.push(x);		pStack.push(y-1);
-		//floodFill(skymask, confermed,x ,y-1 );
 		}
-		
-
 	}
 	
 	protected boolean[] floodFillFromTop(boolean[] skymask){
