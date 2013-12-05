@@ -1,6 +1,6 @@
 package com.slsw.fiarworks.masker;
 
-import java.lang.reflect.Array;
+import java.util.Arrays;
 
 import android.graphics.Bitmap;
 import android.opengl.Matrix;
@@ -98,7 +98,7 @@ public class AlphaMake {
 			mask = new int[height * width];
 			break;
 		case sky:
-			Array.fill(mask, 0);
+			Arrays.fill(mask, 0);
 			break;
 		default:
 			break;
@@ -109,7 +109,7 @@ public class AlphaMake {
 	}
 	
 
-	private SkyPos getSkyDir(float[] currRot){
+	private static SkyPos getSkyDir(float[] currRot){
 		float newY = currRot[7];
 		float newX = currRot[6];
 		if(Math.abs(newY)<Math.abs(newX)){
@@ -128,7 +128,7 @@ public class AlphaMake {
 		}
 	}
 
-	private PhonePos getPhoneDir(float[] currRot){
+	private static PhonePos getPhoneDir(float[] currRot){
 		float newZ = currRot[8];
 		if(newZ>.5) return PhonePos.sky;
 		if(newZ<-.5) return PhonePos.down;
