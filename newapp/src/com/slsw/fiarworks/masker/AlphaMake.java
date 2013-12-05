@@ -25,7 +25,8 @@ public class AlphaMake {
 	public static final int BACKGROUND =  0xffffffff;
 	public static final int OPAQUE = 0;
 	public static final int CUTOFF = 64;
-
+	private static BlockDCT.BlockSize bsize = BlockDCT.BlockSize._8x8;
+	
 	public static Bitmap makeSimpleMask(byte[] image, int width,int height,
 			float[] currRot) {
 		int[] mask = new int[height*width];
@@ -39,22 +40,32 @@ public class AlphaMake {
 		}
 		return Bitmap.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
 	}
+
+	
 	
 	public static Bitmap coolMask(byte[] image, int width,int height,
 			float[] currRot) {
+		
+		int n=1<<bsize.getLog();
+		int mx=width/n;
+		int my=height/n;
 		int[] mask = new int[height*width];
 		
 		int[] luma = PixelTools.YUBtoLuma(image, width, height);
 		
-		double[] norms = BlockDCT.computeNorms(luma, width, height, BlockDCT.BlockSize._8x8, BlockDCT.Norm.L1);
+		double[] norms = BlockDCT.computeNorms(luma, width, height, bsize, BlockDCT.Norm.L1);
 		
-		for (int i = 0; i<norms.length; i++){
-			if (norms[i] < CUTOFF)
+		for (int y = 0; y<height; y++){
+			for (int x = 0; x<width; x++){
+			int bx=x/n;
+			int by=y/n;
+			if (norms[by * mx + bx] < CUTOFF)
 			{
-				mask[i] = BACKGROUND;
+				mask[y * width + x] = BACKGROUND;
 			}
 			else {
-				mask[i] = OPAQUE;
+				mask[y * width + x] = OPAQUE;
+			}
 			}
 		}
 		
@@ -98,7 +109,8 @@ public class AlphaMake {
 			mask = new int[height * width];
 			break;
 		case sky:
-			Arrays.fill(mask, 0);
+			Arrays.fill(mask, BACKGROUND);
+			System.err.println("I am looking up");
 			break;
 		default:
 			break;
@@ -114,7 +126,6 @@ public class AlphaMake {
 		float newX = currRot[6];
 		if(Math.abs(newY)<Math.abs(newX)){
 			if(newX>0){
-
 				return SkyPos.up;
 			} else{
 				return SkyPos.down;
@@ -130,8 +141,8 @@ public class AlphaMake {
 
 	private static PhonePos getPhoneDir(float[] currRot){
 		float newZ = currRot[8];
-		if(newZ>.5) return PhonePos.sky;
-		if(newZ<-.5) return PhonePos.down;
+		if(newZ<-.5) return PhonePos.sky;
+		if(newZ>.5) return PhonePos.down;
 		return PhonePos.center;
 	}
 }

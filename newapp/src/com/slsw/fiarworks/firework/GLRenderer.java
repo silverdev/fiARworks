@@ -96,11 +96,11 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 			System.err.println("FAILED to make Bitmap");
 		} else {
 			// mBackgroundImage.recycle();
-			mBackgroundImage = BackgroundImage;
+			//mBackgroundImage = BackgroundImage;
 			// saveImages();
 		}
-		myMask = AlphaMake.SkyFillMask(image, width, height, prev.mRotVec);
-
+		myMask = AlphaMake.makeSimpleMask(image, width, height, prev.mRotVec);
+		mBackgroundImage = myMask;
 		mCamera.updateView(prev.mRotVec);
 	}
 

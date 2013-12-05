@@ -45,6 +45,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 	
 		mRenderer=new GLRenderer();
 		mView = new MyGLSurfaceView(this, mRenderer);
+		mView.setOnTouchListener(this);
     }
 
     public void onPause() {
