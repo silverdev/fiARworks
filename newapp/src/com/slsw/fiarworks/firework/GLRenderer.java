@@ -97,18 +97,18 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		} else {
 			// mBackgroundImage.recycle();
 			//mBackgroundImage = BackgroundImage;
-			// saveImages();
+			 //saveImages(BackgroundImage);
 		}
 		myMask = AlphaMake.coolMask(image, width, height, prev.mRotVec);
 		mBackgroundImage = BackgroundImage;
 		mCamera.updateView(prev.mRotVec);
 	}
 
-	private void saveImages() {
+	private void saveImages(Bitmap b) {
 		if (wait < 60) {
 			wait++;
 		} else if (captured < imgs.length) {
-			imgs[captured] = mBackgroundImage;
+			imgs[captured] = b;
 			captured++;
 		} else if (captured == imgs.length) {
 			// Save images to file
