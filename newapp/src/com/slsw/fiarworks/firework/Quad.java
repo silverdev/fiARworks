@@ -15,16 +15,16 @@ public class Quad
 		Vec3 p_ = s.position;
 		// size is half-width of the spark
 		// bottom-left
-		p1 = p_;
+		p1 = new Vec3(p_);
 		p1.add(-size, -size, 0.0f);
 		// bottom-right
-		p2 = p_;
+		p2 = new Vec3(p_);
 		p2.add(size, -size, 0.0f);
 		// top-left
-		p3 = p_;
+		p3 = new Vec3(p_);
 		p3.add(-size,  size, 0.0f);
 		// top-right
-		p4 = p_;
+		p4 = new Vec3(p_);
 		p4.add( size,  size, 0.0f);
 	}
 
