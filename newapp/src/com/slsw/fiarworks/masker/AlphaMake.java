@@ -108,31 +108,30 @@ public class AlphaMake {
 				.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
 	}
 	
-	private static SkyPos getSkyDir(float[] currRot){
-		float[] newVecY = new float[3];
-		float[] newVecX = new float[3];
-		Matrix.multiplyMV(newVecY, 0, currRot, 0,  new float[]{(float)0, (float)1, (float)0}, 0);
-		Matrix.multiplyMV(newVecX, 0, currRot, 0,  new float[]{(float)1, (float)0, (float)0}, 0);
-		if(Math.abs(newVecY[2])<Math.abs(newVecX[2])){
-			if(newVecX[2]>0){
+
+	private SkyPos getSkyDir(float[] currRot){
+		float newY = currRot[7];
+		float newX = currRot[6];
+		if(Math.abs(newY)<Math.abs(newX)){
+			if(newX>0){
+
 				return SkyPos.up;
 			} else{
 				return SkyPos.down;
 			}
 		} else{
-			if(newVecY[2]>0){
+			if(newY>0){
 				return SkyPos.left;
 			} else{
 				return SkyPos.right;
 			}
 		}
 	}
-	private static PhonePos getPhoneDir(float[] currRot){
-		float[] newVec = new float[3];
-		Matrix.multiplyMV(newVec, 0, currRot, 0,  new float[]{(float)0, (float)0, (float)1}, 0);
-		if(newVec[2]>.5) return PhonePos.sky;
-		if(newVec[2]<-.5) return PhonePos.down;
+
+	private PhonePos getPhoneDir(float[] currRot){
+		float newZ = currRot[8];
+		if(newZ>.5) return PhonePos.sky;
+		if(newZ<-.5) return PhonePos.down;
 		return PhonePos.center;
 	}
-
 }
