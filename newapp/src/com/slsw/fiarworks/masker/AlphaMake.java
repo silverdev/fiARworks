@@ -22,7 +22,7 @@ public class AlphaMake {
 		down(),
 	}
 	
-	public static final int BACKROUND =  0xffffffff;
+	public static final int BACKGROUND =  0xffffffff;
 	public static final int OPAQUE = 0;
 	public static final int CUTOFF = 64;
 
@@ -32,7 +32,7 @@ public class AlphaMake {
 		for (int i = 0; i < mask.length; i++) {
 			
 			if (i < height * width / 2) {
-				mask[i] = BACKROUND;
+				mask[i] = BACKGROUND;
 			} else {
 				mask[i] = OPAQUE;
 			}
@@ -51,7 +51,7 @@ public class AlphaMake {
 		for (int i = 0; i<norms.length; i++){
 			if (norms[i] < CUTOFF)
 			{
-				mask[i] = BACKROUND;
+				mask[i] = BACKGROUND;
 			}
 			else {
 				mask[i] = OPAQUE;
@@ -73,7 +73,7 @@ public class AlphaMake {
 
 		for (int i = 0; i < norms.length; i++) {
 			if (norms[i] < CUTOFF) {
-				mask[i] = BACKROUND;
+				mask[i] = BACKGROUND;
 			} else {
 				mask[i] = OPAQUE;
 			}
@@ -98,7 +98,8 @@ public class AlphaMake {
 			mask = new int[height * width];
 			break;
 		case sky:
-			Arrays.fill(mask, 0);
+			Arrays.fill(mask, BACKGROUND);
+			System.err.println("I am looking up");
 			break;
 		default:
 			break;
