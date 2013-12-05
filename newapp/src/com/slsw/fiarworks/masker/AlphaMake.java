@@ -130,8 +130,8 @@ public class AlphaMake {
 
 	private static PhonePos getPhoneDir(float[] currRot){
 		float newZ = currRot[8];
-		if(newZ>-.5) return PhonePos.sky;
-		if(newZ<.5) return PhonePos.down;
+		if(newZ<-.5) return PhonePos.sky;
+		if(newZ>.5) return PhonePos.down;
 		return PhonePos.center;
 	}
 }
