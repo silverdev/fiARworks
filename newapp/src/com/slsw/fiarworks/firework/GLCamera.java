@@ -7,12 +7,8 @@ public class GLCamera
 {
 	private float[] mViewMatrix = new float[16];
 
-	private float mDistance;
-	private float mHeight;
-	public GLCamera(float distance, float height)
+	public GLCamera()
 	{
-		mDistance = distance;
-		mHeight = height;
 		Matrix.setIdentityM(mViewMatrix, 0);
 	}
 	//returns view matrix
@@ -35,6 +31,7 @@ public class GLCamera
 		mViewMatrix[8] = dir[6];
 		mViewMatrix[9] = dir[7];
 		mViewMatrix[10] = dir[8];
+		mViewMatrix[15] = 1.0f;
 	}
 
 }

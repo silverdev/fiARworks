@@ -30,7 +30,7 @@ public class Spark
 	ArrayList<Spark> update()
 	{
 		ArrayList<Spark> return_list = new ArrayList<Spark>();
-		position = position.add(velocity);
+		position.add(velocity);
 		if(type == 0)
 		{
 			if(position.y > 5.0f)
