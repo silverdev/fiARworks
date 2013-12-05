@@ -100,7 +100,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		}
 
 		myMask = AlphaMake.makeSimpleMask(image, width, height,
-				prev.changeInRot());
+				prev.mRotVec);
 
 		mCamera.updateView(prev.mRotVec);
 	}
