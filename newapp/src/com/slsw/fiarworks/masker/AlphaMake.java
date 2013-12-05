@@ -1,5 +1,7 @@
 package com.slsw.fiarworks.masker;
 
+import java.lang.reflect.Array;
+
 import android.graphics.Bitmap;
 import android.opengl.Matrix;
 
@@ -59,35 +61,60 @@ public class AlphaMake {
 		return Bitmap.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
 	}
 	
-	public static Bitmap SkyFillMask(byte[] image, int width,int height,
+	public static Bitmap SkyFillMask(byte[] image, int width, int height,
 			float[] currRot) {
-		int[] mask = new int[height*width];
-		
+
+		int[] mask = new int[height * width];
+
 		int[] luma = PixelTools.YUBtoLuma(image, width, height);
-		
-		double[] norms = BlockDCT.computeNorms(luma, width, height, BlockDCT.BlockSize._8x8, BlockDCT.Norm.L1);
-		
-		for (int i = 0; i<norms.length; i++){
-			if (norms[i] < CUTOFF)
-			{
+
+		double[] norms = BlockDCT.computeNorms(luma, width, height,
+				BlockDCT.BlockSize._8x8, BlockDCT.Norm.L1);
+
+		for (int i = 0; i < norms.length; i++) {
+			if (norms[i] < CUTOFF) {
 				mask[i] = BACKGROUND;
-			}
-			else {
+			} else {
 				mask[i] = OPAQUE;
 			}
-			
 		}
-		
-		
-		
-		return Bitmap.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
+		switch (getPhoneDir(currRot)) {
+		case center:
+			switch (getSkyDir(currRot)) {
+			case down:
+				break;
+			case left:
+				break;
+			case right:
+				break;
+			case up:
+				break;
+			default:
+				break;
+
+			}
+			break;
+		case down:
+			mask = new int[height * width];
+			break;
+		case sky:
+			Array.fill(mask, 0);
+			break;
+		default:
+			break;
+		}
+
+		return Bitmap
+				.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
 	}
 	
+
 	private SkyPos getSkyDir(float[] currRot){
 		float newY = currRot[7];
 		float newX = currRot[6];
 		if(Math.abs(newY)<Math.abs(newX)){
 			if(newX>0){
+
 				return SkyPos.up;
 			} else{
 				return SkyPos.down;
@@ -100,6 +127,7 @@ public class AlphaMake {
 			}
 		}
 	}
+
 	private PhonePos getPhoneDir(float[] currRot){
 		float newZ = currRot[8];
 		if(newZ>.5) return PhonePos.sky;
