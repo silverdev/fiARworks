@@ -36,8 +36,9 @@ public class Quad
 			// top-right		
 			p4.add( size, 0.0f, size);
 		}
-		*/
+		/**/
 
+		//*
 		{
 			// ROTATED billboard coordinates. These should face the origin.
 			// Not tested as of 6AM on Dec 5.
@@ -97,7 +98,7 @@ public class Quad
 			p4.add(hobjz);
 
 		}
-
+		/**/
 
 
 	}
