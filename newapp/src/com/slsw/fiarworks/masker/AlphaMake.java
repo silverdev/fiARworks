@@ -58,6 +58,30 @@ public class AlphaMake {
 		return Bitmap.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
 	}
 	
+	public static Bitmap SkyFillMask(byte[] image, int width,int height,
+			float[] currRot) {
+		int[] mask = new int[height*width];
+		
+		int[] luma = PixelTools.YUBtoLuma(image, width, height);
+		
+		double[] norms = BlockDCT.computeNorms(luma, width, height, BlockDCT.BlockSize._8x8, BlockDCT.Norm.L1);
+		
+		for (int i = 0; i<norms.length; i++){
+			if (norms[i] < CUTOFF)
+			{
+				mask[i] = BACKROUND;
+			}
+			else {
+				mask[i] = OPAQUE;
+			}
+			
+		}
+		
+		
+		
+		return Bitmap.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
+	}
+	
 	private SkyPos getSkyDir(float[] currRot){
 		return null;
 	}
