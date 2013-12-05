@@ -1,5 +1,7 @@
 package com.slsw.fiarworks.masker;
 
+import java.lang.reflect.Array;
+
 import android.graphics.Bitmap;
 import android.opengl.Matrix;
 
@@ -59,31 +61,54 @@ public class AlphaMake {
 		return Bitmap.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
 	}
 	
-	public static Bitmap SkyFillMask(byte[] image, int width,int height,
+	public static Bitmap SkyFillMask(byte[] image, int width, int height,
 			float[] currRot) {
-		int[] mask = new int[height*width];
-		
+
+		int[] mask = new int[height * width];
+
 		int[] luma = PixelTools.YUBtoLuma(image, width, height);
-		
-		double[] norms = BlockDCT.computeNorms(luma, width, height, BlockDCT.BlockSize._8x8, BlockDCT.Norm.L1);
-		
-		for (int i = 0; i<norms.length; i++){
-			if (norms[i] < CUTOFF)
-			{
+
+		double[] norms = BlockDCT.computeNorms(luma, width, height,
+				BlockDCT.BlockSize._8x8, BlockDCT.Norm.L1);
+
+		for (int i = 0; i < norms.length; i++) {
+			if (norms[i] < CUTOFF) {
 				mask[i] = BACKROUND;
-			}
-			else {
+			} else {
 				mask[i] = OPAQUE;
 			}
-			
 		}
-		
-		
-		
-		return Bitmap.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
+		switch (getPhoneDir(currRot)) {
+		case center:
+			switch (getSkyDir(currRot)) {
+			case down:
+				break;
+			case left:
+				break;
+			case right:
+				break;
+			case up:
+				break;
+			default:
+				break;
+
+			}
+			break;
+		case down:
+			mask = new int[height * width];
+			break;
+		case sky:
+			Array.fill(mask, 0);
+			break;
+		default:
+			break;
+		}
+
+		return Bitmap
+				.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
 	}
 	
-	private SkyPos getSkyDir(float[] currRot){
+	private static SkyPos getSkyDir(float[] currRot){
 		float[] newVecY = new float[3];
 		float[] newVecX = new float[3];
 		Matrix.multiplyMV(newVecY, 0, currRot, 0,  new float[]{(float)0, (float)1, (float)0}, 0);
@@ -102,7 +127,7 @@ public class AlphaMake {
 			}
 		}
 	}
-	private PhonePos getPhoneDir(float[] currRot){
+	private static PhonePos getPhoneDir(float[] currRot){
 		float[] newVec = new float[3];
 		Matrix.multiplyMV(newVec, 0, currRot, 0,  new float[]{(float)0, (float)0, (float)1}, 0);
 		if(newVec[2]>.5) return PhonePos.sky;
