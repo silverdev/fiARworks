@@ -1,9 +1,10 @@
 package com.slsw.fiarworks.masker;
 
-import java.util.Arrays;
-import com.slsw.fiarworks.bitmapTools.PixelTools;
-import com.slsw.fiarworks.bitmapTools.BlockDCT;
 import android.graphics.Bitmap;
+import android.opengl.Matrix;
+
+import com.slsw.fiarworks.bitmapTools.BlockDCT;
+import com.slsw.fiarworks.bitmapTools.PixelTools;
 
 public class AlphaMake {
 	public enum SkyPos{
@@ -59,10 +60,30 @@ public class AlphaMake {
 	}
 	
 	private SkyPos getSkyDir(float[] currRot){
-		return null;
+		float[] newVecY = new float[3];
+		float[] newVecX = new float[3];
+		Matrix.multiplyMV(newVecY, 0, currRot, 0,  new float[]{(float)0, (float)1, (float)0}, 0);
+		Matrix.multiplyMV(newVecX, 0, currRot, 0,  new float[]{(float)1, (float)0, (float)0}, 0);
+		if(Math.abs(newVecY[2])<Math.abs(newVecX[2])){
+			if(newVecX[2]>0){
+				return SkyPos.up;
+			} else{
+				return SkyPos.down;
+			}
+		} else{
+			if(newVecY[2]>0){
+				return SkyPos.left;
+			} else{
+				return SkyPos.right;
+			}
+		}
 	}
 	private PhonePos getPhoneDir(float[] currRot){
-		return null;
+		float[] newVec = new float[3];
+		Matrix.multiplyMV(newVec, 0, currRot, 0,  new float[]{(float)0, (float)0, (float)1}, 0);
+		if(newVec[2]>.5) return PhonePos.sky;
+		if(newVec[2]<-.5) return PhonePos.down;
+		return PhonePos.center;
 	}
 
 }
