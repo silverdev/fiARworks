@@ -3,7 +3,6 @@ package com.slsw.fiarworks.masker;
 import java.util.Arrays;
 
 import android.graphics.Bitmap;
-import android.opengl.Matrix;
 
 import com.slsw.fiarworks.bitmapTools.BlockDCT;
 import com.slsw.fiarworks.bitmapTools.PixelTools;

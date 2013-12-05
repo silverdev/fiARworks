@@ -36,13 +36,10 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    //setContentView(R.layout.main_layout);
-	    
 	
 		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 		mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 		
-	
 		mRenderer=new GLRenderer();
 		mView = new MyGLSurfaceView(this, mRenderer);
 		mView.setOnTouchListener(this);

@@ -1,6 +1,5 @@
 package com.slsw.fiarworks.firework;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -9,10 +8,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
@@ -86,7 +81,6 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	public void setTextures(byte[] image, int width, int height,
 			CameraPreview prev) {
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 		//Bitmap BackgroundImage = PixelTools.makeBlackAndWhiteBitmap(image,
 		//		width, height);
@@ -95,8 +89,6 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		if (BackgroundImage == null) {
 			System.err.println("FAILED to make Bitmap");
 		} else {
-			// mBackgroundImage.recycle();
-			//mBackgroundImage = BackgroundImage;
 			 //saveImages(BackgroundImage);
 		}
 		myMask = AlphaMake.coolMask(image, width, height, prev.mRotVec);
