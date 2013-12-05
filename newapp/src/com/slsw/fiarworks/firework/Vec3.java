@@ -117,7 +117,7 @@ public class Vec3
 	// (assuming +Z is up in world coordinates)
 	public boolean isAlmostVertical() {
 		// estimation heuristic: if world x and y are both small, the vector is almost vertical
-		if (x<vecPrecision && y<vecPrecision) return true;
+		if (Math.abs(x)<vecPrecision && Math.abs(y)<vecPrecision) return true;
 		else return false;
 	}
 
