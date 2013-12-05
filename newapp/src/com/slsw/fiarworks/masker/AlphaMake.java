@@ -1,5 +1,7 @@
 package com.slsw.fiarworks.masker;
 
+import java.util.Arrays;
+
 import android.graphics.Bitmap;
 import android.opengl.Matrix;
 
@@ -20,7 +22,7 @@ public class AlphaMake {
 		down(),
 	}
 	
-	public static final int BACKROUND =  0xffffffff;
+	public static final int BACKGROUND =  0xffffffff;
 	public static final int OPAQUE = 0;
 	public static final int CUTOFF = 64;
 
@@ -30,7 +32,7 @@ public class AlphaMake {
 		for (int i = 0; i < mask.length; i++) {
 			
 			if (i < height * width / 2) {
-				mask[i] = BACKROUND;
+				mask[i] = BACKGROUND;
 			} else {
 				mask[i] = OPAQUE;
 			}
@@ -49,7 +51,7 @@ public class AlphaMake {
 		for (int i = 0; i<norms.length; i++){
 			if (norms[i] < CUTOFF)
 			{
-				mask[i] = BACKROUND;
+				mask[i] = BACKGROUND;
 			}
 			else {
 				mask[i] = OPAQUE;
@@ -59,55 +61,77 @@ public class AlphaMake {
 		return Bitmap.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
 	}
 	
-	public static Bitmap SkyFillMask(byte[] image, int width,int height,
+	public static Bitmap SkyFillMask(byte[] image, int width, int height,
 			float[] currRot) {
-		int[] mask = new int[height*width];
-		
+
+		int[] mask = new int[height * width];
+
 		int[] luma = PixelTools.YUBtoLuma(image, width, height);
-		
-		double[] norms = BlockDCT.computeNorms(luma, width, height, BlockDCT.BlockSize._8x8, BlockDCT.Norm.L1);
-		
-		for (int i = 0; i<norms.length; i++){
-			if (norms[i] < CUTOFF)
-			{
-				mask[i] = BACKROUND;
-			}
-			else {
+
+		double[] norms = BlockDCT.computeNorms(luma, width, height,
+				BlockDCT.BlockSize._8x8, BlockDCT.Norm.L1);
+
+		for (int i = 0; i < norms.length; i++) {
+			if (norms[i] < CUTOFF) {
+				mask[i] = BACKGROUND;
+			} else {
 				mask[i] = OPAQUE;
 			}
-			
 		}
-		
-		
-		
-		return Bitmap.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
+		switch (getPhoneDir(currRot)) {
+		case center:
+			switch (getSkyDir(currRot)) {
+			case down:
+				break;
+			case left:
+				break;
+			case right:
+				break;
+			case up:
+				break;
+			default:
+				break;
+
+			}
+			break;
+		case down:
+			mask = new int[height * width];
+			break;
+		case sky:
+			Arrays.fill(mask, BACKGROUND);
+			System.err.println("I am looking up");
+			break;
+		default:
+			break;
+		}
+
+		return Bitmap
+				.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
 	}
 	
-	private SkyPos getSkyDir(float[] currRot){
-		float[] newVecY = new float[3];
-		float[] newVecX = new float[3];
-		Matrix.multiplyMV(newVecY, 0, currRot, 0,  new float[]{(float)0, (float)1, (float)0}, 0);
-		Matrix.multiplyMV(newVecX, 0, currRot, 0,  new float[]{(float)1, (float)0, (float)0}, 0);
-		if(Math.abs(newVecY[2])<Math.abs(newVecX[2])){
-			if(newVecX[2]>0){
+
+	private static SkyPos getSkyDir(float[] currRot){
+		float newY = currRot[7];
+		float newX = currRot[6];
+		if(Math.abs(newY)<Math.abs(newX)){
+			if(newX>0){
 				return SkyPos.up;
 			} else{
 				return SkyPos.down;
 			}
 		} else{
-			if(newVecY[2]>0){
+			if(newY>0){
 				return SkyPos.left;
 			} else{
 				return SkyPos.right;
 			}
 		}
 	}
-	private PhonePos getPhoneDir(float[] currRot){
-		float[] newVec = new float[3];
-		Matrix.multiplyMV(newVec, 0, currRot, 0,  new float[]{(float)0, (float)0, (float)1}, 0);
-		if(newVec[2]>.5) return PhonePos.sky;
-		if(newVec[2]<-.5) return PhonePos.down;
+
+	private static PhonePos getPhoneDir(float[] currRot){
+		float newZ = currRot[8];
+		if(newZ<-.5) return PhonePos.sky;
+		if(newZ>.5) return PhonePos.down;
 		return PhonePos.center;
 	}
-
 }
