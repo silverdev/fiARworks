@@ -48,24 +48,13 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 	
 	    // Create an instance of Camera
 	    mCamera = getCameraInstance();
-	    Camera.Parameters parameters = mCamera.getParameters();
-	    List<String> focusModes = parameters.getSupportedFocusModes();
-	    if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO))
-	    {
-	        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-	    }
-	    List<Size> sizes = parameters.getSupportedPreviewSizes();
-	    System.out.println("CALLED");
-	    for(Size s : sizes){
-	    	System.out.println("Size = "+s.width +", "+ s.height);
-	    }
-	    mCamera.setParameters(parameters);
 	
 	    // Create our Preview view and set it as the content of our activity
 	    mPreview = new CameraPreview(this, mCamera, mRenderer);
+	    
+	    startCamera();
 	    setContentView(mView);
 	    addContentView(mPreview, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-	    mSensorManager.registerListener((SensorEventListener)mPreview, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     public void onPause() {
@@ -77,7 +66,33 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
             mCamera.setPreviewCallback(null);
             mPreview.getHolder().removeCallback(mPreview);
             mCamera.release();
+            mCamera=null;
         }
+    }
+    
+    public void onResume(){
+    	super.onResume();
+    	startCamera();
+    }
+    
+    public void startCamera(){
+    	if(mCamera==null){
+	    	mCamera = getCameraInstance();
+	    	Camera.Parameters parameters = mCamera.getParameters();
+		    List<String> focusModes = parameters.getSupportedFocusModes();
+		    if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO))
+		    {
+		        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+		    }
+		    List<Size> sizes = parameters.getSupportedPreviewSizes();
+		    System.out.println("CALLED");
+		    for(Size s : sizes){
+		    	System.out.println("Size = "+s.width +", "+ s.height);
+		    }
+		    mCamera.setParameters(parameters);
+		    
+		    mSensorManager.registerListener((SensorEventListener)mPreview, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
+    	}
     }
 
     /** A safe way to get an instance of the Camera object. */
