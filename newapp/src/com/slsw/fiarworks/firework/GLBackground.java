@@ -203,7 +203,7 @@ public class GLBackground
 											GLES20.GL_FLOAT, false,
 											2*4, floatBufferTex);
 
-			// GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumGeometryFloats / 2);
+			GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumGeometryFloats / 2);
 
 			GLES20.glDisableVertexAttribArray(mPosShaderLocA);
 			GLES20.glDisableVertexAttribArray(mTexShaderLocA);
