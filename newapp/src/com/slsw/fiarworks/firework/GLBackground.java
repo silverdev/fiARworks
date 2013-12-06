@@ -25,9 +25,15 @@ public class GLBackground
         "uniform sampler2D u_TextureMask;" +
         "varying vec2 v_TexCoordinate;" +
         "void main() {" +
-        "  gl_FragColor.r = texture2D(u_TextureCam, v_TexCoordinate).r * texture2D(u_TextureMask, v_TexCoordinate).r;" +
-        "  gl_FragColor.g = texture2D(u_TextureCam, v_TexCoordinate).g * texture2D(u_TextureMask, v_TexCoordinate).g;" +
-        "  gl_FragColor.b = texture2D(u_TextureCam, v_TexCoordinate).b * texture2D(u_TextureMask, v_TexCoordinate).b;" +
+        "  if(texture2D(u_TextureMask, v_TexCoordinate).r > 0.5) {" +
+        // "    gl_FragCoord.z = 0.0;" +
+        // "  gl_FragDepth = 0.01;" + 
+        "  } else {" +
+        // "    gl_FragCoord.z = 100000.0;" +
+        // "  gl_FragDepth = 0.01;" + 
+        "  }" +
+        "  gl_FragColor = texture2D(u_TextureCam, v_TexCoordinate);" +
+        // "  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);" +
         "}";
 
     static final float[] screenPos = {	-1.0f, -1.0f,
