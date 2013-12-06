@@ -123,10 +123,21 @@ public class Vec3
 
 	static Vec3 random_velocity(float speed)
 	{
+		// random values are shifted to center range on zero
 		float x = (r.nextFloat() - 0.5f) * speed;
 		float y = (r.nextFloat() - 0.5f) * speed;
 		float z = (r.nextFloat() - 0.5f) * speed;
 
 		return new Vec3(x, y, z);
+	}
+
+	static Vec3 negz_velocity(float speed)
+	{
+		// mostly move down in z dimension
+		float x = (r.nextFloat())*.5f * speed;
+		float y = (r.nextFloat())*.5f * speed;
+		float z = (r.nextFloat() - 1.0f)*.5f * speed;
+
+		return new Vec3(x, y, z);		
 	}
 }
