@@ -115,7 +115,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 	    final long Endtime = System.currentTimeMillis();
 	    meantime += (Endtime - startTime);
 	    count += 1;
-	    System.out.println(meantime/count); 
+	    // System.out.println(meantime/count); 
 	    
     }
     
@@ -153,6 +153,6 @@ class MyGLSurfaceView extends GLSurfaceView {
     }
     
 	public void launchFirework(double x, double y, double d) {
-
+		this.mRenderer.launchFirework((float)x, (float)y);
 	}
 }

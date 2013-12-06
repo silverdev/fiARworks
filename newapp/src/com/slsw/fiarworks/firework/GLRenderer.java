@@ -106,7 +106,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 			 //saveImages(BackgroundImage);
 			//myMask = BackgroundImage;
 			myMask = AlphaMake.skyFillMask(image, width, height, prev.mRotVec);
-			mBackgroundImage = myMask;
+			mBackgroundImage = BackgroundImage;
 		}
 		
 		
@@ -147,6 +147,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     //x,y are screen coords
     //we need to get the y-axis angle in world coords
 	public void launchFirework(float x, float y) {
+        System.out.println("Launching in GLRenderer");
         float angle = (float)Math.atan2(mCamera.mViewMatrix[4], mCamera.mViewMatrix[0]);
         mFirework.Launch(angle, 10.0f);
 	}
