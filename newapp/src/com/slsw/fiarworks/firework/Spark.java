@@ -33,7 +33,9 @@ public class Spark
 		position.add(velocity);
 		if(type == 0)
 		{
-			if(position.y > 5.0f)
+			System.out.println("Starter Position");
+			System.out.println("X: " + position.x + " Y: " + position.y + " Z: " + position.z);
+			if(position.z > 5.0f)
 			{
 				System.out.println("Exploded!");
 				//Explode

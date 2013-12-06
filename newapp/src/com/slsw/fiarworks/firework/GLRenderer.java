@@ -23,7 +23,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
 	private GLCamera mCamera;
 	private float[] mProjMatrix = new float[16];
-	private float[] mVMatrix;
+	private float[] mVMatrix = new float[16];
 	private float[] mMVPMatrix = new float[16];
 	private GLBackground mBackground;
 	private Bitmap mBackgroundImage = Bitmap.createBitmap(1, 1,
@@ -83,7 +83,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         // Calculate the projection and view transformation
         mBackground.draw_background(mBackgroundImage, myMask);
-        mVMatrix = mCamera.view();
+        Matrix.invertM(mVMatrix, 0, mCamera.view(), 0);
         Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
         mFirework.update();
         mFirework.draw(mMVPMatrix);
