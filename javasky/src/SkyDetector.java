@@ -70,6 +70,8 @@ public class SkyDetector extends JFrame{
 	protected ButtonGroup blockSizeButtonGroup;
 
 	private ButtonGroup normButtonGroup;
+	
+	protected int threshold = 24;
 
 	public static int[] getLumaPlane(BufferedImage _img) {
 		int[] luma=new int[_img.getWidth()*_img.getHeight()];
@@ -114,7 +116,7 @@ public class SkyDetector extends JFrame{
 				int rgb=(Y<<16)|(Y<<8)|Y;
 				int bx=x/n;
 				int by=y/n;
-				if (bx<nx&&by<ny&&norms[by*nx+bx]<Math.pow(thresholdSlider.getValue(), 2)) {
+				if (bx<nx&&by<ny&&norms[by*nx+bx]<threshold) {
 					rgb&=0xffff00;
 				}
 				disp.setRGB(x,y,rgb);
@@ -135,7 +137,7 @@ public class SkyDetector extends JFrame{
 		
 		for (int y=0;y<ny;y++) {
 			for (int x=0;x<nx;x++) {
-				if (x<nx&&y<ny&&norms[y*nx+x]<Math.pow(thresholdSlider.getValue(), 2)) {
+				if (x<nx&&y<ny&&norms[y*nx+x]<threshold) {
 					mask[y * nx +x] = true;
 				}
 				
@@ -320,7 +322,8 @@ public class SkyDetector extends JFrame{
 		thresholdSlider=new JSlider(JSlider.HORIZONTAL,0,500,0);
 		thresholdSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				thresholdBox.setText("" +(int) Math.pow(thresholdSlider.getValue(),2));
+				threshold = (int)Math.pow(thresholdSlider.getValue(),2);
+				thresholdBox.setText("" +threshold);
 				refresh();
 			}
 		});
@@ -332,15 +335,13 @@ public class SkyDetector extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int threshold = 0;
 				try{
 				threshold = Integer.parseInt(thresholdBox.getText());
 				} catch (java.lang.NumberFormatException e){
 					thresholdBox.setText("" + (int)Math.pow(thresholdSlider.getValue(),2));
 					return;
 				}
-				thresholdSlider.setValue((int) Math.sqrt(threshold));
-				thresholdBox.setText("" + (int)Math.pow(thresholdSlider.getValue(),2));
+				thresholdBox.setText("" + threshold);
 				refresh();
 			}});
 		
