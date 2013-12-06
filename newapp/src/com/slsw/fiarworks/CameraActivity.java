@@ -9,6 +9,7 @@ import java.util.List;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.hardware.Sensor;
@@ -19,10 +20,8 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.WindowManager;
 
 import com.slsw.fiarworks.firework.GLRenderer;
-import com.slsw.fiarworks.masker.AlphaMake;
 
 public class CameraActivity extends Activity implements Camera.PreviewCallback, OnTouchListener {
 
@@ -32,18 +31,17 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
     private Sensor mRotation;
 	private MyGLSurfaceView mView;
     private GLRenderer mRenderer;
+	private long meantime = 0;
+	private int count =0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    setContentView(R.layout.main_layout);
-	    
 	
 		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 		mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 		
-	
-		mRenderer=new GLRenderer();
+		mRenderer=new GLRenderer(getBaseContext());
 		mView = new MyGLSurfaceView(this, mRenderer);
 		mView.setOnTouchListener(this);
     }
@@ -107,11 +105,18 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
     }
 
     public void onPreviewFrame(byte[] data, Camera camera) {
-	    System.out.println("PreviewFrame");
+	    //System.out.println("PreviewFrame");
 	    Camera.Parameters p = mCamera.getParameters();
 	    int width = p.getPreviewSize().width;
 	    int height = p.getPreviewSize().height;
+	    
+	    final long startTime = System.currentTimeMillis();
 	    mRenderer.setTextures(data, width, height, mPreview);
+	    final long Endtime = System.currentTimeMillis();
+	    meantime += (Endtime - startTime);
+	    count += 1;
+	    System.out.println(meantime/count); 
+	    
     }
     
     /*

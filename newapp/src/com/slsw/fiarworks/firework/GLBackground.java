@@ -21,10 +21,19 @@ public class GLBackground
 
     private final String fragmentShaderCode =
         "precision mediump float;" +
-        "uniform sampler2D u_Texture;" +
+        "uniform sampler2D u_TextureCam;" +
+        "uniform sampler2D u_TextureMask;" +
         "varying vec2 v_TexCoordinate;" +
         "void main() {" +
-        "  gl_FragColor = texture2D(u_Texture, v_TexCoordinate);" +
+        "  if(texture2D(u_TextureMask, v_TexCoordinate).r > 0.5) {" +
+        // "    gl_FragCoord.z = 0.0;" +
+        // "  gl_FragDepth = 0.01;" + 
+        "  } else {" +
+        // "    gl_FragCoord.z = 100000.0;" +
+        // "  gl_FragDepth = 0.01;" + 
+        "  }" +
+        "  gl_FragColor = texture2D(u_TextureCam, v_TexCoordinate);" +
+        // "  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);" +
         "}";
 
     static final float[] screenPos = {	-1.0f, -1.0f,
@@ -44,10 +53,11 @@ public class GLBackground
 	   									};
 
     static int[] mfloatBufferPosHandle = new int[1];
-    final int[] textureHandle = new int[1];
+    final int[] textureHandle = new int[2];
 	static int mPosShaderLoc;
     static int mTexShaderLoc;
-    static int mTextureUniformLoc;
+    static int mTextureCamUniformLoc;
+    static int mTextureMaskUniformLoc;
 
 
     static int mNumGeometryFloats; 
@@ -72,23 +82,31 @@ public class GLBackground
 			mPosShaderLoc = GLES20.glGetAttribLocation(mProgram, "a_Position");
 			if(mPosShaderLoc == -1)
 			{
-				System.out.println("mPosShaderLoc is -1. This is bad.");
+				System.err.println("mPosShaderLoc is -1. This is bad.");
 			}
 			mTexShaderLoc = GLES20.glGetAttribLocation(mProgram, "a_TexCoordinate");
 			if(mTexShaderLoc == -1)
 			{
-				System.out.println("mTexShaderLoc is -1. This is bad.");
+				System.err.println("mTexShaderLoc is -1. This is bad.");
 			}
-			mTextureUniformLoc = GLES20.glGetUniformLocation(mProgram, "u_Texture");
-			if(mTextureUniformLoc == -1)
+			mTextureCamUniformLoc = GLES20.glGetUniformLocation(mProgram, "u_TextureCam");
+			if(mTextureCamUniformLoc == -1)
 			{
-				System.out.println("mTextureUniformLoc is -1. This is bad.");
+				System.err.println("mTextureCamUniformLoc is -1. This is bad.");
+			}
+			mTextureMaskUniformLoc = GLES20.glGetUniformLocation(mProgram, "u_TextureMask");
+			if(mTextureMaskUniformLoc == -1)
+			{
+				System.err.println("mTextureMaskUniformLoc is -1. This is bad.");
 			}
 
 		}
 
-		GLES20.glGenTextures(1, textureHandle, 0);
+		GLES20.glGenTextures(2, textureHandle, 0);
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[1]);
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
 
@@ -100,13 +118,18 @@ public class GLBackground
 
 	}
 
-	public void draw(Bitmap camera_image)
+	public void draw(Bitmap camera_image, Bitmap mask)
 	{
 		
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
  		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, camera_image, 0);
+
+ 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[1]);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+ 		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, mask, 0);
 
  		mNumGeometryFloats = screenPos.length;
 		int numGeometryBytes = mNumGeometryFloats * 4;
@@ -123,7 +146,11 @@ public class GLBackground
 
 		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
-		GLES20.glUniform1i(mTextureUniformLoc, 0);
+		GLES20.glUniform1i(mTextureCamUniformLoc, 0);
+
+		GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[1]);
+		GLES20.glUniform1i(mTextureMaskUniformLoc, 1);
 
 		GLES20.glEnableVertexAttribArray(mPosShaderLoc);
 		GLES20.glVertexAttribPointer(	mPosShaderLoc, 2,

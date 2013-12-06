@@ -106,3 +106,5 @@ nosetests.xml
 .env/
 .gradle/
 *.patch
+
+newapp/src/com/slsw/fiarworks/firework/OpenGLES20Complete.java

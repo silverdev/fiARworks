@@ -1,15 +1,16 @@
 
 package com.slsw.fiarworks.firework;
 import java.util.ArrayList;
-import java.lang.Math;
+
+import android.content.Context;
 
 public class Firework
 {
 	private ArrayList<Spark> sparks;
 	static private GLFirework glfw;
-	public Firework()
+	public Firework(Context c)
 	{
-		glfw = new GLFirework();
+		glfw = new GLFirework(c);
 		sparks = new ArrayList<Spark>();
 	}
 	public void Launch(float angle, float depth)
@@ -40,6 +41,7 @@ public class Firework
 		float[] draw_buffer = new float[3*6*sparks.size()];
 		for(int i = 0; i < sparks.size(); i++)
 		{
+			// generate new quad from current spark
 			Quad q = new Quad(sparks.get(i));
 			q.set_quad(draw_buffer, i*3*6);
 		}

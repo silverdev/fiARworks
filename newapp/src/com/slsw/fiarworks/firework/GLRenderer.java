@@ -1,6 +1,5 @@
 package com.slsw.fiarworks.firework;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -8,18 +7,15 @@ import java.util.Calendar;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
 import com.slsw.fiarworks.CameraPreview;
-import com.slsw.fiarworks.masker.AlphaMake;
 import com.slsw.fiarworks.bitmapTools.PixelTools;
+import com.slsw.fiarworks.masker.AlphaMake;
 
 public class GLRenderer implements GLSurfaceView.Renderer {
 	private static final String TAG = "GLRenderer";
@@ -35,14 +31,21 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	private static Bitmap myMask = Bitmap.createBitmap(1, 1,
 			Bitmap.Config.RGB_565);
 	private Bitmap[] imgs = new Bitmap[8];
+	private Context context;
 	private int captured = 0;
 	private int wait = 0;
 
+	public GLRenderer(Context c){
+		super();
+		context=c;
+	}
+	
 	@Override
 	public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        // GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 		mBackground = new GLBackground();
-		mFirework = new Firework();
+		mFirework = new Firework(context);
 		mCamera = new GLCamera();
 		mBackgroundImage = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565);
 		mBackgroundImage.setPixel(0, 0, 0xffffff);
@@ -79,14 +82,13 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
 		mFirework.update();
 		mFirework.draw(mMVPMatrix);
-		mBackground.draw(mBackgroundImage);
+		mBackground.draw(mBackgroundImage, myMask);
 
 	}
 
 	public void setTextures(byte[] image, int width, int height,
 			CameraPreview prev) {
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 		//Bitmap BackgroundImage = PixelTools.makeBlackAndWhiteBitmap(image,
 		//		width, height);
@@ -94,21 +96,23 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		 height);
 		if (BackgroundImage == null) {
 			System.err.println("FAILED to make Bitmap");
+			
 		} else {
-			// mBackgroundImage.recycle();
-			//mBackgroundImage = BackgroundImage;
-			// saveImages();
+			 //saveImages(BackgroundImage);
+			//myMask = BackgroundImage;
+			myMask = AlphaMake.skyFillMask(image, width, height, prev.mRotVec);
+			mBackgroundImage = myMask;
 		}
-		myMask = AlphaMake.skyFillMask(image, width, height, prev.mRotVec);
-		mBackgroundImage = myMask;
+		
+		
 		mCamera.updateView(prev.mRotVec);
 	}
 
-	private void saveImages() {
+	private void saveImages(Bitmap b) {
 		if (wait < 60) {
 			wait++;
 		} else if (captured < imgs.length) {
-			imgs[captured] = mBackgroundImage;
+			imgs[captured] = b;
 			captured++;
 		} else if (captured == imgs.length) {
 			// Save images to file
@@ -138,8 +142,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     //x,y are screen coords
     //we need to get the y-axis angle in world coords
 	public void launchFirework(float x, float y) {
-        float angle = 0.0f;
-        // float angle = zAxis(mCamera.mViewMatrix)
+        float angle = (float)Math.atan2(mCamera.mViewMatrix[4], mCamera.mViewMatrix[0]);
         mFirework.Launch(angle, 10.0f);
 	}
 

@@ -31,7 +31,6 @@ public class CameraPreview extends SurfaceView implements
 	private Context context;
 	public float[] mRotVec = new float[9];
 	private float[] mRotOld = new float[9];
-	private byte[][] mask = null;
 	public GLRenderer mRenderer;
 	public volatile boolean sendBitmap;
 	public float mVerticalViewAngle;
@@ -97,10 +96,6 @@ public class CameraPreview extends SurfaceView implements
 			List<Size> sizes = parameters.getSupportedPreviewSizes();
 			Size optimalSize = getOptimalPreviewSize(sizes, w, h);
 			parameters.setPreviewSize(optimalSize.width, optimalSize.height);
-
-			// if
-			// (context.getPackageManager().hasSystemFeature("android.hardware.camera.autofocus"))
-			// parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
 
 			parameters.setPreviewSize(720, 480);
 			mVerticalViewAngle = parameters.getVerticalViewAngle();

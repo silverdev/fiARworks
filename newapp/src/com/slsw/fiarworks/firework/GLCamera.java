@@ -5,7 +5,7 @@ import android.opengl.Matrix;
 
 public class GLCamera
 {
-	private float[] mViewMatrix = new float[16];
+	public float[] mViewMatrix = new float[16];
 
 	public GLCamera()
 	{
