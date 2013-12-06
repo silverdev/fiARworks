@@ -42,13 +42,15 @@ public class Firework
 	public void draw(float[] MVPMatrix)
 	{
 		float[] draw_buffer = new float[3*6*sparks.size()];
+		float[] tex_buffer = new float[2*6*sparks.size()];
+
 		for(int i = 0; i < sparks.size(); i++)
 		{
 			// generate new quad from current spark
 			Quad q = new Quad(sparks.get(i));
-			q.set_quad(draw_buffer, i*3*6);
+			q.set_quad(draw_buffer, i*3*6, tex_buffer, i*2*6);
 		}
-		glfw.updateFireworkAndDraw(draw_buffer, MVPMatrix);
+		glfw.updateFireworkAndDraw(draw_buffer, tex_buffer, MVPMatrix);
 	}
 }
 

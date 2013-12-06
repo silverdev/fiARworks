@@ -81,12 +81,12 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		// Set the camera position (View matrix)
 
         // Calculate the projection and view transformation
-        //mBackground.draw_background(mBackgroundImage, myMask);
+        mBackground.draw_background(mBackgroundImage, myMask);
         mVMatrix = mCamera.view();
         Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
         mFirework.update();
         mFirework.draw(mMVPMatrix);
-        // mBackground.draw_foreground(mBackgroundImage, myMask);
+        mBackground.draw_foreground(mBackgroundImage, myMask);
 
 	}
 
