@@ -22,8 +22,10 @@ public class Firework
 		//radians or degrees?
 		//cos and sin mixed up?
 
-		Vec3 start_pos = new Vec3(0.0f, 0.0f, 100.0f);
-		Vec3 start_vel = new Vec3(0.0f, 0.01f, 0.0f);
+		// Vec3 start_pos = new Vec3(0.0f, -100.0f, 0.0f);
+		float throw_dist = 100.0f;
+		Vec3 start_pos = new Vec3(GLCamera.dangerous_pointing[0]*throw_dist,GLCamera.dangerous_pointing[1]*throw_dist,GLCamera.dangerous_pointing[2]*throw_dist);
+		Vec3 start_vel = new Vec3(0.0f, 0.0f, 0.01f);
 		Spark start_spark = new Spark(start_pos, start_vel, 0);
 		sparks.add(start_spark);
 	}
@@ -41,7 +43,7 @@ public class Firework
 	}
 	public void draw(float[] MVPMatrix)
 	{
-		float[] draw_buffer = new float[3*6*sparks.size()];
+		float[] draw_buffer = new float[3*6*sparks.size()+100];
 		for(int i = 0; i < sparks.size(); i++)
 		{
 			// generate new quad from current spark

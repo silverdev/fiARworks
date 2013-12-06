@@ -22,9 +22,10 @@ public class AlphaMake {
 	}
 	
 	public static final int BACKGROUND =  0xffffffff;
-	public static final int MABY =  0xffff00ff;
+	//public static final int MABY =  0xffff00ff;
+	public static final int MABY =  0x00000001;
 	public static final int OPAQUE = 0;
-	public static final int CUTOFF = 121;
+	public static final int CUTOFF = 100;
 	private static BlockDCT.BlockSize bsize = BlockDCT.BlockSize._8x8;
 	
 	public static Bitmap makeSimpleMask(byte[] image, int width,int height,
