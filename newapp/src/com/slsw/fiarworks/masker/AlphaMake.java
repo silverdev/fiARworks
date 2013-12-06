@@ -72,16 +72,20 @@ public class AlphaMake {
 		return Bitmap.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
 	}
 	
-	public static Bitmap SkyFillMask(byte[] image, int width, int height,
+	public static Bitmap skyFillMask(byte[] image, int width, int height,
 			float[] currRot) {
-
-		int[] mask = new int[height * width];
+		
+		int n=1<<bsize.getLog();
+		int mx=width/n;
+		int my=height/n;
+		
 
 		int[] luma = PixelTools.YUBtoLuma(image, width, height);
 
 		double[] norms = BlockDCT.computeNorms(luma, width, height,
 				BlockDCT.BlockSize._8x8, BlockDCT.Norm.L1);
-
+		int[] mask = new int[norms.length];
+		
 		for (int i = 0; i < norms.length; i++) {
 			if (norms[i] < CUTOFF) {
 				mask[i] = BACKGROUND;
@@ -106,18 +110,33 @@ public class AlphaMake {
 			}
 			break;
 		case down:
-			mask = new int[height * width];
-			break;
+			
+			return Bitmap
+			.createBitmap(new int[height * width], width, height, Bitmap.Config.ARGB_8888);
 		case sky:
 			Arrays.fill(mask, BACKGROUND);
-			System.err.println("I am looking up");
 			break;
 		default:
 			break;
 		}
+		
+		for (int y = 0; y<height; y++){
+			for (int x = 0; x<width; x++){
+			int bx=x/n;
+			int by=y/n;
+			if (mask[by * mx + bx] == 0)
+			{
+				luma[y * width + x] = OPAQUE;
+			}
+			else {
+				luma[y * width + x] = BACKGROUND;
+			}
+			}
+		}
+		
 
 		return Bitmap
-				.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
+				.createBitmap(luma, width, height, Bitmap.Config.ARGB_8888);
 	}
 	
 

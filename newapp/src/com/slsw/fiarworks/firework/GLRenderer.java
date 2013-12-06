@@ -99,7 +99,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 			//mBackgroundImage = BackgroundImage;
 			// saveImages();
 		}
-		myMask = AlphaMake.coolMask(image, width, height, prev.mRotVec);
+		myMask = AlphaMake.skyFillMask(image, width, height, prev.mRotVec);
 		mBackgroundImage = myMask;
 		mCamera.updateView(prev.mRotVec);
 	}
