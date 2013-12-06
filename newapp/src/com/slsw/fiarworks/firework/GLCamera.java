@@ -9,10 +9,13 @@ public class GLCamera
 	private float[] rotMat = new float[16];
 	public float[] pointing = new float[4];
 
+	public static float[] dangerous_pointing = new float[3];
+
 	public GLCamera()
 	{
 		Matrix.setIdentityM(mViewMatrix, 0);
 		Matrix.setIdentityM(rotMat, 0);
+		dangerous_pointing = new float[] {200000,0,0};
 	}
 	//returns view matrix
 	public float[] view()
@@ -20,7 +23,9 @@ public class GLCamera
 
 		Matrix.setIdentityM(mViewMatrix, 0);
 		// Matrix.setLookAtM(mViewMatrix, 0, 0.0f, 0.0f, 0.0f, pointing[0], pointing[1], pointing[2], 0.0f, 1.0f, 0.0f);
-		//*
+		Matrix.setLookAtM(mViewMatrix, 0, 0.0f, 0.0f, 0.0f, pointing[0], pointing[1], pointing[2], 0.0f, 0.0f, 1.0f);
+
+		/*
 		Matrix.setLookAtM(mViewMatrix, 0, 2.0f * pointing[0], 2.0f * pointing[1], 2.0f * pointing[2],
 										  2.0f * -pointing[0], 2.0f * -pointing[1], 2.0f * -pointing[2],
 										  0.0f, 1.0f, 0.0f);
@@ -54,11 +59,20 @@ public class GLCamera
 		rotMat[14] = 0.0f;
 		rotMat[15] = 1.0f;
 
+		// rotMat converts device coords to world coords.
+
 		Matrix.invertM(rotMat, 0, rotMat, 0);
 
-		float[] downVector = {0.0f, 0.0f, 1.0f, 1.0f};
+		// the inverted matrix converts world coords to device coords.
+
+		float[] downVector = {0.0f, 0.0f, -1.0f, 1.0f};
 
 		Matrix.multiplyMV(pointing, 0, rotMat, 0, downVector, 0);
+
+		dangerous_pointing[0] = pointing[0];
+		dangerous_pointing[1] = pointing[1];
+		dangerous_pointing[2] = pointing[2];
+
 		// System.out.println("Camera is pointing at: ");
 		// System.out.println("X: " + pointing[0] + " Y: " + pointing[1] + "Z: " + pointing[2] + " W: " + pointing[3]);
 		
