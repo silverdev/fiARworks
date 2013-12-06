@@ -36,7 +36,7 @@ public class Spark
 		{
 			System.out.println("Starter Position");
 			System.out.println("X: " + position.x + " Y: " + position.y + " Z: " + position.z);
-			if(position.y > 5.0f)
+			if(position.y > 1.0f)
 			{
 				System.out.println("Exploded!");
 				//Explode

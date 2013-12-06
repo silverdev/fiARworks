@@ -66,7 +66,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
 		// this projection matrix is applied to object coordinates
 		// in the onDrawFrame() method
-		Matrix.perspectiveM (mProjMatrix, 0, 45.0f, ratio, 0.1f, 100.0f);
+        Matrix.setIdentityM(mProjMatrix, 0);
+		Matrix.perspectiveM (mProjMatrix, 0, 45.0f, ratio, 0.1f, 100000.0f);
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		// Set the camera position (View matrix)
 
         // Calculate the projection and view transformation
-        mBackground.draw_background(mBackgroundImage, myMask);
+        //mBackground.draw_background(mBackgroundImage, myMask);
         mVMatrix = mCamera.view();
         Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
         mFirework.update();

@@ -18,9 +18,12 @@ public class GLCamera
 	public float[] view()
 	{
 
-		// Matrix.setIdentityM(mViewMatrix, 0);
-		// Matrix.setLookAtM(mViewMatrix, 0, 0.0f, 0.0f, 0.0f, pointing[0], pointing[1], pointing[2], 0.0f, 1.0f, 0.0f);
-		Matrix.setLookAtM(mViewMatrix, 0, 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, -20.0f, 0.0f, 1.0f, 0.0f);
+		Matrix.setIdentityM(mViewMatrix, 0);
+		Matrix.setLookAtM(mViewMatrix, 0, 0.0f, 0.0f, 0.0f, pointing[0], pointing[1], pointing[2], 0.0f, 1.0f, 0.0f);
+		Matrix.setLookAtM(mViewMatrix, 0, 2.0f * pointing[0], 2.0f * pointing[1], 2.0f * pointing[2],
+										  2.0f * -pointing[0], 2.0f * -pointing[1], 2.0f * -pointing[2],
+										  0.0f, 1.0f, 0.0f);
+		// Matrix.setRotateM(mViewMatrix, 0, 50.0f,1.0f,0.0f,0.0f);
 
 		return mViewMatrix;
 	}

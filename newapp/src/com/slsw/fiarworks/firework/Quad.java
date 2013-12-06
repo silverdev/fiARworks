@@ -14,7 +14,7 @@ public class Quad
 	Quad(Spark s)
 	{
 		// size is half-width of the spark
-		float size = 1.5f;
+		float size = 1.0f;
 		// spark center pos in world coords
 		Vec3 p_ = s.position;
 
@@ -34,9 +34,9 @@ public class Quad
 			// bottom-right		
 			p2.add(size, -size, 0.0f);
 			// top-left
-			p3.add(-size, -size, 0.0f);
+			p3.add(-size, size, 0.0f);
 			// top-right		
-			p4.add( size, -size, 0.0f);
+			p4.add( size, size, 0.0f);
 		}
 
 		else
