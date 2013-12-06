@@ -103,7 +103,7 @@ public class Vec3
 	public void unitize() {
 		double len = this.len();
 		// avoid division by zero
-		if (len<vecPrecision) return;
+		if (Math.abs(len)<vecPrecision) return;
 		// don't unitize roughly unit vectors
 		if (Math.abs(len-1)<vecPrecision) return;
 		// divide dimensions by length to unitize
