@@ -1,13 +1,12 @@
 
 package com.slsw.fiarworks.firework;
 
-import java.nio.IntBuffer;
-
-import android.opengl.GLES20;
-import android.opengl.Matrix;
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+
+import android.graphics.Bitmap;
+import android.opengl.GLES20;
 
 /*
  * 
@@ -50,7 +49,7 @@ public class GLFirework
 
 	ByteBuffer mByteBuffer;
 
-	GLFirework()
+	GLFirework(Bitmap b)
 	{
 		int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
         int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);

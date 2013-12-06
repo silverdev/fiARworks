@@ -9,6 +9,7 @@ import java.util.List;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.hardware.Sensor;
@@ -19,10 +20,8 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.WindowManager;
 
 import com.slsw.fiarworks.firework.GLRenderer;
-import com.slsw.fiarworks.masker.AlphaMake;
 
 public class CameraActivity extends Activity implements Camera.PreviewCallback, OnTouchListener {
 
@@ -40,7 +39,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 		mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 		
-		mRenderer=new GLRenderer();
+		mRenderer=new GLRenderer(BitmapFactory.decodeResource(getResources(), R.drawable.sprite4o1));
 		mView = new MyGLSurfaceView(this, mRenderer);
 		mView.setOnTouchListener(this);
     }

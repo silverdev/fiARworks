@@ -1,15 +1,16 @@
 
 package com.slsw.fiarworks.firework;
 import java.util.ArrayList;
-import java.lang.Math;
+
+import android.graphics.Bitmap;
 
 public class Firework
 {
 	private ArrayList<Spark> sparks;
 	static private GLFirework glfw;
-	public Firework()
+	public Firework(Bitmap b)
 	{
-		glfw = new GLFirework();
+		glfw = new GLFirework(b);
 		sparks = new ArrayList<Spark>();
 	}
 	public void Launch(float angle, float depth)

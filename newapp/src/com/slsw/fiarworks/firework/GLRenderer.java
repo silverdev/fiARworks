@@ -30,14 +30,20 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	private static Bitmap myMask = Bitmap.createBitmap(1, 1,
 			Bitmap.Config.RGB_565);
 	private Bitmap[] imgs = new Bitmap[8];
+	private Bitmap sprite;
 	private int captured = 0;
 	private int wait = 0;
 
+	public GLRenderer(Bitmap b){
+		super();
+		sprite=b;
+	}
+	
 	@Override
 	public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		mBackground = new GLBackground();
-		mFirework = new Firework();
+		mFirework = new Firework(sprite);
 		mCamera = new GLCamera();
 		mBackgroundImage = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565);
 		mBackgroundImage.setPixel(0, 0, 0xffffff);
