@@ -18,7 +18,7 @@ public class Quad
 		// spark center pos in world coords
 		Vec3 p_ = s.position;
 
-		boolean useBillboarding = false;
+		boolean useBillboarding = true;
 
 		if (!useBillboarding)
 		{

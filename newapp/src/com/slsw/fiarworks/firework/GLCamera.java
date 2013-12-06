@@ -19,10 +19,12 @@ public class GLCamera
 	{
 
 		Matrix.setIdentityM(mViewMatrix, 0);
-		Matrix.setLookAtM(mViewMatrix, 0, 0.0f, 0.0f, 0.0f, pointing[0], pointing[1], pointing[2], 0.0f, 1.0f, 0.0f);
+		// Matrix.setLookAtM(mViewMatrix, 0, 0.0f, 0.0f, 0.0f, pointing[0], pointing[1], pointing[2], 0.0f, 1.0f, 0.0f);
+		//*
 		Matrix.setLookAtM(mViewMatrix, 0, 2.0f * pointing[0], 2.0f * pointing[1], 2.0f * pointing[2],
 										  2.0f * -pointing[0], 2.0f * -pointing[1], 2.0f * -pointing[2],
 										  0.0f, 1.0f, 0.0f);
+		/**/
 		// Matrix.setRotateM(mViewMatrix, 0, 50.0f,1.0f,0.0f,0.0f);
 
 		return mViewMatrix;
@@ -38,12 +40,18 @@ public class GLCamera
 		rotMat[0] = dir[0];
 		rotMat[1] = dir[1];
 		rotMat[2] = dir[2];
+		rotMat[3] = 0.0f;
 		rotMat[4] = dir[3];
 		rotMat[5] = dir[4];
 		rotMat[6] = dir[5];
+		rotMat[7] = 0.0f;
 		rotMat[8] = dir[6];
 		rotMat[9] = dir[7];
 		rotMat[10] = dir[8];
+		rotMat[11] = 0.0f;
+		rotMat[12] = 0.0f;
+		rotMat[13] = 0.0f;
+		rotMat[14] = 0.0f;
 		rotMat[15] = 1.0f;
 
 		Matrix.invertM(rotMat, 0, rotMat, 0);

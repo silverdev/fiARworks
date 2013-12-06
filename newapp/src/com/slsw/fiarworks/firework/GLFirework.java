@@ -21,13 +21,14 @@ public class GLFirework
         "void main() {" +
         // the matrix must be included as a modifier of gl_Position
         "  vec4 position = vec4(vPositionIn, 1.0);" +
-        "  gl_Position = position * uMVPMatrix;" +
+        "  gl_Position = uMVPMatrix * position;" +
         "}";
 
     private final String fragmentShaderCode =
         "precision mediump float;" +
         "void main() {" +
-        "  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);" +
+        "  gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);" +
+        // "  gl_FragColor = gl_Position*10;" +
         "}";
 
 	static final int POSITION_COORDS_PER_VERTEX = 3;
@@ -90,6 +91,7 @@ public class GLFirework
 		int numGeometryBytes = mNumGeometryFloats * 4;
 
 		FloatBuffer geometryBuffer = mByteBuffer.asFloatBuffer();
+
 		geometryBuffer.put(geometry);
 		geometryBuffer.position(0);
 
@@ -103,7 +105,7 @@ public class GLFirework
 										GLES20.GL_FLOAT, false,
 										GEOMETERY_PER_VERTEX*4, geometryBuffer);
 
-		GLES20.glUniformMatrix4fv(mMVPMatrixLoc, 1, false, MVPMatrix, 0);
+		// GLES20.glUniformMatrix4fv(mMVPMatrixLoc, 1, false, MVPMatrix, 0);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumGeometryFloats / GEOMETERY_PER_VERTEX);
 
