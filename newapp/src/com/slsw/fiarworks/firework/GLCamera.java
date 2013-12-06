@@ -33,12 +33,14 @@ public class GLCamera
 		mViewMatrix[10] = dir[8];
 		mViewMatrix[15] = 1.0f;
 
-		float[] downVector = {0.0f, 0.0f, 1.0f, 1.0f};
-		float[] pointing = {0.0f, 0.0f, 0.0f, 0.0f};
+		Matrix.invertM(mViewMatrix, 0, mViewMatrix, 0);
 
-		Matrix.multiplyMV(pointing, 0, mViewMatrix, 0, downVector, 0);
-		System.out.println("Camera is pointing at: ");
-		System.out.println("X: " + pointing[0] + " Y: " + pointing[1] + "Z: " + pointing[2] + " W: " + pointing[3]);
+		// float[] downVector = {0.0f, 0.0f, 1.0f, 1.0f};
+		// float[] pointing = {0.0f, 0.0f, 0.0f, 0.0f};
+
+		// Matrix.multiplyMV(pointing, 0, mViewMatrix, 0, downVector, 0);
+		// System.out.println("Camera is pointing at: ");
+		// System.out.println("X: " + pointing[0] + " Y: " + pointing[1] + "Z: " + pointing[2] + " W: " + pointing[3]);
 	}
 
 }
