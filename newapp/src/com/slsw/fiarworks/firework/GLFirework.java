@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import android.graphics.Bitmap;
+import android.content.Context;
 import android.opengl.GLES20;
 
 /*
@@ -49,7 +49,7 @@ public class GLFirework
 
 	ByteBuffer mByteBuffer;
 
-	GLFirework(Bitmap b)
+	GLFirework(Context c)
 	{
 		int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
         int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);

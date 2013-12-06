@@ -39,7 +39,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 		mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 		
-		mRenderer=new GLRenderer(BitmapFactory.decodeResource(getResources(), R.drawable.sprite4o1));
+		mRenderer=new GLRenderer(getBaseContext());
 		mView = new MyGLSurfaceView(this, mRenderer);
 		mView.setOnTouchListener(this);
     }
