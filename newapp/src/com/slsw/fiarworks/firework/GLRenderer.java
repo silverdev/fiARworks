@@ -53,7 +53,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		mBackgroundImage.setPixel(0, 0, 0xffffff);
 		myMask = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565);
 		myMask.setPixel(0, 0, 0xffffff);
-		// mFirework.Launch(0.2f, 10.0f);
+		mFirework.Launch(0.0f, 10.0f);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		// this projection matrix is applied to object coordinates
 		// in the onDrawFrame() method
 		Matrix.frustumM(mProjMatrix, 0, -ratio, ratio, -1.0f, 1.0f, 1.0f,
-				10.0f);
+				100.0f);
 
 	}
 
@@ -83,11 +83,11 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         // Calculate the projection and view transformation
         mBackground.draw_background(mBackgroundImage, myMask);
-        Matrix.invertM(mVMatrix, 0, mCamera.view(), 0);
+        mVMatrix = mCamera.view();
         Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
         mFirework.update();
         mFirework.draw(mMVPMatrix);
-        mBackground.draw_foreground(mBackgroundImage, myMask);
+        // mBackground.draw_foreground(mBackgroundImage, myMask);
 
 	}
 
@@ -148,7 +148,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     //we need to get the y-axis angle in world coords
 	public void launchFirework(float x, float y) {
         System.out.println("Launching in GLRenderer");
-        float angle = (float)Math.atan2(mCamera.mViewMatrix[4], mCamera.mViewMatrix[0]);
+        float angle = (float)Math.atan2(mCamera.pointing[1], mCamera.pointing[0]);
         mFirework.Launch(angle, 10.0f);
 	}
 
