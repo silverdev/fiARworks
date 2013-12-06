@@ -31,6 +31,8 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
     private Sensor mRotation;
 	private MyGLSurfaceView mView;
     private GLRenderer mRenderer;
+	private long meantime = 0;
+	private int count =0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,11 +105,18 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
     }
 
     public void onPreviewFrame(byte[] data, Camera camera) {
-	    System.out.println("PreviewFrame");
+	    //System.out.println("PreviewFrame");
 	    Camera.Parameters p = mCamera.getParameters();
 	    int width = p.getPreviewSize().width;
 	    int height = p.getPreviewSize().height;
+	    
+	    final long startTime = System.currentTimeMillis();
 	    mRenderer.setTextures(data, width, height, mPreview);
+	    final long Endtime = System.currentTimeMillis();
+	    meantime += (Endtime - startTime);
+	    count += 1;
+	    System.out.println(meantime/count); 
+	    
     }
     
     /*

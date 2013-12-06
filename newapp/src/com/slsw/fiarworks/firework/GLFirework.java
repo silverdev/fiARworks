@@ -63,12 +63,13 @@ public class GLFirework
 			mPosShaderLoc = GLES20.glGetAttribLocation(mProgram, "vPositionIn");
 			if(mPosShaderLoc == -1)
 			{
-				System.out.println("mPosShaderLoc is -1. This is bad.");
+				System.err.println("mPosShaderLoc is -1. This is bad.");
+				
 			}
 			mMVPMatrixLoc = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
 			if(mMVPMatrixLoc == -1)
 			{
-				System.out.println("mMVPMatrixLoc is -1. This is bad.");
+				System.err.println("mMVPMatrixLoc is -1. This is bad.");
 			}
 		}
 

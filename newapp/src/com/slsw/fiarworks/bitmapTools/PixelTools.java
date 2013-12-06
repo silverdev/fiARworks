@@ -29,9 +29,10 @@ public class PixelTools {
 	public static void floodFill(int endColor, int[] image, int x, int y, int mx, int my){
 		Stack<Integer> pStack = new Stack<Integer>();
 		pStack.push(x);
-		pStack.push(0);
+		pStack.push(y);
+		int startcolor = image[y * mx + x];
 	while(!pStack.empty()){
-		_floodFill(image[y * mx + x], endColor, image, pStack, mx, my);
+		_floodFill(startcolor, endColor, image, pStack, mx, my);
 	}
 	}
 	 

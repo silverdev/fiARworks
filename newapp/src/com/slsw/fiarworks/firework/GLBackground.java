@@ -105,17 +105,22 @@ public class GLBackground
 			mPosShaderLocA = GLES20.glGetAttribLocation(mProgramA, "a_Position");
 			if(mPosShaderLocA == -1)
 			{
-				System.out.println("mPosShaderLocA is -1. This is bad.");
+
+				System.err.println("mPosShaderLocA is -1. This is bad.");
+
 			}
 			mTexShaderLocA = GLES20.glGetAttribLocation(mProgramA, "a_TexCoordinate");
 			if(mTexShaderLocA == -1)
 			{
-				System.out.println("mTexShaderLocA is -1. This is bad.");
+
+				System.err.println("mTexShaderLocA is -1. This is bad.");
 			}
 			mTextureCamUniformLocA = GLES20.glGetUniformLocation(mProgramA, "u_TextureCam");
 			if(mTextureCamUniformLocA == -1)
 			{
-				System.out.println("mTextureCamUniformLocA is -1. This is bad.");
+
+				System.err.println("mTextureCamUniformLocA is -1. This is bad.");
+
 			}
 		}
 
@@ -128,22 +133,23 @@ public class GLBackground
 			mPosShaderLocB = GLES20.glGetAttribLocation(mProgramB, "a_Position");
 			if(mPosShaderLocB == -1)
 			{
-				System.out.println("mPosShaderLocB is -1. This is bad.");
+
+				System.err.println("mPosShaderLocB is -1. This is bad.");
 			}
 			mTexShaderLocB = GLES20.glGetAttribLocation(mProgramB, "a_TexCoordinate");
 			if(mTexShaderLocB == -1)
 			{
-				System.out.println("mTexShaderLocB is -1. This is bad.");
+				System.err.println("mTexShaderLocB is -1. This is bad.");
 			}
 			mTextureCamUniformLocB = GLES20.glGetUniformLocation(mProgramB, "u_TextureCam");
 			if(mTextureCamUniformLocB == -1)
 			{
-				System.out.println("mTextureCamUniformLocB is -1. This is bad.");
+				System.err.println("mTextureCamUniformLocB is -1. This is bad.");
 			}
 			mTextureMaskUniformLocB = GLES20.glGetUniformLocation(mProgramB, "u_TextureMask");
 			if(mTextureMaskUniformLocB == -1)
 			{
-				System.out.println("mTextureMaskUniformLocB is -1. This is bad.");
+				System.err.println("mTextureMaskUniformLocB is -1. This is bad.");
 			}
 		}
 
