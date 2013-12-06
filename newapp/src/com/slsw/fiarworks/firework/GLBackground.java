@@ -163,7 +163,7 @@ public class GLBackground
 
 	}
 
-	public void draw(Bitmap camera_image, Bitmap mask)
+	public void draw_background(Bitmap camera_image, Bitmap mask)
 	{
 		
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
@@ -208,6 +208,31 @@ public class GLBackground
 			GLES20.glDisableVertexAttribArray(mPosShaderLocA);
 			GLES20.glDisableVertexAttribArray(mTexShaderLocA);
 		}
+	}
+	public void draw_foreground(Bitmap camera_image, Bitmap mask)
+	{
+
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+ 		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, camera_image, 0);
+
+ 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[1]);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+ 		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, mask, 0);
+
+ 		mNumGeometryFloats = screenPos.length;
+		int numGeometryBytes = mNumGeometryFloats * 4;
+
+		FloatBuffer floatBufferPos = mByteBufferPos.asFloatBuffer();
+		floatBufferPos.put(screenPos);
+		floatBufferPos.position(0);
+
+		FloatBuffer floatBufferTex = mByteBufferTex.asFloatBuffer();
+		floatBufferTex.put(screenTex);
+		floatBufferTex.position(0);
+
 		{
 			GLES20.glUseProgram(mProgramB);
 

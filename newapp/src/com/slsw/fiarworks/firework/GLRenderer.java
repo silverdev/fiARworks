@@ -80,13 +80,14 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		// GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
 		// Set the camera position (View matrix)
-		mVMatrix = mCamera.view();
 
-		// Calculate the projection and view transformation
-		Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
-		mFirework.update();
-		mFirework.draw(mMVPMatrix);
-		mBackground.draw(mBackgroundImage, myMask);
+        // Calculate the projection and view transformation
+        mBackground.draw_background(mBackgroundImage, myMask);
+        mVMatrix = mCamera.view();
+        Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
+        mFirework.update();
+        mFirework.draw(mMVPMatrix);
+        mBackground.draw_foreground(mBackgroundImage, myMask);
 
 	}
 
