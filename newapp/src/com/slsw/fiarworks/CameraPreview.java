@@ -163,6 +163,7 @@ public class CameraPreview extends SurfaceView implements
 		if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
 			// Update rotation and position vector
 			SensorManager.getRotationMatrixFromVector(mRotVec, event.values);
+			
 		}
 	}
 
