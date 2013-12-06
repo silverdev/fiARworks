@@ -16,14 +16,14 @@ public class Firework
 	public void Launch(float angle, float depth)
 	{
 		// System.out.println("Launching");
-		// Vec3 start_pos = new Vec3(depth * (float) Math.cos(angle), depth * (float) Math.sin(angle), 0.0f);
+		Vec3 start_pos = new Vec3(depth * (float) Math.cos(angle), depth * (float) Math.sin(angle), 0.0f);
 		// System.out.println("X: " + start_pos.x + " Y: " + start_pos.y + "Z: " + start_pos.z);
 		//possible issues:
 		//radians or degrees?
 		//cos and sin mixed up?
 
-		Vec3 start_pos = new Vec3(0.0f, 0.0f, 100.0f);
-		Vec3 start_vel = new Vec3(0.0f, 0.01f, 0.0f);
+		// Vec3 start_pos = new Vec3(0.0f, 100.0f, 0.0f);
+		Vec3 start_vel = new Vec3(0.0f, 0.0f, 0.2f);
 		Spark start_spark = new Spark(start_pos, start_vel, 0);
 		sparks.add(start_spark);
 	}
