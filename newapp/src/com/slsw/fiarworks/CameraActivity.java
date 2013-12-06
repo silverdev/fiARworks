@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 
 import com.slsw.fiarworks.firework.GLRenderer;
 
@@ -37,6 +38,9 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+	    // Kirby and Eric are putting wake lock back for a while. If you want to get rid of it,
+	    // please comment the next line out instead of deleting it.
+	    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	
 		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 		mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
