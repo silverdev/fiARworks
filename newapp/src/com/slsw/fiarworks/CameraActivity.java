@@ -33,6 +33,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
     private GLRenderer mRenderer;
 	private long meantime = 0;
 	private int count =0;
+	private boolean allowLaunching = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -126,12 +127,43 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 	 * Called whenever a touch is detected.
 	 */
 	public boolean onTouch(View v, MotionEvent event) {
-		System.out.println("ONTOUCH");
-		double x = event.getX(); 
-		double y = event.getY();
-		y = (y/v.getHeight()-.5)*2;
-		x= (x/v.getWidth()-.5)*2;
-		mView.launchFirework(x,y, 0.0);
+
+		// identify touch type
+		int actionType = event.getActionMasked();
+		String eventTypeString;
+		// touch with just one finger
+		if (actionType==MotionEvent.ACTION_DOWN) {
+			eventTypeString = new String("ACTION_DOWN " + actionType);
+			// schedule a launch
+			allowLaunching = true;
+		}
+		// lift the only finger
+		else if (actionType==MotionEvent.ACTION_UP) {
+			eventTypeString = new String("ACTION_UP " + actionType);
+			// don't launch
+			allowLaunching = false;
+		}
+		// finger slide
+		else if (actionType==MotionEvent.ACTION_MOVE) {
+			eventTypeString = new String("ACTION_MOVE " + actionType);
+			// don't launch
+			allowLaunching = false;
+		}
+		// anything else, like touching/lifting an additional finger
+		else {
+			eventTypeString = new String("dunno, look it up "+actionType);
+			// don't launch
+			allowLaunching = false;
+		}
+		System.out.println("ONTOUCH: " + eventTypeString);
+		
+		if (allowLaunching) {
+			double x = event.getX();
+			double y = event.getY();
+			y = (y/v.getHeight()-.5)*2;
+			x= (x/v.getWidth()-.5)*2;
+			mView.launchFirework(x,y, 0.0);
+		}
 		
 		return true;
 	}

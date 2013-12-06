@@ -42,12 +42,14 @@ public class GLCamera
 		float[] pointing = {0.0f, 0.0f, 0.0f, 0.0f};
 
 		Matrix.multiplyMV(pointing, 0, mViewMatrix, 0, downVector, 0);
+		/*
 		System.out.println("Camera is pointing at: ");
 		System.out.println("X: " + pointing[0] + " Y: " + pointing[1] + "Z: " + pointing[2] + " W: " + pointing[3]);
 		System.out.println("["+dir[0]+"]["+dir[1]+"]["+dir[2]+"]");
 		System.out.println("["+dir[3]+"]["+dir[4]+"]["+dir[5]+"]");
 		System.out.println("["+dir[6]+"]["+dir[7]+"]["+dir[8]+"]");
 		System.out.println("---");
+		/**/
 	}
 
 }
