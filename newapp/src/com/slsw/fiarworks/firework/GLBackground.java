@@ -45,11 +45,11 @@ public class GLBackground
         "uniform sampler2D u_TextureMask;" +
         "varying vec2 v_TexCoordinate;" +
         "void main() {" +
-        "  if(texture2D(u_TextureMask, v_TexCoordinate).r < 0.5) {" +
+        "  if(texture2D(u_TextureMask, v_TexCoordinate).r > 0.5) {" +
         "    discard;" + 
         "  }" +
-        // "  gl_FragColor = texture2D(u_TextureCam, v_TexCoordinate) * 0.5;" +
-        "  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);" +
+        "  gl_FragColor = texture2D(u_TextureCam, v_TexCoordinate);" +
+        // "  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);" +
         "}";
 
     static final float[] screenPos = {	-1.0f, -1.0f,
@@ -203,13 +203,13 @@ public class GLBackground
 											GLES20.GL_FLOAT, false,
 											2*4, floatBufferTex);
 
-			GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumGeometryFloats / 2);
+			// GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumGeometryFloats / 2);
 
 			GLES20.glDisableVertexAttribArray(mPosShaderLocA);
 			GLES20.glDisableVertexAttribArray(mTexShaderLocA);
 		}
 		{
-			GLES20.glUseProgram(mProgramA);
+			GLES20.glUseProgram(mProgramB);
 
 			GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
@@ -229,7 +229,7 @@ public class GLBackground
 											GLES20.GL_FLOAT, false,
 											2*4, floatBufferTex);
 
-			// GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumGeometryFloats / 2);
+			GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumGeometryFloats / 2);
 
 			GLES20.glDisableVertexAttribArray(mPosShaderLocB);
 			GLES20.glDisableVertexAttribArray(mTexShaderLocB);
