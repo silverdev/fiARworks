@@ -7,14 +7,15 @@ import java.util.Calendar;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
 import com.slsw.fiarworks.CameraPreview;
-import com.slsw.fiarworks.masker.AlphaMake;
 import com.slsw.fiarworks.bitmapTools.PixelTools;
+import com.slsw.fiarworks.masker.AlphaMake;
 
 public class GLRenderer implements GLSurfaceView.Renderer {
 	private static final String TAG = "GLRenderer";
@@ -30,15 +31,21 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	private static Bitmap myMask = Bitmap.createBitmap(1, 1,
 			Bitmap.Config.RGB_565);
 	private Bitmap[] imgs = new Bitmap[8];
+	private Context context;
 	private int captured = 0;
 	private int wait = 0;
 
+	public GLRenderer(Context c){
+		super();
+		context=c;
+	}
+	
 	@Override
 	public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         // GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 		mBackground = new GLBackground();
-		mFirework = new Firework();
+		mFirework = new Firework(context);
 		mCamera = new GLCamera();
 		mBackgroundImage = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565);
 		mBackgroundImage.setPixel(0, 0, 0xffffff);
