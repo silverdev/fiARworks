@@ -24,6 +24,10 @@ public class Firework
 
 		// Vec3 start_pos = new Vec3(0.0f, 100.0f, 0.0f);
 		Vec3 start_vel = new Vec3(0.0f, 0.0f, 0.2f);
+		// Vec3 start_pos = new Vec3(0.0f, -100.0f, 0.0f);
+		// float throw_dist = 100.0f;
+		// Vec3 start_pos = new Vec3(GLCamera.dangerous_pointing[0]*throw_dist,GLCamera.dangerous_pointing[1]*throw_dist,GLCamera.dangerous_pointing[2]*throw_dist);
+		// Vec3 start_vel = new Vec3(0.0f, 0.0f, 0.01f);
 		Spark start_spark = new Spark(start_pos, start_vel, 0);
 		sparks.add(start_spark);
 	}
@@ -43,7 +47,7 @@ public class Firework
 	{
 		float[] draw_buffer = new float[3*6*sparks.size()];
 		float[] tex_buffer = new float[2*6*sparks.size()];
-
+		//bug with size of buffers and stuff with multiple fireworks
 		for(int i = 0; i < sparks.size(); i++)
 		{
 			// generate new quad from current spark

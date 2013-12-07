@@ -45,7 +45,7 @@ public class GLBackground
         "uniform sampler2D u_TextureMask;" +
         "varying vec2 v_TexCoordinate;" +
         "void main() {" +
-        "  if(texture2D(u_TextureMask, v_TexCoordinate).r > 0.5) {" +
+        "  if(texture2D(u_TextureMask, v_TexCoordinate).b > 0.5) {" +
         "    discard;" + 
         "  }" +
         "  gl_FragColor = texture2D(u_TextureCam, v_TexCoordinate) * 0.5;" +
