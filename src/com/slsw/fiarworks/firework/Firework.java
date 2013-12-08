@@ -16,16 +16,18 @@ public class Firework
 	public void Launch(float angle, float depth)
 	{
 		// System.out.println("Launching");
-		// Vec3 start_pos = new Vec3(depth * (float) Math.cos(angle), depth * (float) Math.sin(angle), 0.0f);
+		Vec3 start_pos = new Vec3(depth * (float) Math.cos(angle), depth * (float) Math.sin(angle), 0.0f);
 		// System.out.println("X: " + start_pos.x + " Y: " + start_pos.y + "Z: " + start_pos.z);
 		//possible issues:
 		//radians or degrees?
 		//cos and sin mixed up?
 
+		// Vec3 start_pos = new Vec3(0.0f, 100.0f, 0.0f);
+		Vec3 start_vel = new Vec3(0.0f, 0.0f, 0.2f);
 		// Vec3 start_pos = new Vec3(0.0f, -100.0f, 0.0f);
-		float throw_dist = 100.0f;
-		Vec3 start_pos = new Vec3(GLCamera.dangerous_pointing[0]*throw_dist,GLCamera.dangerous_pointing[1]*throw_dist,GLCamera.dangerous_pointing[2]*throw_dist);
-		Vec3 start_vel = new Vec3(0.0f, 0.0f, 0.01f);
+		// float throw_dist = 100.0f;
+		// Vec3 start_pos = new Vec3(GLCamera.dangerous_pointing[0]*throw_dist,GLCamera.dangerous_pointing[1]*throw_dist,GLCamera.dangerous_pointing[2]*throw_dist);
+		// Vec3 start_vel = new Vec3(0.0f, 0.0f, 0.01f);
 		Spark start_spark = new Spark(start_pos, start_vel, 0);
 		sparks.add(start_spark);
 	}
@@ -43,14 +45,16 @@ public class Firework
 	}
 	public void draw(float[] MVPMatrix)
 	{
-		float[] draw_buffer = new float[3*6*sparks.size()+100];
+		float[] draw_buffer = new float[3*6*sparks.size()];
+		float[] tex_buffer = new float[2*6*sparks.size()];
+		//bug with size of buffers and stuff with multiple fireworks
 		for(int i = 0; i < sparks.size(); i++)
 		{
 			// generate new quad from current spark
 			Quad q = new Quad(sparks.get(i));
-			q.set_quad(draw_buffer, i*3*6);
+			q.set_quad(draw_buffer, i*3*6, tex_buffer, i*2*6);
 		}
-		glfw.updateFireworkAndDraw(draw_buffer, MVPMatrix);
+		glfw.updateFireworkAndDraw(draw_buffer, tex_buffer, MVPMatrix);
 	}
 }
 

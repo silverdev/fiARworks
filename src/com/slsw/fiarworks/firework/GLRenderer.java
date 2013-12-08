@@ -53,7 +53,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		mBackgroundImage.setPixel(0, 0, 0xffffff);
 		myMask = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565);
 		myMask.setPixel(0, 0, 0xffffff);
-		mFirework.Launch(0.0f, 10.0f);
+		// mFirework.Launch(0.0f, 10.0f);
 	}
 
 	@Override
