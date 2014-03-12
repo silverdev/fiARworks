@@ -12,7 +12,9 @@ import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
-
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import com.slsw.fiarworks.R;
 
 /*
  * 
@@ -23,9 +25,12 @@ public class GLFirework
 		// This matrix member variable provides a hook to manipulate
 		// the coordinates of the objects that use this vertex shader
 		"uniform mat4 uMVPMatrix;" +
+		"attribute vec2 vTexturePosIn;" +
 		"attribute vec3 vPositionIn;" +
+		"varying vec2 vTexturePos;" +
 		"void main() {" +
 		// the matrix must be included as a modifier of gl_Position
+		"  vTexturePos = vTexturePosIn;" +
 		"  vec4 position = vec4(vPositionIn, 1.0);" +
 		"  gl_Position = uMVPMatrix * position;" +
 		"}";
@@ -33,38 +38,41 @@ public class GLFirework
 	private final String fragmentShaderCode =
 		"precision mediump float;" +
 		"uniform sampler2D u_TextureMask;" +
+		"uniform sampler2D u_AlphaTexture;" +
 		"uniform vec2 u_WindowSize;" +
+		"varying vec2 vTexturePos;" +
 		"void main() {" +
 		"  if(texture2D(u_TextureMask, gl_FragCoord.xy / u_WindowSize.xy).b > 0.5) {" +
         "    discard;" + 
         "  }" +
-		"  gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);" +
+		// "  gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);" +
+		"  gl_FragColor = vec4(texture2D(u_AlphaTexture, vTexturePos).rgb, 1.0);" +
 		"}";
 
 	static final int POSITION_COORDS_PER_VERTEX = 3;
-	static final int TEXTURE_COORDS_PER_VERTEX = 2;
 	static final int BYTES_PER_FLOAT = 4;
 	static final int GEOMETERY_PER_VERTEX = 3;
 	static final int VERTEX_PER_SPARK = 6;
 	static final int MAX_SPARKS = 1000;
 
-	static int[] mGeometryBufferHandle = new int[1];
-	final int[] textureHandle = new int[1];
+	final int[] textureHandle = new int[2];
 	static int mPosShaderLoc;
 	static int mTexShaderLoc;
 	static int mColShaderLoc;
 	static int mMVPMatrixLoc;
 	static int mWindowSizeLoc;
 	static int mTextureMaskUniformLoc;
+	static int mAlphaTextureUniformLoc;
 
-	static int mNumGeometryFloats; 
+	static int mNumGeometryFloats;
+	static int mNumTexGeometryFloats;
 	static int mProgram;
 
 	static int width;
 	static int height;
 
 
-
+	Bitmap spark_tex;
 	ByteBuffer mByteBuffer;
 
 	GLFirework(Context c)
@@ -84,6 +92,11 @@ public class GLFirework
 				System.err.println("mPosShaderLoc is -1. This is bad.");
 				
 			}
+			mTexShaderLoc = GLES20.glGetAttribLocation(mProgram, "vTexturePosIn");
+			if(mTexShaderLoc == -1)
+			{
+				System.err.println("vTexturePosIn is -1. This is bad.");
+			}
 			mMVPMatrixLoc = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
 			if(mMVPMatrixLoc == -1)
 			{
@@ -94,15 +107,23 @@ public class GLFirework
 			{
 				System.err.println("mTextureMaskUniformLocB is -1. This is bad.");
 			}
+			mAlphaTextureUniformLoc = GLES20.glGetUniformLocation(mProgram, "u_AlphaTexture");
+			if(mAlphaTextureUniformLoc == -1)
+			{
+				System.err.println("mAlphaTextureUniformLoc is -1. This is bad.");
+			}
 			mWindowSizeLoc = GLES20.glGetUniformLocation(mProgram, "u_WindowSize");
 			if(mWindowSizeLoc == -1)
 			{
-				System.err.println("u_WindowSize is -1. This is bad.");
+				System.err.println("mWindowSizeLoc is -1. This is bad.");
 			}
 		}
 
-		GLES20.glGenTextures(1, textureHandle, 0);
+		GLES20.glGenTextures(2, textureHandle, 0);
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[1]);
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
 
@@ -116,17 +137,19 @@ public class GLFirework
 		width = wm.getDefaultDisplay().getWidth();
 		height = wm.getDefaultDisplay().getHeight();
 
+		spark_tex = BitmapFactory.decodeResource(c.getResources(), R.drawable.particle);
+
 	}
 
 	static int printed = 0;
-	public void updateFireworkAndDraw(float[] geometry, float[] MVPMatrix, Bitmap mask)
+	public void updateFireworkAndDraw(float[] geometry, float[] tex_coord_geometry, float[] MVPMatrix, Bitmap mask)
 	{
 		//bind the mask as a texture
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
-		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
  		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, mask, 0);
 
+ 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[1]);
+ 		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, spark_tex, 0);
 
 		//fill geometry buffer
 
@@ -138,12 +161,26 @@ public class GLFirework
 		geometryBuffer.put(geometry);
 		geometryBuffer.position(0);
 
+		//fill tex coord geometry buffer
+		mNumTexGeometryFloats = tex_coord_geometry.length;
+		int numTexGeometryBytes = mNumTexGeometryFloats * 4;
 
+		FloatBuffer texGeometryBuffer = mByteBuffer.asFloatBuffer();
+
+		texGeometryBuffer.put(tex_coord_geometry);
+		texGeometryBuffer.position(0);
+
+
+		// GLES20.glEnable();
 		GLES20.glUseProgram(mProgram);
 
 		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
 		GLES20.glUniform1i(mTextureMaskUniformLoc, 0);
+
+		GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[1]);
+		GLES20.glUniform1i(mAlphaTextureUniformLoc, 1);
 
 		GLES20.glUniformMatrix4fv(mMVPMatrixLoc, 1, false, MVPMatrix, 0);
 
@@ -151,15 +188,21 @@ public class GLFirework
 		GLES20.glUniform2fv(mWindowSizeLoc, 1, screenCoords, 0);
 
 		GLES20.glEnableVertexAttribArray(mPosShaderLoc);
-		GLES20.glVertexAttribPointer(   mPosShaderLoc, POSITION_COORDS_PER_VERTEX,
+		GLES20.glVertexAttribPointer(   mPosShaderLoc, 3,
 										GLES20.GL_FLOAT, false,
-										GEOMETERY_PER_VERTEX*4, geometryBuffer);
+										3*4, geometryBuffer);
+
+		GLES20.glEnableVertexAttribArray(mTexShaderLoc);
+		GLES20.glVertexAttribPointer(   mTexShaderLoc, 2,
+										GLES20.GL_FLOAT, false,
+										2*4, texGeometryBuffer);
 
 
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumGeometryFloats / GEOMETERY_PER_VERTEX);
 
 
 		GLES20.glDisableVertexAttribArray(mPosShaderLoc);
+		GLES20.glDisableVertexAttribArray(mTexShaderLoc);
 	}
 
 	public static int loadShader(int type, String shaderCode){

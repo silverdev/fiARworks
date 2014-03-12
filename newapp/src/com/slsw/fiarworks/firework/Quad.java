@@ -102,7 +102,7 @@ public class Quad
 		
 	}
 
-	public void set_quad(float[] buffer, int offset)
+	public void set_quad(float[] buffer, int offset, float[] tex_coord_buffer, int tex_coord_offset)
 	{
 		set_vertex(buffer, offset + 0 , p1);
 		set_vertex(buffer, offset + 3 , p3);
@@ -110,12 +110,27 @@ public class Quad
 		set_vertex(buffer, offset + 9, p4);
 		set_vertex(buffer, offset + 12, p3);
 		set_vertex(buffer, offset + 15, p2);
+
+		set_texture(tex_coord_buffer, tex_coord_offset + 0,  0.0f, 0.0f);
+		set_texture(tex_coord_buffer, tex_coord_offset + 2,  0.0f, 1.0f);
+		set_texture(tex_coord_buffer, tex_coord_offset + 4,  1.0f, 0.0f);
+		set_texture(tex_coord_buffer, tex_coord_offset + 6,  1.0f, 1.0f);
+		set_texture(tex_coord_buffer, tex_coord_offset + 8,  0.0f, 1.0f);
+		set_texture(tex_coord_buffer, tex_coord_offset + 10, 1.0f, 0.0f);
 	}
+
+
 
 	private void set_vertex(float[] buffer, int offset, Vec3 p)
 	{
 		buffer[offset + 0] = p.x;
 		buffer[offset + 1] = p.y;
 		buffer[offset + 2] = p.z;
+	}
+
+	private void set_texture(float[] buffer, int offset, float a, float b)
+	{
+		buffer[offset + 0] = a;
+		buffer[offset + 1] = b;
 	}
 }
