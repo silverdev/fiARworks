@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.graphics.PixelFormat;
 
 import com.slsw.fiarworks.firework.GLRenderer;
 
@@ -178,6 +179,11 @@ class MyGLSurfaceView extends GLSurfaceView {
 
         // Create an OpenGL ES 2.0 context.
         setEGLContextClientVersion(2);
+
+        //Should make background visible
+        setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+        getHolder().setFormat(PixelFormat.TRANSLUCENT);
+        setZOrderMediaOverlay(true);
 
         // Set the Renderer for drawing on the GLSurfaceView
         mRenderer = rend;
