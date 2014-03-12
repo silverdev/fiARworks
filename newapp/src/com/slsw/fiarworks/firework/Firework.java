@@ -3,6 +3,7 @@ package com.slsw.fiarworks.firework;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 public class Firework
 {
@@ -43,7 +44,7 @@ public class Firework
 
 		return;
 	}
-	public void draw(float[] MVPMatrix)
+	public void draw(float[] MVPMatrix, Bitmap mask)
 	{
 		float[] draw_buffer = new float[3*6*sparks.size()+100];
 		for(int i = 0; i < sparks.size(); i++)
@@ -52,7 +53,7 @@ public class Firework
 			Quad q = new Quad(sparks.get(i));
 			q.set_quad(draw_buffer, i*3*6);
 		}
-		glfw.updateFireworkAndDraw(draw_buffer, MVPMatrix);
+		glfw.updateFireworkAndDraw(draw_buffer, MVPMatrix, mask);
 	}
 }
 
