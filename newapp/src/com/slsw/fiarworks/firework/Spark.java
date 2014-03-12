@@ -34,11 +34,12 @@ public class Spark
 		// type 0 can spawn new sparks
 		if(type == 0)
 		{
-			System.out.println("Starter Position");
-			System.out.println("X: " + position.x + " Y: " + position.y + " Z: " + position.z);
-			if(position.z > 1.0f)
+			// System.out.println("Starter Position");
+			// System.out.println("X: " + position.x + " Y: " + position.y + " Z: " + position.z);
+			// if(position.z > 1.0f)
+			if(true) //explode right away
 			{
-				System.out.println("Exploded!");
+				// System.out.println("Exploded!");
 				//Explode
 				for(int i = 0; i < 100; i++)
 				{

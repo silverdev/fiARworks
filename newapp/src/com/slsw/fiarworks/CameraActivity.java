@@ -75,7 +75,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
     }
     
     public void startCamera(){
-    	System.out.println("mCamera no longer null");
+    	// System.out.println("mCamera no longer null");
     	if(mCamera==null) {
 	    	mCamera = getCameraInstance();
 	    	mPreview = new CameraPreview(this, mCamera, mRenderer);
