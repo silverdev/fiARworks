@@ -46,7 +46,7 @@ public class GLFirework
         "    discard;" + 
         "  }" +
 		// "  gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);" +
-		"  gl_FragColor = vec4(texture2D(u_AlphaTexture, vTexturePos).rgb, 1.0);" +
+		"  gl_FragColor = vec4(1.0, 1.0, 1.0, texture2D(u_AlphaTexture, vTexturePos).r);" +
 		"}";
 
 	static final int POSITION_COORDS_PER_VERTEX = 3;
@@ -171,7 +171,9 @@ public class GLFirework
 		texGeometryBuffer.position(0);
 
 
-		// GLES20.glEnable();
+		GLES20.glEnable(GLES20.GL_BLEND);
+		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_DST_ALPHA);
+		GLES20.glBlendEquation(GLES20.GL_FUNC_ADD);
 		GLES20.glUseProgram(mProgram);
 
 		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
@@ -200,7 +202,7 @@ public class GLFirework
 
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumGeometryFloats / GEOMETERY_PER_VERTEX);
 
-
+		GLES20.glDisable(GLES20.GL_BLEND);
 		GLES20.glDisableVertexAttribArray(mPosShaderLoc);
 		GLES20.glDisableVertexAttribArray(mTexShaderLoc);
 	}
