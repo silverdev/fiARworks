@@ -38,6 +38,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
     public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	
+		getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 		mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 		

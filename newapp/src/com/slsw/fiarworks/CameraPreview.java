@@ -95,7 +95,8 @@ public class CameraPreview extends SurfaceView implements
 
 			List<Size> sizes = parameters.getSupportedPreviewSizes();
 			Size optimalSize = getOptimalPreviewSize(sizes, w, h);
-			parameters.setPreviewSize(optimalSize.width, optimalSize.height);
+			//parameters.setPreviewSize(optimalSize.width, optimalSize.height);
+			System.err.println("OPTIMAL = "+optimalSize.width+", "+optimalSize.height);
 
 			parameters.setPreviewSize(720, 480);
 			mVerticalViewAngle = parameters.getVerticalViewAngle();
