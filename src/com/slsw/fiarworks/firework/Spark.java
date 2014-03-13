@@ -25,6 +25,7 @@ public class Spark
 		position = pos;
 		velocity = vel;
 		type = t;
+		age = 0;
 
 	}
 	ArrayList<Spark> update()
@@ -34,17 +35,23 @@ public class Spark
 		// type 0 can spawn new sparks
 		if(type == 0)
 		{
+<<<<<<< HEAD:newapp/src/com/slsw/fiarworks/firework/Spark.java
 			// System.out.println("Starter Position");
 			// System.out.println("X: " + position.x + " Y: " + position.y + " Z: " + position.z);
 			// if(position.z > 1.0f)
 			if(true) //explode right away
+=======
+			System.out.println("Starter Position");
+			System.out.println("X: " + position.x + " Y: " + position.y + " Z: " + position.z);
+			if(position.z > 55.0f)
+>>>>>>> 1f58e7643637ff32b8f64584501cd873c89623a7:src/com/slsw/fiarworks/firework/Spark.java
 			{
 				// System.out.println("Exploded!");
 				//Explode
 				for(int i = 0; i < 100; i++)
 				{
 					// make type 1 sparks
-					Spark new_spark = new Spark(new Vec3(position), Vec3.random_velocity(0.04f), 1);
+					Spark new_spark = new Spark(new Vec3(position), Vec3.random_velocity(0.3f), 1);
 					// Spark new_spark = new Spark(new Vec3(position), Vec3.negz_velocity(0.04f), 1);
 
 					return_list.add(new_spark);
@@ -58,7 +65,9 @@ public class Spark
 		// type 1 can't spawn any more sparks
 		else if(type == 1)
 		{
-			return_list.add(this);
+			age++;
+			if(age < 180)
+				return_list.add(this);
 		}
 		return return_list;
 	}

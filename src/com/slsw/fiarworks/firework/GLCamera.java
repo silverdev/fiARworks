@@ -22,9 +22,17 @@ public class GLCamera
 	{
 
 		Matrix.setIdentityM(mViewMatrix, 0);
+<<<<<<< HEAD:newapp/src/com/slsw/fiarworks/firework/GLCamera.java
 		// Matrix.setLookAtM(mViewMatrix, 0, 0.0f, 0.0f, 0.0f, pointing[0], pointing[1], pointing[2], 0.0f, 0.0f, 1.0f);
 
 		Matrix.setLookAtM(mViewMatrix, 0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
+=======
+		Matrix.setLookAtM(mViewMatrix, 0, 0.0f, 0.0f, 0.0f, pointing[0], pointing[1], pointing[2], 0.0f, 0.0f, 1.0f);
+		//*
+		// Matrix.setLookAtM(mViewMatrix, 0, 2.0f * pointing[0], 2.0f * pointing[1], 2.0f * pointing[2],
+										  // 2.0f * -pointing[0], 2.0f * -pointing[1], 2.0f * -pointing[2],
+										  // 0.0f, 1.0f, 0.0f);
+>>>>>>> 1f58e7643637ff32b8f64584501cd873c89623a7:src/com/slsw/fiarworks/firework/GLCamera.java
 		/*
 		Matrix.setLookAtM(mViewMatrix, 0, 2.0f * pointing[0], 2.0f * pointing[1], 2.0f * pointing[2],
 										  2.0f * -pointing[0], 2.0f * -pointing[1], 2.0f * -pointing[2],

@@ -5,8 +5,13 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+
+import android.graphics.Bitmap;
+
+import android.graphics.BitmapFactory;
 import android.content.Context;
 import android.opengl.GLES20;
+<<<<<<< HEAD:newapp/src/com/slsw/fiarworks/firework/GLFirework.java
 import android.opengl.GLUtils;
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
@@ -15,6 +20,10 @@ import android.view.WindowManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import com.slsw.fiarworks.R;
+=======
+import com.slsw.fiarworks.R;
+import android.opengl.GLUtils;
+>>>>>>> 1f58e7643637ff32b8f64584501cd873c89623a7:src/com/slsw/fiarworks/firework/GLFirework.java
 
 /*
  * 
@@ -22,6 +31,7 @@ import com.slsw.fiarworks.R;
 public class GLFirework
 {
 	private final String vertexShaderCode =
+<<<<<<< HEAD:newapp/src/com/slsw/fiarworks/firework/GLFirework.java
 		// This matrix member variable provides a hook to manipulate
 		// the coordinates of the objects that use this vertex shader
 		"uniform mat4 uMVPMatrix;" +
@@ -48,6 +58,26 @@ public class GLFirework
 		// "  gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);" +
 		"  gl_FragColor = vec4(1.0, 1.0, 1.0, texture2D(u_AlphaTexture, vTexturePos).r);" +
 		"}";
+=======
+        // This matrix member variable provides a hook to manipulate
+        // the coordinates of the objects that use this vertex shader
+        "uniform mat4 uMVPMatrix;" +
+        "attribute vec3 vPositionIn;" +
+        "void main() {" +
+        // the matrix must be included as a modifier of gl_Position
+        "  vec4 position = vec4(vPositionIn, 1.0);" +
+        "  gl_Position = uMVPMatrix * position;" +
+        "}";
+
+    private final String fragmentShaderCode =
+        "precision mediump float;" +
+        "uniform sampler2D u_Texture;" +
+        "varying vec2 v_TexCoordinate;" +
+        "void main() {" +
+        "  gl_FragColor = texture2D(u_Texture, v_TexCoordinate);" +
+        // "  gl_FragColor = gl_Position*10;" +
+        "}";
+>>>>>>> 1f58e7643637ff32b8f64584501cd873c89623a7:src/com/slsw/fiarworks/firework/GLFirework.java
 
 	static final int POSITION_COORDS_PER_VERTEX = 3;
 	static final int BYTES_PER_FLOAT = 4;
@@ -55,6 +85,7 @@ public class GLFirework
 	static final int VERTEX_PER_SPARK = 6;
 	static final int MAX_SPARKS = 1000;
 
+<<<<<<< HEAD:newapp/src/com/slsw/fiarworks/firework/GLFirework.java
 	final int[] textureHandle = new int[2];
 	static int mPosShaderLoc;
 	static int mTexShaderLoc;
@@ -66,6 +97,18 @@ public class GLFirework
 
 	static int mNumGeometryFloats;
 	static int mNumTexGeometryFloats;
+=======
+    static int[] mGeometryBufferHandle = new int[1];
+    final int[] textureHandle = new int[1];
+	static int mPosShaderLoc;
+    static int mTexShaderLoc;
+    static int mColShaderLoc;
+    static int mMVPMatrixLoc;
+    static int mTextureUniformLoc;
+
+
+    static int mNumGeometryFloats; 
+>>>>>>> 1f58e7643637ff32b8f64584501cd873c89623a7:src/com/slsw/fiarworks/firework/GLFirework.java
 	static int mProgram;
 
 	static int width;
@@ -78,6 +121,14 @@ public class GLFirework
 
 	GLFirework(Context c)
 	{
+		Bitmap spark_tex = BitmapFactory.decodeResource(c.getResources(), R.drawable.particle);
+
+		GLES20.glGenTextures(1, textureHandle, 0);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+ 		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, spark_tex, 0);
+
 		int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
 		int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
 
@@ -103,6 +154,7 @@ public class GLFirework
 			{
 				System.err.println("mMVPMatrixLoc is -1. This is bad.");
 			}
+<<<<<<< HEAD:newapp/src/com/slsw/fiarworks/firework/GLFirework.java
 			mTextureMaskUniformLoc = GLES20.glGetUniformLocation(mProgram, "u_TextureMask");
 			if(mTextureMaskUniformLoc == -1)
 			{
@@ -117,6 +169,19 @@ public class GLFirework
 			if(mWindowSizeLoc == -1)
 			{
 				System.err.println("mWindowSizeLoc is -1. This is bad.");
+=======
+			mTexShaderLoc = GLES20.glGetAttribLocation(mProgram, "a_TexCoordinate");
+			if(mTexShaderLoc == -1)
+			{
+				System.err.println("mTexShaderLoc is -1. This is bad.");
+			}
+			mTextureUniformLoc = GLES20.glGetUniformLocation(mProgram, "u_Texture");
+			if(mTextureUniformLoc == -1)
+			{
+
+				System.err.println("mTextureCamUniformLoc is -1. This is bad.");
+
+>>>>>>> 1f58e7643637ff32b8f64584501cd873c89623a7:src/com/slsw/fiarworks/firework/GLFirework.java
 			}
 		}
 
@@ -145,7 +210,11 @@ public class GLFirework
 	}
 
 	static int printed = 0;
+<<<<<<< HEAD:newapp/src/com/slsw/fiarworks/firework/GLFirework.java
 	public void updateFireworkAndDraw(float[] geometry, float[] tex_coord_geometry, float[] MVPMatrix, Bitmap mask)
+=======
+	public void updateFireworkAndDraw(float[] geometry, float[] tex, float[] MVPMatrix)
+>>>>>>> 1f58e7643637ff32b8f64584501cd873c89623a7:src/com/slsw/fiarworks/firework/GLFirework.java
 	{
 		//bind the mask as a texture
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
@@ -164,6 +233,7 @@ public class GLFirework
 		geometryBuffer.put(geometry);
 		geometryBuffer.position(0);
 
+<<<<<<< HEAD:newapp/src/com/slsw/fiarworks/firework/GLFirework.java
 		//fill tex coord geometry buffer
 		mNumTexGeometryFloats = tex_coord_geometry.length;
 		int numTexGeometryBytes = mNumTexGeometryFloats * 4;
@@ -172,6 +242,12 @@ public class GLFirework
 
 		texGeometryBuffer.put(tex_coord_geometry);
 		texGeometryBuffer.position(0);
+=======
+		FloatBuffer texBuffer = mByteBuffer.asFloatBuffer();
+
+		texBuffer.put(tex);
+		texBuffer.position(0);
+>>>>>>> 1f58e7643637ff32b8f64584501cd873c89623a7:src/com/slsw/fiarworks/firework/GLFirework.java
 
 
 		GLES20.glEnable(GLES20.GL_BLEND);
@@ -189,8 +265,14 @@ public class GLFirework
 
 		GLES20.glUniformMatrix4fv(mMVPMatrixLoc, 1, false, MVPMatrix, 0);
 
+<<<<<<< HEAD:newapp/src/com/slsw/fiarworks/firework/GLFirework.java
 		float[] screenCoords = {(float)width, (float)height};
 		GLES20.glUniform2fv(mWindowSizeLoc, 1, screenCoords, 0);
+=======
+		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+		GLES20.glUniform1i(mTextureUniformLoc, 0);
+>>>>>>> 1f58e7643637ff32b8f64584501cd873c89623a7:src/com/slsw/fiarworks/firework/GLFirework.java
 
 		GLES20.glEnableVertexAttribArray(mPosShaderLoc);
 		GLES20.glVertexAttribPointer(   mPosShaderLoc, 3,
@@ -198,9 +280,17 @@ public class GLFirework
 										3*4, geometryBuffer);
 
 		GLES20.glEnableVertexAttribArray(mTexShaderLoc);
+<<<<<<< HEAD:newapp/src/com/slsw/fiarworks/firework/GLFirework.java
 		GLES20.glVertexAttribPointer(   mTexShaderLoc, 2,
 										GLES20.GL_FLOAT, false,
 										2*4, texGeometryBuffer);
+=======
+		GLES20.glVertexAttribPointer(	mTexShaderLoc, POSITION_COORDS_PER_VERTEX,
+										GLES20.GL_FLOAT, false,
+										GEOMETERY_PER_VERTEX*2, texBuffer);
+
+		// GLES20.glUniformMatrix4fv(mMVPMatrixLoc, 1, false, MVPMatrix, 0);
+>>>>>>> 1f58e7643637ff32b8f64584501cd873c89623a7:src/com/slsw/fiarworks/firework/GLFirework.java
 
 
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumGeometryFloats / GEOMETERY_PER_VERTEX);
