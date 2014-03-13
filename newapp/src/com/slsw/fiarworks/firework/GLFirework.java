@@ -175,8 +175,9 @@ public class GLFirework
 
 
 		GLES20.glEnable(GLES20.GL_BLEND);
-		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_DST_ALPHA);
+		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE);
 		GLES20.glBlendEquation(GLES20.GL_FUNC_ADD);
+
 		GLES20.glUseProgram(mProgram);
 
 		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
