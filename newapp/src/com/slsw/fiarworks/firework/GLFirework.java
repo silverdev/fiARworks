@@ -74,6 +74,7 @@ public class GLFirework
 
 	Bitmap spark_tex;
 	ByteBuffer mByteBuffer;
+	ByteBuffer mTexByteBuffer;
 
 	GLFirework(Context c)
 	{
@@ -131,6 +132,8 @@ public class GLFirework
 		//we'll change the contents every frame
 		mByteBuffer = ByteBuffer.allocateDirect(MAX_SPARKS * VERTEX_PER_SPARK * GEOMETERY_PER_VERTEX * BYTES_PER_FLOAT);
 		mByteBuffer.order(ByteOrder.nativeOrder());
+		mTexByteBuffer = ByteBuffer.allocateDirect(MAX_SPARKS * VERTEX_PER_SPARK * 2 * BYTES_PER_FLOAT);
+		mTexByteBuffer.order(ByteOrder.nativeOrder());
 		// GLES20.glGenBuffers(1, mGeometryBufferHandle, 0);
 
 		WindowManager wm = (WindowManager) c.getSystemService(c.WINDOW_SERVICE);	
@@ -165,7 +168,7 @@ public class GLFirework
 		mNumTexGeometryFloats = tex_coord_geometry.length;
 		int numTexGeometryBytes = mNumTexGeometryFloats * 4;
 
-		FloatBuffer texGeometryBuffer = mByteBuffer.asFloatBuffer();
+		FloatBuffer texGeometryBuffer = mTexByteBuffer.asFloatBuffer();
 
 		texGeometryBuffer.put(tex_coord_geometry);
 		texGeometryBuffer.position(0);
