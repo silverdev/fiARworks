@@ -86,7 +86,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
         mFirework.update();
         mFirework.draw(mMVPMatrix, myMask);
-        // mBackground.draw_foreground(mBackgroundImage, myMask);
+        mBackground.draw_foreground(mBackgroundImage, myMask);
 
 	}
 
@@ -104,8 +104,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		} else {
 			 //saveImages(BackgroundImage);
 			// myMask = BackgroundImage;
-			myMask = AlphaMake.makeSimpleMask(image, width, height, prev.mRotVec);
-			// myMask = AlphaMake.skyFillMask(image, width, height, prev.mRotVec);
+			//myMask = AlphaMake.makeSimpleMask(image, width, height, prev.mRotVec);
+			 myMask = AlphaMake.skyFillMask(image, width, height, prev.mRotVec);
 			mBackgroundImage = BackgroundImage;
 		}
 		
