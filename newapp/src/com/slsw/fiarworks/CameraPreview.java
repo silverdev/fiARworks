@@ -159,12 +159,13 @@ public class CameraPreview extends SurfaceView implements
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		//System.err.println(Arrays.toString(event.values));
+		System.err.println(Arrays.toString(event.values));/*
 		if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
 			// Update rotation and position vector
 			SensorManager.getRotationMatrixFromVector(mRotVec, event.values);
+			System.err.println(mRotVec);
 			
-		}
+		}*/
 	}
 
 	public float[] changeInRot() {
