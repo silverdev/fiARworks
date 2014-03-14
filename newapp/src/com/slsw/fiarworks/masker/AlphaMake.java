@@ -42,7 +42,12 @@ public class AlphaMake {
 		return Bitmap.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
 	}
 
-	
+	public static Bitmap makeFullSky(byte[] image, int width,int height,
+			float[] currRot) {
+		return Bitmap
+				.createBitmap(new int[height * width], width, height, Bitmap.Config.ARGB_8888);
+		
+	}
 	
 	public static Bitmap coolMask(byte[] image, int width,int height,
 			float[] currRot) {
