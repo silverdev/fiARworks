@@ -5,11 +5,15 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import java.util.Random;
+
+
 public class Firework
 {
 	private ArrayList<Spark> sparks;
 	static private GLFirework glfw;
 	private GLCamera cam;
+	private static Random r = new Random();
 	public Firework(Context c, GLCamera camera)
 	{
 		glfw = new GLFirework(c);
