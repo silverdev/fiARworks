@@ -35,7 +35,7 @@ public class Spark
 		if(type == 0)
 			size = 0.2f;
 		else if(type == 1)
-			size = 0.5f;
+			size = 0.2f;
 		age = 0;
 		p1 = new Vec3();
 		p2 = new Vec3();
@@ -57,7 +57,7 @@ public class Spark
 				for(int i = 0; i < 100; i++)
 				{
 					// make type 1 sparks
-					Spark new_spark = new Spark(new Vec3(position), Vec3.random_velocity(0.04f), 1);
+					Spark new_spark = new Spark(new Vec3(position), Vec3.random_velocity(0.06f), 1);
 					// Spark new_spark = new Spark(new Vec3(position), Vec3.negz_velocity(0.04f), 1);
 
 					return_list.add(new_spark);
@@ -72,7 +72,7 @@ public class Spark
 		else if(type == 1)
 		{
 			size = size * 0.99f;
-			if(size > 0.1f)
+			if(size > 0.02f)
 				return_list.add(this);
 		}
 		return return_list;
