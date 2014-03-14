@@ -4,7 +4,7 @@
 package com.slsw.fiarworks;
 
 import java.io.IOException;
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -34,6 +34,7 @@ public class CameraPreview extends SurfaceView implements
 	public GLRenderer mRenderer;
 	public volatile boolean sendBitmap;
 	public float mVerticalViewAngle;
+	public static double SETFORM0TO1 = .3;
 
 	@SuppressWarnings("deprecation")
 	public CameraPreview(Context context, Camera camera, GLRenderer renderer) {
@@ -162,8 +163,12 @@ public class CameraPreview extends SurfaceView implements
 		//System.err.println(Arrays.toString(event.values));
 		if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
 			// Update rotation and position vector
-			SensorManager.getRotationMatrixFromVector(mRotVec, event.values);
-			
+			float[] rotVec = new float[9];
+			SensorManager.getRotationMatrixFromVector(rotVec, event.values);
+			for (int i = 0; i<9; i++){
+				rotVec[i] = (float) ((rotVec[i] * SETFORM0TO1 + mRotVec[i] * (1-SETFORM0TO1))/2);
+			}
+			mRotVec = rotVec;
 		}
 	}
 

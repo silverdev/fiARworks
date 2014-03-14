@@ -9,7 +9,6 @@ import java.util.List;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.hardware.Sensor;
@@ -119,7 +118,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 	    final long Endtime = System.currentTimeMillis();
 	    meantime += (Endtime - startTime);
 	    count += 1;
-	    // System.out.println(meantime/count); 
+	     System.out.println(meantime/count); 
 	    
     }
     
