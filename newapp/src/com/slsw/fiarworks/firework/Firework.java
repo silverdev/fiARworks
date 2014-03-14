@@ -26,9 +26,9 @@ public class Firework
 		//cos and sin mixed up?
 
 		// Vec3 start_pos = new Vec3(0.0f, -100.0f, 0.0f);
-		float throw_dist = 100.0f;
-		Vec3 start_pos = new Vec3(cam.facing[0]*throw_dist,cam.facing[1]*throw_dist,cam.facing[2]*throw_dist);
-		Vec3 start_vel = new Vec3(0.0f, 0.0f, 0.0f);
+		float throw_dist = 60.0f;
+		Vec3 start_pos = new Vec3(cam.facing[0]*throw_dist,cam.facing[1]*throw_dist,0.0f);
+		Vec3 start_vel = new Vec3(0.0f, 0.0f, 0.3f);
 		Spark start_spark = new Spark(start_pos, start_vel, 0);
 		sparks.add(start_spark);
 	}
@@ -53,9 +53,7 @@ public class Firework
 		for(int i = 0; i < size; i++)
 		{
 			// generate new quad from current spark
-
-			Quad q = new Quad(sparks.get(i));
-			q.set_quad(draw_buffer, i*3*6, tex_coord_buffer, i*2*6);
+			sparks.get(i).set_quad(draw_buffer, i*3*6, tex_coord_buffer, i*2*6);
 		}
 		glfw.updateFireworkAndDraw(draw_buffer, tex_coord_buffer, MVPMatrix, mask);
 	}}

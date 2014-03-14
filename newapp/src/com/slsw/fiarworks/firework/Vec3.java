@@ -32,6 +32,13 @@ public class Vec3
 		this.z = other.z;
 	}
 
+	public void set(float x_, float y_, float z_)
+	{
+		x = x_;
+		y = y_;
+		z = z_;
+	}
+
 	public void add(final Vec3 B)
 	{
 //		Changed to modify existing object instead of returning a new one.

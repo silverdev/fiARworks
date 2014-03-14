@@ -53,7 +53,7 @@ public class GLFirework
 	static final int BYTES_PER_FLOAT = 4;
 	static final int GEOMETERY_PER_VERTEX = 3;
 	static final int VERTEX_PER_SPARK = 6;
-	static final int MAX_SPARKS = 1000;
+	static final int MAX_SPARKS = 10000;
 
 	final int[] textureHandle = new int[2];
 	static int mPosShaderLoc;
