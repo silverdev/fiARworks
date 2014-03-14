@@ -42,7 +42,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	
 	@Override
 	public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         // GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         // GLES20.glDepthFunc( GLES20.GL_LEQUAL );
         // GLES20.glDepthMask( true );
@@ -80,12 +80,12 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		// Set the camera position (View matrix)
 
         // Calculate the projection and view transformation
-        mBackground.draw_background(mBackgroundImage, myMask);
+        //mBackground.draw_background(mBackgroundImage, myMask);
         mVMatrix = mCamera.view();
         Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
         mFirework.update();
         mFirework.draw(mMVPMatrix, myMask);
-        // mBackground.draw_foreground(mBackgroundImage, myMask);
+        mBackground.draw_foreground(mBackgroundImage, myMask);
 
 	}
 
@@ -103,7 +103,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		} else {
 			 //saveImages(BackgroundImage);
 			// myMask = BackgroundImage;
-			myMask = AlphaMake.makeFullSky(image, width, height, prev.mRotVec);
+			myMask = AlphaMake.skyFillMask(image, width, height, prev.mRotVec);
 			mBackgroundImage = BackgroundImage;
 		}
 		
