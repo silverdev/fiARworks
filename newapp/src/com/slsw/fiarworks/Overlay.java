@@ -1,24 +1,15 @@
 package com.slsw.fiarworks;
 
-import java.io.FileOutputStream;
-import java.lang.ref.SoftReference;
-
-import com.slsw.fiarworks.masker.AlphaMake;
-
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.hardware.Camera;
-import android.hardware.Camera.PictureCallback;
-import android.hardware.Camera.ShutterCallback;
-import android.os.Environment;
-import android.view.Display;
 import android.view.View;
+
+import com.slsw.fiarworks.masker.AlphaMake;
 
 public class Overlay extends View {
 	private Paint p;
@@ -26,6 +17,7 @@ public class Overlay extends View {
 	private int frame;
 	private final int FRAMERATE = 60;
 	private SynchBitmap mask;
+	private Rect rect;
 
 	public Overlay(Context context, CameraPreview prev) {
 		super(context);
@@ -33,6 +25,7 @@ public class Overlay extends View {
 		p = new Paint();
 		preview = prev;
 		mask = new SynchBitmap(null);
+		rect = null;
 	}
 
 	/*
@@ -51,12 +44,16 @@ public class Overlay extends View {
 	 * p.setColor(Color.argb(255, 0, 0, 0)); canvas.drawRect(0, 0,
 	 * canvas.getWidth(), canvas.getHeight(), p); }
 	 */
+		if(rect == null){
+			rect = new Rect(0,0,canvas.getWidth(), canvas.getHeight());
+		}
 		Bitmap b = mask.get();
 		if(b!=null){
-			p.setColor(Color.argb(255, 0, 0, 0)); canvas.drawRect(0, 0,
+			System.err.println("DRAWFRAME");
+			p.setColor(Color.argb(255, 0, 0, 0)); 
+			canvas.drawRect(0, 0,
 					  canvas.getWidth(), canvas.getHeight(), p);
-			canvas.drawBitmap(Bitmap.createScaledBitmap(b,
-					 canvas.getWidth(), canvas.getHeight(), true), 0, 0, null);
+			canvas.drawBitmap(b, null, rect, null);
 		}
 		super.onDraw(canvas);
 		invalidate();

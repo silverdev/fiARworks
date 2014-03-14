@@ -74,7 +74,7 @@ public class AlphaMake {
 	
 	public static Bitmap skyFillMask(byte[] image, int width, int height,
 			float[] currRot) {
-		
+		System.err.println("SKYFILL");
 		int n=1<<bsize.getLog();
 		int mx=width/n;
 		int my=height/n;
@@ -168,8 +168,8 @@ public class AlphaMake {
 	private static SkyPos getSkyDir(float[] currRot){
 		float newY = currRot[7];
 		float newX = currRot[6];
-		if(Math.abs(newY)<Math.abs(newX)){
-			if(newX>0){
+		if(Math.abs(newY)<=Math.abs(newX)){
+			if(newX>=0){
 				return SkyPos.up;
 			} else{
 				return SkyPos.down;

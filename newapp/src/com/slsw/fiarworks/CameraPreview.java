@@ -21,7 +21,6 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.slsw.fiarworks.firework.GLRenderer;
 
 public class CameraPreview extends SurfaceView implements
 		SurfaceHolder.Callback, SensorEventListener {
@@ -31,7 +30,6 @@ public class CameraPreview extends SurfaceView implements
 	private Context context;
 	public float[] mRotVec = new float[9];
 	private float[] mRotOld = new float[9];
-	public GLRenderer mRenderer;
 	public volatile boolean sendBitmap;
 	public float mVerticalViewAngle;
 

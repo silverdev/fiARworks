@@ -20,7 +20,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-import com.slsw.fiarworks.firework.GLRenderer;
 
 public class CameraActivity extends Activity implements Camera.PreviewCallback, OnTouchListener {
 
@@ -124,25 +123,3 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 	}
 
  }
-
-class MyGLSurfaceView extends GLSurfaceView {
-	private final GLRenderer mRenderer;
-
-    public MyGLSurfaceView(Context context, GLRenderer rend) {
-        super(context);
-
-        // Create an OpenGL ES 2.0 context.
-        setEGLContextClientVersion(2);
-
-        // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = rend;
-        setRenderer(mRenderer);
-
-        // Render the view only when there is a change in the drawing data
-        setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-    }
-    
-	public void launchFirework(double x, double y, double d) {
-
-	}
-}
