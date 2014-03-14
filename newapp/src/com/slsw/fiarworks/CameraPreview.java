@@ -34,7 +34,7 @@ public class CameraPreview extends SurfaceView implements
 	public GLRenderer mRenderer;
 	public volatile boolean sendBitmap;
 	public float mVerticalViewAngle;
-	public static double SETFORM0TO1 = .1;
+	public static double SETFORM0TO1 = 1.0;
 
 	@SuppressWarnings("deprecation")
 	public CameraPreview(Context context, Camera camera, GLRenderer renderer) {
