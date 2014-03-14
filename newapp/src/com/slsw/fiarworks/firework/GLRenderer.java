@@ -47,8 +47,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         // GLES20.glDepthFunc( GLES20.GL_LEQUAL );
         // GLES20.glDepthMask( true );
 		mBackground = new GLBackground();
-		mFirework = new Firework(context);
 		mCamera = new GLCamera();
+		mFirework = new Firework(context, mCamera);
 		mBackgroundImage = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565);
 		mBackgroundImage.setPixel(0, 0, 0xffffff);
 		myMask = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565);
@@ -148,7 +148,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	public void launchFirework(float x, float y) {
 		//TODO::
         System.out.println("Launching in GLRenderer");
-        float angle = (float)Math.atan2(mCamera.pointing[1], mCamera.pointing[0]);
+        float angle = (float)Math.atan2(mCamera.facing[1], mCamera.facing[0]);
         mFirework.Launch(angle, 100.0f);
 	}
 

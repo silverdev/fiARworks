@@ -9,10 +9,12 @@ public class Firework
 {
 	private ArrayList<Spark> sparks;
 	static private GLFirework glfw;
-	public Firework(Context c)
+	private GLCamera cam;
+	public Firework(Context c, GLCamera camera)
 	{
 		glfw = new GLFirework(c);
 		sparks = new ArrayList<Spark>();
+		cam = camera;
 	}
 	public void Launch(float angle, float depth)
 	{
@@ -25,8 +27,8 @@ public class Firework
 
 		// Vec3 start_pos = new Vec3(0.0f, -100.0f, 0.0f);
 		float throw_dist = 100.0f;
-		Vec3 start_pos = new Vec3(GLCamera.dangerous_pointing[0]*throw_dist,GLCamera.dangerous_pointing[1]*throw_dist,GLCamera.dangerous_pointing[2]*throw_dist);
-		Vec3 start_vel = new Vec3(0.0f, 0.0f, 0.01f);
+		Vec3 start_pos = new Vec3(cam.facing[0]*throw_dist,cam.facing[1]*throw_dist,cam.facing[2]*throw_dist);
+		Vec3 start_vel = new Vec3(0.0f, 0.0f, 0.0f);
 		Spark start_spark = new Spark(start_pos, start_vel, 0);
 		sparks.add(start_spark);
 	}
