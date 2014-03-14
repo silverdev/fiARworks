@@ -45,7 +45,7 @@ public class GLFirework
 		"  if(texture2D(u_TextureMask, gl_FragCoord.xy / u_WindowSize.xy).b < 0.5) {" +
         "    discard;" + 
         "  }" +
-		// "  gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);" +
+		//"  gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);" +
 		"  gl_FragColor = vec4(0.9, 0.2, 0.2, texture2D(u_AlphaTexture, vTexturePos).r);" +
 		"}";
 
