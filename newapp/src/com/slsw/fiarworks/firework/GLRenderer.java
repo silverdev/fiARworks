@@ -104,7 +104,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		} else {
 			 //saveImages(BackgroundImage);
 			// myMask = BackgroundImage;
-			myMask = AlphaMake.makeSkyFull(image, width, height, prev.mRotVec);
+			myMask = AlphaMake.makeFullSky(image, width, height, prev.mRotVec);
 			mBackgroundImage = BackgroundImage;
 		}
 		

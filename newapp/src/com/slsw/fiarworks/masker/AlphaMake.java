@@ -44,8 +44,12 @@ public class AlphaMake {
 
 	public static Bitmap makeFullSky(byte[] image, int width,int height,
 			float[] currRot) {
+		int[] mask =new int[height * width];
+		for (int i = 0; i < mask.length; i++) {
+			mask[i] = BACKGROUND;
+		}
 		return Bitmap
-				.createBitmap(new int[height * width], width, height, Bitmap.Config.ARGB_8888);
+				.createBitmap(mask, width, height, Bitmap.Config.ARGB_8888);
 		
 	}
 	

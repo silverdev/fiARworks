@@ -34,7 +34,7 @@ public class CameraPreview extends SurfaceView implements
 	public GLRenderer mRenderer;
 	public volatile boolean sendBitmap;
 	public float mVerticalViewAngle;
-	public static double SETFORM0TO1 = .3;
+	public static double SETFORM0TO1 = .1;
 
 	@SuppressWarnings("deprecation")
 	public CameraPreview(Context context, Camera camera, GLRenderer renderer) {
@@ -166,7 +166,7 @@ public class CameraPreview extends SurfaceView implements
 			float[] rotVec = new float[9];
 			SensorManager.getRotationMatrixFromVector(rotVec, event.values);
 			for (int i = 0; i<9; i++){
-				rotVec[i] = (float) ((rotVec[i] * SETFORM0TO1 + mRotVec[i] * (1-SETFORM0TO1))/2);
+				rotVec[i] = (float) ((rotVec[i] * SETFORM0TO1 + mRotVec[i] * (1-SETFORM0TO1)));
 			}
 			mRotVec = rotVec;
 		}
