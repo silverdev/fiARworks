@@ -48,7 +48,7 @@ public class GLBackground
         "  if(texture2D(u_TextureMask, v_TexCoordinate).b > 0.5) {" +
         "    discard;" + 
         "  }" +
-        "  gl_FragColor = texture2D(u_TextureCam, v_TexCoordinate) * 0.5;" +
+    	"  gl_FragColor = texture2D(u_TextureCam, v_TexCoordinate);" +
         // "  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);" +
         "}";
 
