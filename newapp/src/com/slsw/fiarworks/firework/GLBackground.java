@@ -45,11 +45,11 @@ public class GLBackground
         "uniform sampler2D u_TextureMask;" +
         "varying vec2 v_TexCoordinate;" +
         "void main() {" +
-        "  if(texture2D(u_TextureMask, v_TexCoordinate).b > 0.5) {" +
+        "  if(texture2D(u_TextureMask, v_TexCoordinate).b < 0.5) {" +
         "    discard;" + 
         "  }" +
     	//"  gl_FragColor = texture2D(u_TextureCam, v_TexCoordinate);" +
-        "  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);" +
+        "  gl_FragColor = vec4(.5, .5, .5, 1.0);" +
         "}";
 
     static final float[] screenPos = {	-1.0f, -1.0f,

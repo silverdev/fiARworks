@@ -46,7 +46,7 @@ public class GLFirework
 		"varying vec2 vTexturePos;" +
 		"varying vec3 vColorVary;" +
 		"void main() {" +
-		"  if(texture2D(u_TextureMask, gl_FragCoord.xy / u_WindowSize.xy).b < 0.5) {" +
+		"  if(texture2D(u_TextureMask,vec2(1,0) - ( gl_FragCoord.xy / u_WindowSize.xy)).b < 0.5) {" +
         "    discard;" + 
         "  }" +
 		// "  gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);" +

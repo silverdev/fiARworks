@@ -84,8 +84,9 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         mVMatrix = mCamera.view();
         Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
         mFirework.update();
+        //mBackground.draw_foreground(mBackgroundImage, myMask);
         mFirework.draw(mMVPMatrix, myMask);
-        mBackground.draw_foreground(mBackgroundImage, myMask);
+        
 
 	}
 
