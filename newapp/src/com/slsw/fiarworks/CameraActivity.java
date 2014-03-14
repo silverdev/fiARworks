@@ -9,7 +9,6 @@ import java.util.List;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.hardware.Sensor;
@@ -29,8 +28,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
     private CameraPreview mPreview;
 	private SensorManager mSensorManager;
     private Sensor mRotation;
-	private MyGLSurfaceView mView;
-    private GLRenderer mRenderer;
+	private Overlay mView;
 	private long meantime = 0;
 	private int count =0;
 
@@ -41,10 +39,6 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 		getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 		mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-		
-		mRenderer=new GLRenderer(getBaseContext());
-		mView = new MyGLSurfaceView(this, mRenderer);
-		mView.setOnTouchListener(this);
     }
 
     public void onPause() {
@@ -68,14 +62,14 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
     	super.onResume();
     	System.out.println("RESUME");
     	startCamera();
-    	mSensorManager.registerListener((SensorEventListener)mPreview, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
+    	System.err.println(mSensorManager.registerListener((SensorEventListener)mPreview, mRotation, SensorManager.SENSOR_DELAY_NORMAL));
     }
     
     public void startCamera(){
     	System.out.println("mCamera no longer null");
     	if(mCamera==null) {
 	    	mCamera = getCameraInstance();
-	    	mPreview = new CameraPreview(this, mCamera, mRenderer);
+	    	mPreview = new CameraPreview(this, mCamera);
 	    	Camera.Parameters parameters = mCamera.getParameters();
 		    List<String> focusModes = parameters.getSupportedFocusModes();
 		    if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO))
@@ -88,8 +82,9 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 		    	System.out.println("Size = "+s.width +", "+ s.height);
 		    }
 		    mCamera.setParameters(parameters);
-		    setContentView(mView);
-			addContentView(mPreview, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		    mView=new Overlay(getBaseContext(), mPreview);
+		    setContentView(mPreview);
+			addContentView(mView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
     	}
     }
 
@@ -111,12 +106,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 	    int width = p.getPreviewSize().width;
 	    int height = p.getPreviewSize().height;
 	    
-	    final long startTime = System.currentTimeMillis();
-	    mRenderer.setTextures(data, width, height, mPreview);
-	    final long Endtime = System.currentTimeMillis();
-	    meantime += (Endtime - startTime);
-	    count += 1;
-	    System.out.println(meantime/count); 
+		mView.setTextures(data, width, height, mPreview);
 	    
     }
     
@@ -129,7 +119,6 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 		double y = event.getY();
 		y = (y/v.getHeight()-.5)*2;
 		x= (x/v.getWidth()-.5)*2;
-		mView.launchFirework(x,y, 0.0);
 		
 		return true;
 	}

@@ -36,7 +36,7 @@ public class CameraPreview extends SurfaceView implements
 	public float mVerticalViewAngle;
 
 	@SuppressWarnings("deprecation")
-	public CameraPreview(Context context, Camera camera, GLRenderer renderer) {
+	public CameraPreview(Context context, Camera camera) {
 		super(context);
 		mCamera = camera;
 		this.context = context;
@@ -48,7 +48,6 @@ public class CameraPreview extends SurfaceView implements
 		mHolder.addCallback(this);
 		mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		sendBitmap = true;
-		mRenderer = renderer;
 	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
@@ -160,7 +159,7 @@ public class CameraPreview extends SurfaceView implements
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		//System.err.println(Arrays.toString(event.values));
+		System.err.println(Arrays.toString(event.values));
 		if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
 			// Update rotation and position vector
 			SensorManager.getRotationMatrixFromVector(mRotVec, event.values);
