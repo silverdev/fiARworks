@@ -27,10 +27,13 @@ public class GLFirework
 		"uniform mat4 uMVPMatrix;" +
 		"attribute vec2 vTexturePosIn;" +
 		"attribute vec3 vPositionIn;" +
+		"attribute vec3 vColorIn;" +
+		"varying vec3 vColorVary;" +
 		"varying vec2 vTexturePos;" +
 		"void main() {" +
 		// the matrix must be included as a modifier of gl_Position
 		"  vTexturePos = vTexturePosIn;" +
+		"  vColorVary = vColorIn;" +
 		"  vec4 position = vec4(vPositionIn, 1.0);" +
 		"  gl_Position = uMVPMatrix * position;" +
 		"}";
@@ -41,12 +44,14 @@ public class GLFirework
 		"uniform sampler2D u_AlphaTexture;" +
 		"uniform vec2 u_WindowSize;" +
 		"varying vec2 vTexturePos;" +
+		"varying vec3 vColorVary;" +
 		"void main() {" +
 		"  if(texture2D(u_TextureMask, gl_FragCoord.xy / u_WindowSize.xy).b < 0.5) {" +
         "    discard;" + 
         "  }" +
 		// "  gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);" +
-		"  gl_FragColor = vec4(0.9, 0.2, 0.2, texture2D(u_AlphaTexture, vTexturePos).r);" +
+		"  gl_FragColor = vec4(vColorVary.rgb, texture2D(u_AlphaTexture, vTexturePos).r);" +
+		// "  gl_FragColor = vec4(vColorVary.rg, 1.0, 1.0);" +
 		"}";
 
 	static final int POSITION_COORDS_PER_VERTEX = 3;
@@ -66,6 +71,7 @@ public class GLFirework
 
 	static int mNumGeometryFloats;
 	static int mNumTexGeometryFloats;
+	static int mNumColGeometryFloats;
 	static int mProgram;
 
 	static int width;
@@ -75,6 +81,8 @@ public class GLFirework
 	Bitmap spark_tex;
 	ByteBuffer mByteBuffer;
 	ByteBuffer mTexByteBuffer;
+	ByteBuffer mColByteBuffer;
+
 
 	GLFirework(Context c)
 	{
@@ -96,7 +104,12 @@ public class GLFirework
 			mTexShaderLoc = GLES20.glGetAttribLocation(mProgram, "vTexturePosIn");
 			if(mTexShaderLoc == -1)
 			{
-				System.err.println("vTexturePosIn is -1. This is bad.");
+				System.err.println("mTexShaderLoc is -1. This is bad.");
+			}
+			mColShaderLoc = GLES20.glGetAttribLocation(mProgram, "vColorIn");
+			if(mColShaderLoc == -1)
+			{
+				System.err.println("mColShaderLoc is -1. This is bad.");
 			}
 			mMVPMatrixLoc = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
 			if(mMVPMatrixLoc == -1)
@@ -134,6 +147,8 @@ public class GLFirework
 		mByteBuffer.order(ByteOrder.nativeOrder());
 		mTexByteBuffer = ByteBuffer.allocateDirect(MAX_SPARKS * VERTEX_PER_SPARK * 2 * BYTES_PER_FLOAT);
 		mTexByteBuffer.order(ByteOrder.nativeOrder());
+		mColByteBuffer = ByteBuffer.allocateDirect(MAX_SPARKS * VERTEX_PER_SPARK * 3 * BYTES_PER_FLOAT);
+		mColByteBuffer.order(ByteOrder.nativeOrder());
 		// GLES20.glGenBuffers(1, mGeometryBufferHandle, 0);
 
 		WindowManager wm = (WindowManager) c.getSystemService(c.WINDOW_SERVICE);	
@@ -145,7 +160,7 @@ public class GLFirework
 	}
 
 	static int printed = 0;
-	public void updateFireworkAndDraw(float[] geometry, float[] tex_coord_geometry, float[] MVPMatrix, Bitmap mask)
+	public void updateFireworkAndDraw(float[] geometry, float[] tex_coord_geometry, float[] color_geometry, float[] MVPMatrix, Bitmap mask)
 	{
 		//bind the mask as a texture
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
@@ -172,6 +187,15 @@ public class GLFirework
 
 		texGeometryBuffer.put(tex_coord_geometry);
 		texGeometryBuffer.position(0);
+
+		//fill color coord geometry buffer
+		mNumColGeometryFloats = color_geometry.length;
+		int numColGeometryBytes = mNumColGeometryFloats * 4;
+
+		FloatBuffer colGeometryBuffer = mColByteBuffer.asFloatBuffer();
+
+		colGeometryBuffer.put(color_geometry);
+		colGeometryBuffer.position(0);
 
 
 		GLES20.glEnable(GLES20.GL_BLEND);
@@ -202,6 +226,11 @@ public class GLFirework
 		GLES20.glVertexAttribPointer(   mTexShaderLoc, 2,
 										GLES20.GL_FLOAT, false,
 										2*4, texGeometryBuffer);
+
+		GLES20.glEnableVertexAttribArray(mColShaderLoc);
+		GLES20.glVertexAttribPointer(   mColShaderLoc, 3,
+										GLES20.GL_FLOAT, true,
+										3*4, colGeometryBuffer);
 
 
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumGeometryFloats / GEOMETERY_PER_VERTEX);

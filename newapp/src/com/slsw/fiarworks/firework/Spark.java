@@ -1,6 +1,7 @@
 
 package com.slsw.fiarworks.firework;
 import java.util.ArrayList;
+import java.util.Random;
 
 /*
  * Types:
@@ -20,17 +21,23 @@ public class Spark
 	private Vec3 p2;
 	private Vec3 p3;
 	private Vec3 p4;
+	private Vec3 objx;
+	private Vec3 objy;
+	private Vec3 objz;
 	public static final Vec3 worldx = new Vec3(1,0,0);
 	public static final Vec3 worldz = new Vec3(0,0,1);
+	private static Random r = new Random();
 	protected Vec3 position;
 	private Vec3 velocity;
+	private Vec3 color;
 	private int type;
 	private int age;
 	private float size;
-	Spark(Vec3 pos, Vec3 vel, int t)
+	Spark(Vec3 pos, Vec3 vel, Vec3 col, int t)
 	{
 		position = pos;
 		velocity = vel;
+		color = col;
 		type = t;
 		if(type == 0)
 			size = 0.2f;
@@ -41,6 +48,9 @@ public class Spark
 		p2 = new Vec3();
 		p3 = new Vec3();
 		p4 = new Vec3();
+		objx = new Vec3();
+		objy = new Vec3();
+		objz = new Vec3();
 	}
 	ArrayList<Spark> update()
 	{
@@ -57,7 +67,7 @@ public class Spark
 				for(int i = 0; i < 100; i++)
 				{
 					// make type 1 sparks
-					Spark new_spark = new Spark(new Vec3(position), Vec3.random_velocity(0.06f), 1);
+					Spark new_spark = new Spark(new Vec3(position), Vec3.random_velocity(0.06f), color, 1);
 					// Spark new_spark = new Spark(new Vec3(position), Vec3.negz_velocity(0.04f), 1);
 
 					return_list.add(new_spark);
@@ -71,6 +81,7 @@ public class Spark
 		// type 1 can't spawn any more sparks
 		else if(type == 1)
 		{
+			velocity.z -= 0.002f;
 			size = size * 0.99f;
 			if(size > 0.02f)
 				return_list.add(this);
@@ -78,7 +89,7 @@ public class Spark
 		return return_list;
 	}
 
-	public void set_quad(float[] buffer, int offset, float[] tex_coord_buffer, int tex_coord_offset)
+	public void set_quad(float[] buffer, int offset, float[] tex_coord_buffer, int tex_coord_offset, float[] color_buffer)
 	{
 		// spark center pos in world coords
 		Vec3 p_ = position;
@@ -110,11 +121,10 @@ public class Spark
 			// Not tested as of 6AM on Dec 5.
 			
 			// the objy axis points out the back of the quad
-			Vec3 objy = new Vec3(p_);
+			objy.set(p_.x, p_.y, p_.z);
 			objy.unitize();
 			
 			// objx is generally the horizontal axis of the quad
-			Vec3 objx;
 			// if the particle is almost directly above or below the viewer
 			// then we need to do something different to avoid numerical problems
 			if (objy.isAlmostVertical()) {
@@ -133,7 +143,7 @@ public class Spark
 			objx.unitize();
 			
 			// objz is generally the vertical axis of the quad
-			Vec3 objz = objx.cross(objy);
+			objz = objx.cross(objy);
 			objz.unitize();
 			
 			// half width of quad in objx dimension
@@ -145,10 +155,10 @@ public class Spark
 			hobjz.mult(size);
 
 			// start with points centered on the spark
-			p1 = new Vec3(p_);
-			p2 = new Vec3(p_);
-			p3 = new Vec3(p_);
-			p4 = new Vec3(p_);
+			p1.set(p_.x, p_.y, p_.z);
+			p2.set(p_.x, p_.y, p_.z);
+			p3.set(p_.x, p_.y, p_.z);
+			p4.set(p_.x, p_.y, p_.z);
 			// shift points into position based on calculated half-width vectors
 			// bottom-left
 			p1.sub(hobjx);
@@ -178,6 +188,13 @@ public class Spark
 		set_texture(tex_coord_buffer, tex_coord_offset + 6,  1.0f, 1.0f);
 		set_texture(tex_coord_buffer, tex_coord_offset + 8,  0.0f, 1.0f);
 		set_texture(tex_coord_buffer, tex_coord_offset + 10, 1.0f, 0.0f);
+
+		set_color(color_buffer, offset + 0);
+		set_color(color_buffer, offset + 3);
+		set_color(color_buffer, offset + 6);
+		set_color(color_buffer, offset + 9);
+		set_color(color_buffer, offset + 12);
+		set_color(color_buffer, offset + 15);
 	}
 
 
@@ -187,6 +204,13 @@ public class Spark
 		buffer[offset + 0] = p.x;
 		buffer[offset + 1] = p.y;
 		buffer[offset + 2] = p.z;
+	}
+
+	private void set_color(float[] buffer, int offset)
+	{
+		buffer[offset + 0] = color.x;
+		buffer[offset + 1] = color.y;
+		buffer[offset + 2] = color.z;
 	}
 
 	private void set_texture(float[] buffer, int offset, float a, float b)
