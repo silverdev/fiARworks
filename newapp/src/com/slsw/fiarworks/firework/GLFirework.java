@@ -153,7 +153,7 @@ public class GLFirework
 
 		WindowManager wm = (WindowManager) c.getSystemService(c.WINDOW_SERVICE);	
 		width = wm.getDefaultDisplay().getWidth();
-		height = wm.getDefaultDisplay().getHeight();
+		height = -wm.getDefaultDisplay().getHeight();
 
 		spark_tex = BitmapFactory.decodeResource(c.getResources(), R.drawable.particle);
 
